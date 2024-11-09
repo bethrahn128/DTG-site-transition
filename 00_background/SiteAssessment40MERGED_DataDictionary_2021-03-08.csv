@@ -1,0 +1,965 @@
+﻿Variable / Field Name,Form Name,Section Header,Field Type,Field Label,"Choices, Calculations, OR Slider Labels",Field Note,Text Validation Type OR Show Slider Number,Text Validation Min,Text Validation Max,Identifier?,Branching Logic (Show field only if...),Required Field?,Custom Alignment,Question Number (surveys only),Matrix Group Name,Matrix Ranking?,Field Annotation
+record_id,tblcenter,,text,Record ID,,,,,,,,,,,,,
+tblcenter_redcap_id,tblcenter,,text,Record ID from tblCENTER REDCap Project,,,,,,,,,,,,,
+last_reviewed_d,tblcenter,,text,"Last Reviewed Date 
+<div style=""font-weight:lighter;font-style:italic"">Date when this center's data was last reviewed and/or updated</div>",,,date_ymd,,,,,,,,,,
+tblcenter_txt,tblcenter,,descriptive,"<div style=""color:white; text-align:center; border: 1px #34495e; background-color: #2c3e50;""><h3 style=""margin:0px; padding:10px"">CENTER Record</h3></div>",,,,,,,,,,,,,
+region,tblcenter,"<div style=""font-weight:lighter"">This record represents a unique data site/unique physical location of care -- active or formerly active -- in the IeDEA network. The fields below collect the <u><a target=""_blank"" href=""https://redcap.vanderbilt.edu/plugins/iedea/des/index.php?pid=64149&tid=5&page=variables&deprecated=false&draft=false"">variables in tblCENTER</a></u> of the IeDEA Data Exchange Standard. </div>",dropdown,"REGION
+<div style=""font-weight:lighter;font-style:italic"">IeDEA global region</div>","AP, Asia-Pacific | NA, NA-ACCORD (North America) | CN, CCASAnet (Latin America) | CA, Central Africa | EA, East Africa | SA, Southern Africa | WA, West Africa","Values: AP, EA, SA, WA, CA, CN, NA",,,,,,,,,,,
+center,tblcenter,,text,"CENTER
+<div style=""font-weight:lighter;font-style:italic"">Code for Clinic/Centre/Hospital where patient is seen.
+Needs to be unique within each region.</div>",,,,,,,,,,,,,
+name,tblcenter,,text,"NAME
+<div style=""font-weight:lighter;font-style:italic"">Proper name to identify center</div>",,,,,,,,,,,,,
+program,tblcenter,,text,"PROGRAM
+<div style=""font-weight:lighter;font-style:italic"">Care program with which the center is associated (if applicable)</div>",,,,,,,,,,,,,
+adultped,tblcenter,,dropdown,"ADULTPED
+<div style=""font-weight:lighter;font-style:italic"">Population the center serves</div>","ADULT, Adults (ADULT) | PED, Children (PED) | BOTH, Adults and children (BOTH)",,,,,,,,,,,,
+rural,tblcenter,,dropdown,"RURAL
+<div style=""font-weight:lighter;font-style:italic"">Facility location</div>","1, Urban | 2, Mostly urban | 3, Mostly rural | 4, Rural | 9, Unknown",,,,,,,,,,,,
+level,tblcenter,,dropdown,"LEVEL
+<div style=""font-weight:lighter;font-style:italic"">Facility level of care</div>","1, Health centre | 2, District hospital | 3, Regional, provincial or university hospital | 9, Unknown",,,,,,,,,,,,
+country,tblcenter,Site Location,dropdown,COUNTRY,"AFG, Afghanistan | ALA, Ŭand Islands | ALB, Albania | DZA, Algeria | ASM, American Samoa | AND, Andorra | AGO, Angola | AIA, Anguilla | ATA, Antarctica | ATG, Antigua and Barbuda | ARG, Argentina | ARM, Armenia | ABW, Aruba | AUS, Australia | AUT, Austria | AZE, Azerbaijan | BHS, Bahamas (the) | BHR, Bahrain | BGD, Bangladesh | BRB, Barbados | BLR, Belarus | BEL, Belgium | BLZ, Belize | BEN, Benin | BMU, Bermuda | BTN, Bhutan | BOL, Bolivia (Plurinational State of) | BES, Bonaire, Sint Eustatius and Saba | BIH, Bosnia and Herzegovina | BWA, Botswana | BVT, Bouvet Island | BRA, Brazil | IOT, British Indian Ocean Territory (the) | BRN, Brunei Darussalam | BGR, Bulgaria | BFA, Burkina Faso | BDI, Burundi | CPV, Cabo Verde | KHM, Cambodia | CMR, Cameroon | CAN, Canada | CYM, Cayman Islands (the) | CAF, Central African Republic (the) | TCD, Chad | CHL, Chile | CHN, China | CXR, Christmas Island | CCK, Cocos (Keeling) Islands (the) | COL, Colombia | COM, Comoros (the) | COD, Congo (the Democratic Republic of the) | COG, Congo (the) | COK, Cook Islands (the) | CRI, Costa Rica | CIV, Côte d'Ivoire | HRV, Croatia | CUB, Cuba | CUW, Cura硯 | CYP, Cyprus | CZE, Czechia | DNK, Denmark | DJI, Djibouti | DMA, Dominica | DOM, Dominican Republic (the) | ECU, Ecuador | EGY, Egypt | SLV, El Salvador | GNQ, Equatorial Guinea | ERI, Eritrea | EST, Estonia | SWZ, Eswatini | ETH, Ethiopia | FLK, Falkland Islands (the) [Malvinas] | FRO, Faroe Islands (the) | FJI, Fiji | FIN, Finland | FRA, France | GUF, French Guiana | PYF, French Polynesia | ATF, French Southern Territories (the) | GAB, Gabon | GMB, Gambia (the) | GEO, Georgia | DEU, Germany | GHA, Ghana | GIB, Gibraltar | GRC, Greece | GRL, Greenland | GRD, Grenada | GLP, Guadeloupe | GUM, Guam | GTM, Guatemala | GGY, Guernsey | GIN, Guinea | GNB, Guinea-Bissau | GUY, Guyana | HTI, Haiti | HMD, Heard Island and McDonald Islands | VAT, Holy See (the) | HND, Honduras | HKG, Hong Kong | HUN, Hungary | ISL, Iceland | IND, India | IDN, Indonesia | IRN, Iran (Islamic Republic of) | IRQ, Iraq | IRL, Ireland | IMN, Isle of Man | ISR, Israel | ITA, Italy | JAM, Jamaica | JPN, Japan | JEY, Jersey | JOR, Jordan | KAZ, Kazakhstan | KEN, Kenya | KIR, Kiribati | PRK, Korea (the Democratic People's Republic of) | KOR, Korea (the Republic of) | KWT, Kuwait | KGZ, Kyrgyzstan | LAO, Lao People's Democratic Republic (the) | LVA, Latvia | LBN, Lebanon | LSO, Lesotho | LBR, Liberia | LBY, Libya | LIE, Liechtenstein | LTU, Lithuania | LUX, Luxembourg | MAC, Macao | MKD, Macedonia (the former Yugoslav Republic of) | MDG, Madagascar | MWI, Malawi | MYS, Malaysia | MDV, Maldives | MLI, Mali | MLT, Malta | MHL, Marshall Islands (the) | MTQ, Martinique | MRT, Mauritania | MUS, Mauritius | MYT, Mayotte | MEX, Mexico | FSM, Micronesia (Federated States of) | MDA, Moldova (the Republic of) | MCO, Monaco | MNG, Mongolia | MNE, Montenegro | MSR, Montserrat | MAR, Morocco | MOZ, Mozambique | MMR, Myanmar | NAM, Namibia | NRU, Nauru | NPL, Nepal | NLD, Netherlands (the) | NCL, New Caledonia | NZL, New Zealand | NIC, Nicaragua | NER, Niger (the) | NGA, Nigeria | NIU, Niue | NFK, Norfolk Island | MNP, Northern Mariana Islands (the) | NOR, Norway | OMN, Oman | PAK, Pakistan | PLW, Palau | PSE, Palestine, State of | PAN, Panama | PNG, Papua New Guinea | PRY, Paraguay | PER, Peru | PHL, Philippines (the) | PCN, Pitcairn | POL, Poland | PRT, Portugal | PRI, Puerto Rico | QAT, Qatar | REU, R鵮ion | ROU, Romania | RUS, Russian Federation (the) | RWA, Rwanda | BLM, Saint Barth鬥my | SHN, Saint Helena, Ascension and Tristan da Cunha | KNA, Saint Kitts and Nevis | LCA, Saint Lucia | MAF, Saint Martin (French part) | SPM, Saint Pierre and Miquelon | VCT, Saint Vincent and the Grenadines | WSM, Samoa | SMR, San Marino | STP, Sao Tome and Principe | SAU, Saudi Arabia | SEN, Senegal | SRB, Serbia | SYC, Seychelles | SLE, Sierra Leone | SGP, Singapore | SXM, Sint Maarten (Dutch part) | SVK, Slovakia | SVN, Slovenia | SLB, Solomon Islands | SOM, Somalia | ZAF, South Africa | SGS, South Georgia and the South Sandwich Islands | SSD, South Sudan | ESP, Spain | LKA, Sri Lanka | SDN, Sudan (the) | SUR, Suriname | SJM, Svalbard and Jan Mayen | SWE, Sweden | CHE, Switzerland | SYR, Syrian Arab Republic | TWN, Taiwan (Province of China) | TJK, Tajikistan | TZA, Tanzania, United Republic of | THA, Thailand | TLS, Timor-Leste | TGO, Togo | TKL, Tokelau | TON, Tonga | TTO, Trinidad and Tobago | TUN, Tunisia | TUR, Turkey | TKM, Turkmenistan | TCA, Turks and Caicos Islands (the) | TUV, Tuvalu | UGA, Uganda | UKR, Ukraine | ARE, United Arab Emirates (the) | GBR, United Kingdom of Great Britain and Northern Ireland (the) | UMI, United States Minor Outlying Islands (the) | USA, United States of America (the) | URY, Uruguay | UZB, Uzbekistan | VUT, Vanuatu | VEN, Venezuela (Bolivarian Republic of) | VNM, Viet Nam | VGB, Virgin Islands (British) | VIR, Virgin Islands (U.S.) | WLF, Wallis and Futuna | ESH, Western Sahara | YEM, Yemen | ZMB, Zambia | ZWE, Zimbabwe","<a target=""_blank"" href=""http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3"">Coded as 3-letter ISO code (on back end)</a>",autocomplete,,,,,,,,,,
+province,tblcenter,,text,PROVINCE,,,,,,,,,,,,,
+district,tblcenter,,text,DISTRICT,,,,,,,,,,,,,
+city,tblcenter,,text,CITY,,,,,,,,,,,,,
+geocode_lat,tblcenter,,text,"Geocode - Latitude (GEOCODE_LAT)
+<div style=""font-weight:lighter;font-style:italic"">Approximated geocodes (fewer decimal points) are acceptable. 
+Example look-up website: <a target=""_blank"" href=""https://itouchmap.com/latlong.html"">iTouchMap</a> </div>",,,,,,,,,,,,,
+geocode_lon,tblcenter,,text,Geocode - Longitude (GEOCODE_LON),,,,,,,,,,,,,
+open_d,tblcenter,Site Metadata,text,"Database Open Date (OPEN_D)
+<div style=""font-weight:lighter;font-style:italic"">(optional) earliest date for which data were included for this site</div>",,,date_ymd,,,,,,,,,,
+close_d,tblcenter,,text,Database Closing Date (CLOSE_D),,,date_ymd,,,,,,,,,,
+add_center,tblcenter,,text,"Site Inclusion Date (ADD_CENTER_D)
+<div style=""font-weight:lighter;font-style:italic"">Date that the site was added to IeDEA</div>",,,date_ymd,,,,,,,,,,
+drop_center,tblcenter,,text,"Site Exclusion date (DROP_CENTER_D)
+<div style=""font-weight:lighter;font-style:italic"">Date that the site was dropped from IeDEA (if dropped)</div>",,,date_ymd,,,,,,,,,,
+survey_internet,tblcenter,,dropdown,"SURVEY_INTERNET
+<div style=""font-weight:lighter;font-style:italic"">Quality of Internet access for completing online surveys.</div>","1, sufficient   access to complete online surveys | 2, degraded access making online survey completion difficult | 3, no internet access | 9, Unknown",,,,,,,,,,,,
+survey_paper,tblcenter,,dropdown,"SURVEY_PAPER
+<div style=""font-weight:lighter;font-style:italic"">Resources for printing and transferring paper surveys to a central location for data entry</div>","1, site has resources to print and transfer surveys | 2, site has resources to print, but not to transfer surveys | 3, site does not have resources to print, but can transfer surveys | 4, site needs assistance in both printing and transferring surveys | 8, not applicable | 9, Unknown",,,,,,,,,,,,
+supplemental_txt,tblcenter,,descriptive,"<div style=""color:white; text-align:center; border: 1px #3498db; background-color: #2980b9;""><h3 style=""margin:0px; padding:10px"">Supplemental Data (non-tblCENTER)</h3></div>",,,,,,,,,,,,,
+notes,tblcenter,,notes,Notes about this site,,,,,,,,,,,,,
+nondes_website,tblcenter,Map Information,text,Site Website,,,,,,,,,,,,,
+nondes_displayname,tblcenter,,text,"Site Display Name
+<div style=""font-weight:lighter"">The site's name is set as <u>[name]</u>. If you want a different name to appear on the IeDEA public website/map, list it here.</div>",,,,,,,,,,,,,
+nondes_hidemap,tblcenter,,checkbox,"Hide this Site on Map
+<div style=""font-weight:lighter;"">Can be used to hide sites on the iedea.org public map. Sites with a DROP_CENTER date will be automatically hidden.</div>","1, Yes",,,,,,,,,,,,
+nondes_excludesurvey,tblcenter,Site Assessment Information,checkbox,Exclude from Site Assessment,"1, Yes",,,,,,,,,,,,
+nondes_excludereason,tblcenter,,checkbox,Why excluded?,"1, No longer participating in IeDEA | 2, Interval cohort | 3, No direct contact with site | 4, Site declined participation | 99, Other",,,,,,[nondes_excludesurvey(1)] = '1',,,,,,
+nondes_sa_notes,tblcenter,,notes,Site Assessment Notes,,,,,,,,,,,,,
+time_start,iedea_2020_site_survey_english,,text," <div style=""border: 1px solid #19B5FE;background: #A2C0D9  ; font-size:13px; color: #000000; text-align:left;padding:10px;"">The ""Now"" button helps us estimate of how long this survey takes to complete.</div>",,,datetime_ymd,,,,,,,,,, @NOW @READONLY
+name_info,iedea_2020_site_survey_english,,descriptive," <div style=""border: 1px solid #19B5FE;background: #A2C0D9  ; font-size:13px; color: #000000; text-align:left;padding:10px;"">Our information shows that the name for this site is <span style=""color:#000080; font-size:15px;"">[name]</span> </div>",,,,,,,,,,,,,
+name_correction,iedea_2020_site_survey_english,,text," <div style=""border: 1px solid #19B5FE;background: #A2C0D9  ; font-size:13px; color: #000000; text-align:left;padding:10px;"">If <span style=""color:#000080; font-size:15px"">[name]</span> is not correct, please provide a correction and we will update our records.</div>",,,,,,,,,,,,,
+name_pc,iedea_2020_site_survey_english," <div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">1. RESPONDENT INFORMATION</div>",text,1.1 Name of person completing this survey,,,,,,,,y,,,,,
+email1,iedea_2020_site_survey_english,,text,1.2 Email address of person completing this survey,,,email,,,,,y,,,,,
+date1,iedea_2020_site_survey_english,,text,1.3 Please enter the date this survey is being completed,,,date_ymd,,,,,y,,,,,
+title,iedea_2020_site_survey_english,,radio,1.4 What is your title?,"1, Head Clinician/Clinical Officer In-Charge | 2, Other Clinician | 3, Site Manager | 4, Site Data Manager | 5, Head Nurse | 88, Other",,,,,,,y,,,,,
+other_specify1,iedea_2020_site_survey_english,,text,"1.4.1  If Other, please specify",,,,,,,[title] = '88',y,,,,,
+residence_setting,iedea_2020_site_survey_english," <div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">2. PATIENT POPULATION</div>",radio,"2.1 How would you describe the residence of the population served by this health facility's HIV clinic(s)?
+
+<i>Select one response only</i>","2, Predominantly Urban | 3, Predominantly Rural | 5, Mixed urban/rural",,,,,,,y,,,,,
+clinic_type_b,iedea_2020_site_survey_english,,checkbox,"2.2 What types of patients are served at the HIV clinic(s)?
+
+<i>Check all that apply</i>","4, Children (ages 0-9) | 2, Adolescents / youth (ages 10-24) | 1, Adults - general population (ages 20+)",,,,,,,y,,,,,
+desc_2_3,iedea_2020_site_survey_english,,descriptive,"2.3 In 2019 how often were <u>specialized or dedicated HIV clinics</u> held for each of the following patient groups? 
+
+<i>If patient groups are served as part of general clinic population, rather than through dedicated clinics, check ""Not Available"".</i>
+
+<i>Check all that apply</i></div>",,,,,,,,,,,,,
+pediatrics_b,iedea_2020_site_survey_english,,checkbox,2.3a Pediatric patients (ages 0-9),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+adolescents_b,iedea_2020_site_survey_english,,checkbox,2.3b Adolescents/youth (ages 10-24),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+pregnant_b,iedea_2020_site_survey_english,,checkbox,2.3c Pregnant/breast-feeding women,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+family_care,iedea_2020_site_survey_english,,checkbox,2.3d Family care clinics,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+men,iedea_2020_site_survey_english,,checkbox,2.3e Men,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+patients_w_oi,iedea_2020_site_survey_english,,checkbox,2.3f Patients with comorbidities or opportunistic infections,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+sex_workers,iedea_2020_site_survey_english,,checkbox,2.3g Female sex workers (FSW),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+msm,iedea_2020_site_survey_english,,checkbox,2.3h Men who have sex with <Br>men (MSM),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+transgender,iedea_2020_site_survey_english,,checkbox,2.3i Transgender individuals,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+people_w_suds,iedea_2020_site_survey_english,,checkbox,2.3j People with substance use disorders (SUDs),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+people_w_iivd,iedea_2020_site_survey_english,,checkbox,2.3k People who inject drugs (PWID),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+people_w_mhd,iedea_2020_site_survey_english,,checkbox,2.3l People with mental health disorders (MHDs),"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+mobile_populations,iedea_2020_site_survey_english,,checkbox,2.3m Mobile populations,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+prisoners,iedea_2020_site_survey_english,,checkbox,2.3n Incarcerated populations/prisoners,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+people_w_disabilities,iedea_2020_site_survey_english,,checkbox,2.3o People living with disabilities,"1, Available every day the <br> health facility is open | 2, Available on <br>special/dedicated days | 77, Not available",,,,,,,y,,,alt_3_2,, @NONEOFTHEABOVE='77
+staffing_mx_0,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">3. STAFFING & COMMUNITY LINKAGES 
+ <i>Please describe staffing situation as it was prior to the COVID-19 pandemic</div>",descriptive,"3.1 In 2019, how often were the following categories of staff available at this HIV clinic?",,,,,,,,,,,,,
+pediatrician_0,iedea_2020_site_survey_english,,radio,3.1a. Pediatrician (general),"1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mix_0,,
+internist_0,iedea_2020_site_survey_english,,radio,"3.1b. Internist, family practitioner, generalist (physician)","1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mix_0,,
+id_specialist,iedea_2020_site_survey_english,,radio,3.1c. Infectious disease or HIV specialist,"1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mix_0,,
+midlevel_prov_0,iedea_2020_site_survey_english,,radio,"3.1d. Mid-level providers (clinical officers, nurses/nurse practitioners, midwifes, physician assistants)","1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mix_0,,
+adher_counselor,iedea_2020_site_survey_english,,radio,3.1e. Adherence counselors,"1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mx,,
+peer_educ,iedea_2020_site_survey_english,,radio,3.1f. Peer educators/<br>mentors/navigators,"1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mx,,
+outreach,iedea_2020_site_survey_english,,radio,3.1g.  Outreach workers,"1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mx,,
+nutritionist,iedea_2020_site_survey_english,,radio,3.1h. Nutritionists,"1, Available every day <br> clinic is open | 2, Available some days | 77, Not available",,,,,,,y,,,staffing_mx,,
+descriptive,iedea_2020_site_survey_english,,descriptive,"3.2 In 2019, how often did this HIV clinic work with any of the following community-based partners to <u>promote HIV testing</u>?",,,,,,,,,,,,,
+community_committee,iedea_2020_site_survey_english,,radio,"3.2a. Community health committees, village health teams, or voluntary community-based organizations","0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,community_partners,,
+community_leaders,iedea_2020_site_survey_english,,radio,"3.2b. Community leaders/officials, community health workers, or community health volunteers","0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,community_partners,,
+plwha_associations,iedea_2020_site_survey_english,,radio,3.2c. People living with HIV/AIDS (PLWHA) associations or patient support groups,"0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,community_partners,,
+other_associations,iedea_2020_site_survey_english,,radio,"3.2d. Other associations/support groups (e.g. addiction or mental health support groups, sexual minority support groups, etc.)","0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,community_partners,,
+peer_groups,iedea_2020_site_survey_english,,radio,3.2e. Youth groups or peer educator groups,"0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,community_partners,,
+partners_other,iedea_2020_site_survey_english,,radio,3.2f. Other <i>(please specify or select Never)</i>,"0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,community_partners,,
+other_specify2,iedea_2020_site_survey_english,,text,"3.2f1. If Other, please specify",,,,,,,[partners_other] = '1' or [partners_other] = '2' or [partners_other] = '3',y,,,,,
+descriptive_2,iedea_2020_site_survey_english,,descriptive,"3.3 In 2019, how often did this HIV clinic work with any of the following community-based partners to <u> trace patients</u>?",,,,,,,,,,,,,
+community_partners_trace,iedea_2020_site_survey_english,,radio,"3.3a. Community health committees, village health teams, or voluntary community-based organizations","0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,trace,,
+community_leaders_trace,iedea_2020_site_survey_english,,radio,"3.3b. Community leaders/officials, community health workers, or community health volunteers","0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,trace,,
+plwha_associations_trace,iedea_2020_site_survey_english,,radio,3.3c. People living with HIV/AIDS (PLWHA) associations or patient support groups,"0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,trace,,
+other_associations_trace,iedea_2020_site_survey_english,,radio,"3.3d. Other associations/support groups (e.g. addiction or mental health support groups, sexual minority support groups, etc.)","0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,trace,,
+peer_groups_trace,iedea_2020_site_survey_english,,radio,3.3e. Youth groups or peer educator groups,"0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,trace,,
+partners_other_trace,iedea_2020_site_survey_english,,radio,3.3f. Other <i>(please specify or select Never)</i>,"0, Never | 1, Daily/weekly | 2, Monthly/quarterly | 3, Less than quarterly",,,,,,,y,,,trace,,
+other_specify_trace,iedea_2020_site_survey_english,,text,"3.3f1. If Other, please specify",,,,,,,[partners_other_trace] = '1' or [partners_other_trace] = '2' or [partners_other_trace] = '3',y,,,,,
+ct_services,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">4. HIV TESTING & DIAGNOSIS
+<i>Please describe practices/service delivery as offered prior to the COVID-19 pandemic</div>",radio,"4.1 How often were HIV counseling and testing services offered at this health facility? 
+","1, Services available every day clinic is open | 2, Services available some days | 3, Services never available",,,,,,,y,,,,,
+test_services_type2_b,iedea_2020_site_survey_english,,checkbox,"4.2 What types of HIV testing services were offered at this health facility during 2019?
+
+
+
+<i>Check all that apply.</i>","1, Opt-out testing <i>(provider-initiated)</i> | 2, Opt-in testing <i>(client-initiated)</i> | 3, Partner/couples testing | 4, ""Family tree"" testing <i>(testing of family and other household members)</i> | 7, Early Infant Diagnosis (EID) | 5, Rapid HIV tests/Same-day testing | 6, HIV self-testing kits | 88, Other",,,,,,[ct_services]!='3',y,,,,,
+other_hivtesting,iedea_2020_site_survey_english,,text,"4.2a. If Other, please specify",,,,,,,[test_services_type2_b(88)] = '1',y,,,,,
+services_type_2,iedea_2020_site_survey_english,,checkbox,"4.3 	Which of the following types of HIV testing services were offered <u>in the catchment area</u> of this health facility during 2019?
+
+
+<i>Check all that apply OR select ""None"".</i>
+","77, None | 2, Voluntary counseling and testing (VCT) at fixed community locations | 3, Mobile VCT testing | 1, Home testing | 4, Self testing | 88, Other | 99, Do not know",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+other_testing_services,iedea_2020_site_survey_english,,text,"4.3a. If Other, please specify",,,,,,,[services_type_2(88)] = '1',y,,,,,
+confirm_test_art,iedea_2020_site_survey_english,,radio,"4.4 <u>After a positive result on an HIV screening test at this health facility or elsewhere</u>, was additional testing done at this health facility to confirm HIV diagnoses prior to initiating patients on ART?
+","1, Yes | 0, No | 77, Not applicable (All patients initiate ART prior to enrollment at this site)",,,,,,,y,,,,,
+confirm_dx_adults,iedea_2020_site_survey_english,,checkbox,"4.4a How was the diagnosis of HIV infection confirmed for adult patients enrolling into care at this site in 2019?
+
+<i>Check all that apply.</i>
+","1, Confirmatory antibody test | 2, Confirmation based on HIV viral load (PCR) test | 88, Other",,,,,,[confirm_test_art]='1',y,,,,,
+confirm_dx_adults_other,iedea_2020_site_survey_english,,text,"4.4a1. If Other, please specify",,,,,,,[confirm_dx_adults(88)] = '1',y,,,,,
+confirm_dx_infants,iedea_2020_site_survey_english,,checkbox,"4.4b How was the diagnosis of HIV infection confirmed for infants < 18 months at this site in 2019?
+
+<i>Check all that apply.</i>
+","77, Not applicable (no infants/pediatric patients) | 1, Confirmatory antibody test | 2, Confirmation based on HIV DNA or RNA PCR | 88, Other",,,,,,[confirm_test_art]='1',y,,,,, @NONEOFTHEABOVE=77
+confirm_dx_infants_other,iedea_2020_site_survey_english,,text,"4.4b1. If Other, please specify",,,,,,,[confirm_dx_infants(88)] = '1',y,,,,,
+dx_services_infants,iedea_2020_site_survey_english,,radio,"4.5 In 2019, how often were <u>early infant diagnosis (EID)</u> services offered at this health facility? ","1, Services available every day clinic is open | 2, Services available some days | 77, Services never available",,,,,,[confirm_test_art]<>1 OR [confirm_dx_infants(77)]<>1,y,,,,, @NONEOFTHEABOVE=77
+same_day_poc,iedea_2020_site_survey_english,,radio,"4.6 Was same-day/point of care (POC) DNA PCR EID testing routinely available at this health facility in 2019? 
+
+<u><i>Routinely available</u> means that the test could be requested or performed, when needed</i>
+","1, Yes | 2, No",,,,,,[dx_services_infants] = '1' OR [dx_services_infants] = '2',y,RH,,,,
+eid_dx_tat,iedea_2020_site_survey_english,,text,"4.7 During 2019, what was the usual turnaround time (in days) for getting early infant diagnosis (EID) test results?
+
+<i>Enter the number of days, or NA if EID was not available  in 2019
+
+<u>Turnaround time</u> means the time from ordering or referring a patient for the test to the time when results are received by the facility/clinic staff.</i>
+",,Number of days or NA if EID not available in 2019,,,,,([dx_services_infants] = '1' OR [dx_services_infants] = '2'),y,,,,,
+desc_4_8,iedea_2020_site_survey_english,,descriptive,"4.8 During 2019, where were the following <u>HIV diagnostic tests</u> typically performed for patients enrolled in care at this HIV clinic?   
+
+<i>Confirm whether diagnostic services were provided in the HIV clinic and/or elsewhere at the same health facility, only off-site or were not available for routine patient care.</i>
+",,,,,,,,,,,,,
+rpid_hivtest,iedea_2020_site_survey_english,,checkbox,4.8a. HIV-1/HIV-2 antigen/antibody immunoassay test for established HIV infection,"1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,hiv_diagnstic_tests,," @NONEOFTHEABOVE=3,77"
+hiv1_2_antigen,iedea_2020_site_survey_english,,checkbox,"4.8b. HIV-1 p24 antigen test for acute HIV infection  (i.e., before HIV antibodies are detectable)","1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,hiv_diagnstic_tests,," @NONEOFTHEABOVE=3,77"
+hiv_p24_antigen,iedea_2020_site_survey_english,,checkbox,"4.8c. Virologic assay tests (e.g., HIV RNA nucleic acid test, nucleic acid amplification test) for acute HIV infection","1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,hiv_diagnstic_tests,," @NONEOFTHEABOVE=3,77"
+hiv_nat,iedea_2020_site_survey_english,,checkbox,4.8d. Supplemental HIV-1/HIV-2 antibody differentiation immunoassay,"1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,hiv_diagnstic_tests,," @NONEOFTHEABOVE=3,77"
+hiv1_2_antibody,iedea_2020_site_survey_english,,checkbox,4.8e. DNA or RNA PCR for early infant diagnosis (EID),"1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,hiv_diagnstic_tests,," @NONEOFTHEABOVE=3,77"
+entry_b,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">5. CARE FOR NEW PATIENTS <br>(PATIENTS NEWLY TESTING POSITIVE OR TRANSFERRING FROM ANOTHER SITE) </div>",checkbox,"5.1 During 2019, what were the most common entry points into HIV care for patients at this health facility? 
+
+
+
+<i>Check all that apply.</i>","1, Voluntary counseling and testing (VCT) unit | 23, Maternal and child health services (e.g. Antenatal care, prevention of mother to child transmission, maternity/labor & delivery, under-5 clinic) | 4, Sexually transmitted infection (STI) treatment unit | 5, Tuberculosis (TB) unit | 6, Outpatient department | 8, Inpatient Hospitalization | 7, Referrals/transfers from other health facilities/sites | 88, Other",,,,,,,y,,,,,
+entry_b_other,iedea_2020_site_survey_english,,text,"5.1a If Other, please specify",,,,,,,[entry_b(88)] = '1',y,,,,,
+services_type_3_b,iedea_2020_site_survey_english,,checkbox,"5.2 During 2019, what type of support services were routinely provided to patients who receive a positive HIV test result at this health facility?
+
+
+
+<i>Check all that apply OR select ""None"". 
+
+<u>Routinely</u> provided means provided as the  standard of care.</i>","77, None | 12, Psychosocial support from nurse, social worker, counselor, mentor, etc. | 3, Partner disclosure counseling and support | 4, Referral to support groups | 5, Referral to community-based volunteers/workers | 88, Other",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+other_specify4,iedea_2020_site_survey_english,,text,"5.2a If Other, please specify",,,,,,,[services_type_3_b(88)] = '1',y,,,,,
+screening_enrollment,iedea_2020_site_survey_english,,checkbox,"5.3	During 2019, which of the following screenings were routinely done <u>at the time of enrollment into HIV care</u> at this health facility (e.g. newly-diagnosed patients or patients who transfer to this site for HIV care)?
+
+
+<i>Check all that apply or select ""None"". 
+<u>Routinely</u> means provided as the standard of care at enrollment.</i> 
+","77, None | 1, Pregnancy/breastfeeding | 2, Testing for latent tuberculosis infection (LTBI) | 3, Screening for tuberculosis (TB) disease | 4, Sexually-transmitted infection (STI) screening | 5, Hepatitis B screening | 6, Substance use disorders (alcohol, smoking, illicit drug use, etc.) | 7, Mental health disorders (depression, anxiety, post-traumatic stress)",,,,,,,y,,,,, @NONEOFTHEABOVE='77'
+cotrimoxazole_meds,iedea_2020_site_survey_english,,checkbox,"5.4	What types of patients received Cotrimoxazole prophylaxis as the standard of care at the HIV clinic? 
+
+
+<i>Check all that apply OR select ""None"".</i>
+","77, None | 1, All patients | 2, Patients who meet a CD4 threshold | 3, Pregnant women | 4, Infants/children < 18 months | 5, Infants/children < 5 years | 6, Infants/children < 10 years | 7, TB patients | 88, Other",,,,,,,y,,,,," @NONEOFTHEABOVE='1,77'"
+cotrimoxazole_other,iedea_2020_site_survey_english,,text,"If Other, please specify",,,,,,,[cotrimoxazole_meds(88)] = '1',y,,,,,
+cd4_testing,iedea_2020_site_survey_english,,yesno,"5.5 	In 2019, was CD4 cell count testing done as the standard of care <u>prior to ART initiation</u> (for newly-enrolling patients)  or <u>prior to re-starting ART</u> (for patients re-entering care at this health facility? ",,,,,,,,y,RH,,,,
+lab_cd4_b,iedea_2020_site_survey_english,,radio,5.6 Where is the laboratory that conducted the majority of the CD4 cell count testing for this HIV clinic in 2019?,"1, Onsite, at the same health facility as the HIV clinic | 23, Offsite | 77, Not available",,,,,,,y,,,,,
+sameday_cd4,iedea_2020_site_survey_english,,yesno,"5.7 In 2019, were same-day/point of care (POC) CD4 count results routinely available at this health facility?
+
+<i><u>Routinely available</u>, means that the test 
+could be requested or performed, when needed.</i>",,,,,,,[lab_cd4_b] = '1' or [lab_cd4_b] = '23',y,RH,,,,
+care_preart,iedea_2020_site_survey_english,,yesno,"5.8 	Did this HIV clinic provide care to any pre-ART patients in 2019 (i.e., patients who were enrolled in HIV care but had not initiated ART)? 
+
+<i>If all patients initiate ART elsewhere prior to enrollment in HIV care at this clinic, please select ""No"". Otherwise, please select ""Yes"". </i>",,,,,,,,y,RH,,,,
+meds_pre_art_type_b,iedea_2020_site_survey_english,,checkbox,"5.9 What medications were routinely provided to <i><u>pre-ART patients</i></u> (or routinely prescribed if this clinic does not provide medications directly)?  
+
+
+<i>Check all that apply OR select ""None"". </i>
+
+<i><u>Routinely</u> provided means provided as the  standard of care.</i>","77, None | 2, Isoniazid  (or other TB preventive therapies, i.e. 3 HP, etc.) | 3, Vitamin supplements (i.e., multivitamins) | 88, Other",,,,,,[care_preart]='1',y,,,,, @NONEOFTHEABOVE=77
+other_specify8,iedea_2020_site_survey_english,,text,"5.9a. If Other, please specify",,,,,,,[meds_pre_art_type_b(88)] = '1',y,,,,,
+missapp_art_naive,iedea_2020_site_survey_english,,checkbox,"5.10 What was done if <u>pre-ART patients</u> missed an appointment or did not return for ART services?   
+
+
+
+
+<i>Check all that apply OR select 
+""Nothing/No routine follow-up tracing"".</i>","77, Nothing <i>(No routine follow-up tracing of pre-ART patients)</i> | 1, Phone call to individual and/or family | 2, Send message via letter, email, SMS, or online patient portal | 3, Home visit by clinic staff or community outreach worker | 4, Outreach by peer supporter/mentor | 88, Other",,,,,,[care_preart]='1',y,,,,, @NONEOFTHEABOVE=77
+other_specify_artnaive,iedea_2020_site_survey_english,,text,"5.10a If Other, please specify",,,,,,,[missapp_art_naive(88)] = '1',y,,,,,
+criteria_art_c_2,iedea_2020_site_survey_english,,checkbox,"5.11 By December 2019, what were the <u>criteria for ART initiation</u> at this health facility? 
+
+
+
+<i>Select all that apply or select ""Start all patients on ART""</i>
+","1, Start <u>all</u> patients on ART regardless of CD4 or clinical criteria | 2, Start <u>some</u> patients on ART regardless of CD4 /clinical criteria | 3, CD4 count ≤500 cell/mm<sup>3</sup> for all or some patients | 4, CD4 count ≤350 cell/mm<sup>3</sup> for all or some patients | 88, Other criteria",,,,,,[care_preart]='1',y,,,,, @NONEOFTHEABOVE='1'
+criteria_art_some,iedea_2020_site_survey_english,,text,"5.11a If Start some patients on ART, please specify criteria
+",,,,,,,[criteria_art_c_2(2)] = '1',y,,,,,
+criteria_art_88_spec_c,iedea_2020_site_survey_english,,text,"5.11b If Other criteria, please specify
+",,,,,,,[criteria_art_c_2(88)] = '1',y,,,,,
+art_time2_b,iedea_2020_site_survey_english,,radio,"5.12 How soon after confirming HIV diagnoses and/or treatment eligibility did patients generally initiate ART in 2019?
+
+<i>Check one best response.</i>
+","1, Same day that ART eligibility is established | 2, 1 to 7 days after establishing ART eligibility | 3, 8 to 14 days after establishing ART eligibility | 4, 2-4 weeks after establishing ART eligibility | 5, >1 month after establishing ART eligibility",,,,,,[care_preart]='1',y,,,,,
+art_visits,iedea_2020_site_survey_english,,radio,"5.13 At this clinic, how many ART readiness counseling sessions were typically conducted before eligible patients initiated ART in 2019?
+
+<i>Check one best response</i>","1, 0 | 2, 1 | 3, 2 | 4, 3 | 5, 4 or more sessions",,,,,,[care_preart]='1',y,,,,,
+visits_stable_art,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">6. ART MONITORING, ADHERENCE & RETENTION STRATEGIES 
+<i>Describe practices/service delivery prior to COVID-19 </i></div>",radio,"6.1 In 2019, what was the standard frequency of refills for patients who are stable on ART?
+
+<i>Check one best response</i>","1, Monthly | 2, Every 3 months | 3, Every 6 Months | 88, Other",,,,,,[care_preart]='1' OR [care_preart]='0' OR [care_preart]='',y,,,,,
+other_specify21,iedea_2020_site_survey_english,,text,"6.1a If Other, please specify",,,,,,,[visits_stable_art] = '88',y,,,,,
+meds_art,iedea_2020_site_survey_english,,checkbox,"6.2 In 2019, how was ART medication adherence routinely monitored in patients at this HIV clinic? 
+
+	
+<i>Check all that apply OR select ""Not applicable"".
+
+
+<u>Routinely monitored</u> means monitored as the  standard of care.</i>
+","77, Not applicable  <i>(Medication adherence not routinely monitored)</i> | 1, Unstructured assessment of adherence by clinician | 2, Structured assessment of adherence by clinician using recall instrument (e.g., recall of missed doses during 24-hour, 3-day, 7-day, 30-day, or other recall period). | 3, Pill counts | 4, Pharmacy refills | 5, Electronic dose monitoring (MEMS caps) | 6, Directly observed treatment | 7, Routine viral loads | 8, Viral loads for patients suspected of non-adherence. | 88, Other",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+other_specify13,iedea_2020_site_survey_english,,text,"6.2a If Other, please specify",,,,,,,[meds_art(88)] = '1',y,,,,,
+services_art_type,iedea_2020_site_survey_english,,checkbox,"6.3 What ART adherence support services were routinely provided to HIV patients at this HIV clinic in 2019? 
+
+
+<i>Check all that apply OR select ""None/Not applicable"".
+
+
+<u>Routinely provided</u> means provided as part of standard care.</i>","77, None/Not applicable | 1, One-on-one adherence counseling | 2, Group adherence counseling | 3, Individual mental health counseling | 4, Group mental health counseling | 5, Referral to peer support or mentor groups | 88, Other",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+other_specify14,iedea_2020_site_survey_english,,text,"6.3a If Other, please specify",,,,,,,[services_art_type(88)] = '1',y,,,,,
+reminders_art_type,iedea_2020_site_survey_english,,checkbox,"6.4 Which of the following types of adherence aids/reminders were routinely provided to <i><u>ART patients? </i></u>
+
+
+
+<i>Check all that apply OR select ""None/Not applicable"".
+
+
+ <u>Routinely provided</u> means provided as the  standard of care.</i>","77, None/Not applicable | 1, Patient education media (written, pictorial, video, etc.) | 2, Pill boxes or blister packs | 3, Calendars, checklists, or other reminders | 4, Alarm clocks, wrist watches, beepers | 5, Counseling by pharmacist/pharmacy staff | 6, Routine review of medication pick up | 88, Other",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+other_specify15,iedea_2020_site_survey_english,,text,"6.4a If Other, please specify",,,,,,,[reminders_art_type(88)] = '1',y,,,,,
+sms_retention_b,iedea_2020_site_survey_english,,checkbox,"6.5 In 2019, did this clinic utilize text or voice messaging to support any of the following:
+
+<i> Check all that apply OR select None/Not applicable</i>","77, None/Not applicable | 1, Adherence to medication | 2, Adherence to appointments | 3, Follow-up of missed appointments | 4, Educational messaging",,,,,,,y,,,,, @NONEOFTHEABOVE='77'
+desc_6_6,iedea_2020_site_survey_english,,descriptive,"6.6 	During 2019, where were the following <u>tests</u> typically performed for patients enrolled in care at this HIV clinic? 
+
+
+<i>Confirm whether diagnostic services are provided in the HIV clinic AND/OR elsewhere at the same health facility, only off-site, or were not available for routine patient care.</i>",,,,,,,,,,,,,
+qualitative_pcr_vl,iedea_2020_site_survey_english,,checkbox,6.6a Quantitative PCR for HIV viral load assay,"1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,labs,," @NONEOFTHEABOVE=3,77"
+genotypic_dr_testing,iedea_2020_site_survey_english,,checkbox,6.6b HIV-1 genotypic drug resistance testing,"1, Provided in <br>HIV Clinic | 2, In same health facility<br> (but not at HIV clinic) | 3, Only offsite<br> (referral) | 77, Not available",,,,,,,y,,,labs,," @NONEOFTHEABOVE=3,77"
+poc_pcr_rna,iedea_2020_site_survey_english, ,yesno,"6.7	In 2019, was same-day/point of care (POC) RNA PCR HIV viral load testing routinely available at this health facility? 
+
+
+<i><u>Routinely available</u> means that the test could be requested or performed any time, when needed.</i>
+",,,,,,,,y,RH,,,,
+tat_vl_days,iedea_2020_site_survey_english,,text,"6.8 During 2019, what was the usual turnaround time (in days) for getting viral load test results? 
+
+<i><u>Turnaround time</u> means the time from ordering or referring a patient for the test to the time when results are received.
+
+Enter number of days, or NA if viral load testing not available
+",,"enter number of days, or NA if VL testing not available",,,,,,y,,,,,
+intro_2,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">7. ROUTINE CARE OF ENROLLED HIV PATIENTS 
+<i>Describe practices/service delivery prior to COVID-19</i></div>",descriptive,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:18px; color: #000000; text-align:center;padding:10px;"">ROUTINE SCREENING DURING FOLLOW UP</div>
+",,,,,,,,,,,,,
+desc_7_1,iedea_2020_site_survey_english,,descriptive,"7.1. 	Which of the following <u>screenings</u> were <u>regularly performed during follow-up visits</u> for enrolled HIV patients and where was screening typically conducted?
+
+<i>Check one best response.</i></div>",,,,,,,,,,,,,
+ltbi_screening,iedea_2020_site_survey_english,,radio,7.1a. Testing for latent tuberculosis infection (LTBI),"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+tb_screening,iedea_2020_site_survey_english,,radio,7.1b. Screening for tuberculosis (TB) disease,"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+sti_screening,iedea_2020_site_survey_english,,radio,7.1c. Screening for sexually transmitted infections (STIs),"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+hbv_screening,iedea_2020_site_survey_english,,radio,7.1d. Screening for Hepatitis B virus (HBV),"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+hcv_screening,iedea_2020_site_survey_english,,radio,7.1e. Screening for Hepatitis C virus (HCV),"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+sud_screening,iedea_2020_site_survey_english,,radio,7.1f. Screening for alcohol and substance use disorders,"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+mhd_screening,iedea_2020_site_survey_english,,radio,7.1g. Screening for mental health disorders,"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+cervical_ca_screening,iedea_2020_site_survey_english,,radio,7.1h. Cervical cancer screening (visual inspection /PAP smear),"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+anal_pap_screening,iedea_2020_site_survey_english,,radio,7.1i. Anal PAP screening,"1, Provided in <br>HIV Clinic | 2, In same health facility (but not at HIV clinic) | 3, Only offsite (referral) | 77, Not available",,,,,,,y,,,screening_services,,
+intro_3,iedea_2020_site_survey_english,,descriptive,"<div style=""border: 1px solid #19B5FE;background: #FDFEFE; font-size:18px; color: #000000; text-align:center;padding:10px;"">COUNSELING SERVICES FOR HIV POSITIVE PATIENTS
+<i>Describe practices/service delivery prior to COVID-19</i></div>
+",,,,,,,,,,,,,
+desc_7_2,iedea_2020_site_survey_english,,descriptive,"7.2 Which of the following <u>counseling services</u> were <u>provided to enrolled HIV patients</u> and where were these services typically provided?
+
+<i>Check one best response.</i></div>",,,,,,,,,,,,,
+counsel_disclosure_b,iedea_2020_site_survey_english,,radio,7.2a. Counseling regarding disclosure to sexual partners,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_1,,
+safesex_method_b,iedea_2020_site_survey_english,,radio,7.2b Education on sexual behavior and safer sex practices,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_1,,
+family_plan_b,iedea_2020_site_survey_english,,radio,7.2c Family planning counseling,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_1,,
+harm_reduction_b,iedea_2020_site_survey_english,,radio,7.2d Education on high-risk substance-use behaviors and harm reduction  practices,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_1,,
+intro_4,iedea_2020_site_survey_english,,descriptive,"<div style=""border: 1px solid #19B5FE;background: #FDFEFE; font-size:18px; color: #000000; text-align:center;padding:10px;"">OTHER PREVENTIVE AND TREATMENT SERVICES FOR HIV POSITIVE PATIENTS</div>
+",,,,,,,,,,,,,
+dest_7_3,iedea_2020_site_survey_english,,descriptive,"7.3 	During 2019, which of the following <u>preventive and treatment services</u> were provided to <u>enrolled HIV patients</u> and where were these services typically provided?
+
+<i>Check one best response.</i></div>",,,,,,,,,,,,,
+prov_condoms_b,iedea_2020_site_survey_english,,radio,7.3a Condoms,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+prep,iedea_2020_site_survey_english,,radio,7.3b Pre-exposure prophylaxis (PrEP),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+pep,iedea_2020_site_survey_english,,radio,7.3c Post-exposure prophylaxis (PEP),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+male_circum_b,iedea_2020_site_survey_english,,radio,7.3d Voluntary male circumcision services,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+famplan_methods_b,iedea_2020_site_survey_english,,radio,7.3e Family planning/contraceptive methods other than condoms,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+tx_depression,iedea_2020_site_survey_english,,radio,7.3f Treatment/management of depression,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+tx_ptsd,iedea_2020_site_survey_english,,radio,7.3g Treatment/management of post-traumatic stress disorder (PTSD),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+tx_anxiety,iedea_2020_site_survey_english,,radio,7.3h Treatment/management of anxiety disorders (other than PTSD),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+tx_alcohol,iedea_2020_site_survey_english,,radio,7.3i Treatment for alcohol use disorders,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+tx_sud,iedea_2020_site_survey_english,,radio,7.3j Treatment for substance abuse disorders (other than alcohol),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+hpv_vacc_b,iedea_2020_site_survey_english,,radio,7.3k HPV vaccine,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+pneumococcal_vacc,iedea_2020_site_survey_english,,radio,7.3l Pneumococcal vaccine,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+hepa_vacc,iedea_2020_site_survey_english,,radio,7.3m Hepatitis A vaccine,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+hepb_vacc,iedea_2020_site_survey_english,,radio,7.3n Hepatitis B vaccine,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,prev_services_0,,
+intro_5,iedea_2020_site_survey_english,,descriptive,"<div style=""border: 1px solid #19B5FE;background: #FDFEFE; font-size:18px; color: #000000; text-align:center;padding:10px;"">LABORATORY AND DIAGNOSTIC TESTING SERVICES FOR HIV POSITIVE PATIENTS</div>
+",,,,,,,,,,,,,
+desc_7_4,iedea_2020_site_survey_english,,descriptive,"7.4 	During 2019, where were the following laboratory and diagnostic tests typically performed for patients enrolled in care at your HIV clinic?
+
+<i>Check one best response.</i></div>",,,,,,,,,,,,,
+cbc,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><u>Routine laboratory monitoring</u></div>",radio,"7.4a Complete blood count (e.g, platelets, hematocrit, lymphocytes, hemoglobin)","1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,laboratory,,
+glucose,iedea_2020_site_survey_english,,radio,7.4b Glucose,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,laboratory,,
+creatinine_labs,iedea_2020_site_survey_english,,radio,7.4c Creatinine,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,laboratory,,
+cholesterol,iedea_2020_site_survey_english,,radio,7.4d Cholesterol,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,laboratory,,
+ast_alt,iedea_2020_site_survey_english,,radio,7.4e AST (SGOT) and/or ALT (SGPT),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,laboratory,,
+hepv,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><u>Infectious disease testing</u></div>",radio,7.4f Hepatitis B virus (HBV),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,labs_dx,,
+hepc,iedea_2020_site_survey_english,,radio,7.4g Hepatitis C virus (HCV),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,labs_dx,,
+syphilis,iedea_2020_site_survey_english,,radio,7.4h Syphilis testing (RPR/TPHA/ VDRL),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,labs_dx,,
+stis,iedea_2020_site_survey_english,,radio,7.4i STIs other than syphilis,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,labs_dx,,
+crypto_antigen,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><u>Other screening & diagnostics</u></div>",radio,7.4j Cryptococcal meningitis screening (serum cryptococcal antigen or lateral flow assay),"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,other_labs,,
+crypto_csfindia,iedea_2020_site_survey_english,,radio,7.4k Cryptococcal meningitis diagnosis by CSF India Ink or latex agglutination,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,other_labs,,
+ultrasound,iedea_2020_site_survey_english,,radio,7.4l Ultrasound for liver disease management,"1, Provided in <br>HIV Clinic | 2, In same health facility <br>(but not at HIV clinic) | 3, Only offsite <br>(referral) | 77, Not available",,,,,,,y,,,other_labs,,
+intro_6,iedea_2020_site_survey_english,,descriptive,"<div style=""border: 1px solid #19B5FE;background: #FDFEFE; font-size:18px; color: #000000; text-align:center;padding:10px;"">FEES/CHARGES FOR HIV-RELATED CARE AND SERVICES</div>
+",,,,,,,,,,,,,
+desc_7_5,iedea_2020_site_survey_english,,descriptive,"7.5	During 2019, did HIV patients typically pay any fees (other than insurance co-pays) for the following types of routine and specialized services? 	
+
+<i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i>",,,,,,,,,,,,,
+routine_visits,iedea_2020_site_survey_english,,radio,7.5a Routine clinic visits or consultations,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+specialty_visits,iedea_2020_site_survey_english,,radio,7.5b Specialty clinic visits or consultations,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+first_line_art,iedea_2020_site_survey_english,,radio,7.5c First line ART regimens,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+second_line_art,iedea_2020_site_survey_english,,radio,7.5d Second line ART regimens,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+tb_meds,iedea_2020_site_survey_english,,radio,7.5e TB medications,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+oi_meds,iedea_2020_site_survey_english,,radio,"7.5f Opportunstic Infection (OI) medications (e.g., Bactrim, Cotrimoxazole, Septra, TMP-SMX)","1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+hepc_meds,iedea_2020_site_survey_english,,radio,7.5g Hepatitis C antiviral medication,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+mh_tx,iedea_2020_site_survey_english,,radio,"7.5h Mental health disorder treatment (e.g. medication, counseling, psychotherapy)","1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+psychiatric_meds,iedea_2020_site_survey_english,,radio,7.5i Psychiatric medications,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+sud_tx,iedea_2020_site_survey_english,,radio,"7.5j Substance use disorder treatment (e.g. medication, counseling, psychotherapy)","1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees,,
+desc_7_6,iedea_2020_site_survey_english,,descriptive,"7.6  	In 2019, did HIV patients typically pay any fees (other than insurance co-pays) for the following laboratory and diagnostic services?
+
+<i>Check one best response.</i>
+
+<i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i></div>",,,,,,,,,,,,,
+rapid_hivtest,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><u>HIV-related tests</u></div>",radio,7.6a HIV-1/HIV-2 antigen/antibody immunoassay test for established HIV infection,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+hiv1_hiv2_test,iedea_2020_site_survey_english,,radio,7.6b HIV-1 p24 antigen test for acute HIV-1 infection,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+hiv1_p24,iedea_2020_site_survey_english,,radio,7.6c Supplemental HIV-1/HIV-2 antibody differentiation immunoassay,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+cd4_test,iedea_2020_site_survey_english,,radio,7.6d CD4 testing,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+qual_pcr_eid,iedea_2020_site_survey_english,,radio,7.6e DNA or RNA PCR for early infant diagnosis (EID),"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+quant_pcr_vl,iedea_2020_site_survey_english,,radio,7.6f Quantitative PCR or viral load,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+hiv1_dr,iedea_2020_site_survey_english,,radio,7.6g HIV-1 genotypic drug resistance testing,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,fees_labs,,
+cbc_monitor,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i>
+
+<u>Routine laboratory monitoring</u></div>",radio,"7.6h Complete blood count (e.g, platelets, hematocrit, lymphocytes, hemoglobin etc.,)","1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,labs_monitor,,
+glucose_monito,iedea_2020_site_survey_english,,radio,7.6i Glucose,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,labs_monitor,,
+creatinine_monitor,iedea_2020_site_survey_english,,radio,7.6j Creatinine,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,labs_monitor,,
+cholesterol_monitor,iedea_2020_site_survey_english,,radio,7.6k Cholesterol,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,labs_monitor,,
+ast_alt_monitor,iedea_2020_site_survey_english,,radio,7.6l AST (SGOT) and/or ALT (SGPT),"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,labs_monitor,,
+hbv_test,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i>
+
+<u>Infectious disease testing</u></div>",radio,7.6m Hepatitis B virus (HBV),"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,id_testing,,
+hcv_test,iedea_2020_site_survey_english,,radio,7.6n Hepatitis C virus (HCV),"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,id_testing,,
+syphilis_test,iedea_2020_site_survey_english,,radio,7.6o Syphilis testing (RPR/TPHA/VDRL),"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,id_testing,,
+sti_test,iedea_2020_site_survey_english,,radio,7.6p STIs other than syphilis,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,id_testing,,
+crypto_antigen_dx,iedea_2020_site_survey_english,"<div style= ""border: 1px solid #19B5FE;background: #FDFEFE; font-size:14px; color: #000000; text-align:left;padding:10px;""><i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i>
+
+<u>Other screening & diagnostics</u></div>",radio,7.6q Cryptococcal meningitis screening (serum cryptococcal antigen/lateral flow assay),"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,other_screening_labs,,
+crypto_csfindia_dx,iedea_2020_site_survey_english,,radio,7.6r Cryptococcal meningitis diagnosis by CSF India Ink or latex agglutination,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,other_screening_labs,,
+ultrasound_dx,iedea_2020_site_survey_english,,radio,7.6s Ultrasound for liver disease management,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,other_screening_labs,,
+cervical_ca_dx,iedea_2020_site_survey_english,,radio,7.6t Cervical cancer screening,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,other_screening_labs,,
+anal_pap_dx,iedea_2020_site_survey_english,,radio,7.6u Anal pap screening,"1, Yes | 2, No | 3, Don't Know | 77, NA",,,,,,,y,,,other_screening_labs,,
+extended_hours,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">8. DIFFERENTIATED HIV CARE 
+(CARE TAILORED TO THE NEEDS OF DIFFERENT PATIENT POPULATIONS)
+<i>Describe practices/service delivery prior to COVID-19</i></div>",checkbox,"8.1	In 2019, did this health facility offer services during extended hours for HIV patients?
+
+<I>Check all that apply.</I>
+","77, No | 1, Services offered during extended opening hours | 2, Services offered during weekends",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+services_extendedhrs,iedea_2020_site_survey_english,,checkbox,"8.2 	What types of services were available for HIV patients during extended hours in 2019? 
+
+
+<i>Check all that apply.</i>
+","1, HIV testing & counseling | 2, ART adherence counseling | 3, ART initiation | 4, ART refills | 5, General HIV services | 6, Laboratory testing (VL monitoring, etc.) | 88, Other (specify)",,,,,,[extended_hours(1)]='1' or [extended_hours(2)]='1',y,,,,,
+serv_extend_hrs_oth,iedea_2020_site_survey_english,,text,"8.2a If other, specify",,,,,,,[services_extendedhrs(88)]='1',y,,,,,
+diff_care_yn,iedea_2020_site_survey_english,,yesno,"8.3 In 2019, did this HIV clinic provide differentiated care (i.e., care specifically tailored to the needs of different patient populations)?",,,,,,,[extended_hours(77)]='1' or [extended_hours(1)]='1' or [extended_hours(2)]='1',y,RH,,,,
+diff_hivservices,iedea_2020_site_survey_english,,checkbox,"8.4	Which of the following HIV-related services were differentiated (i.e., tailored to the needs of different patient populations) in 2019?
+
+
+<i>Check all that apply.</i>
+","1, HIV testing | 2, ART initiation | 3, ART delivery",,,,,,[diff_care_yn]='1',y,,,,,
+diff_care_pt_type,iedea_2020_site_survey_english,,checkbox,"8.5 Which of the following types of patients were served via <u>differentiated ART delivery models</u> at this HIV clinic in 2019?
+
+<i>Check all that apply for differentiated ART delivery, 
+or skip to 9.1.</i>","77, Not applicable <i>(no differentiated ART delivery)</i> | 1, Patients presenting/returning to care with advanced HIV disease (CD4< 200 cells/mm<sup>3</sup> and/or WHO clinical stage 4 disease) | 2, Patients presenting/returning to care when clinically well | 3, Patients clinically stable on ART (""stable patients"") | 4, Patients on ART with virologic/therapeutic failure (""unstable patients"", on ART>1 year)",,,,,,[diff_hivservices(3)]='1',y,,,,, @NONEOFTHEABOVE=77
+diff_criteria,iedea_2020_site_survey_english,,checkbox,"8.6 Which of the following criteria were used to define patient eligibility for differentiated ART delivery models at this HIV clinic in 2019?    
+
+
+<i>Check all that apply.</i>
+","1, Age thresholds (e.g. minimum age) | 2, Time on ART (e.g. minimum time) | 3, CD4 cell count thresholds (e.g., CD4 > 500 or < 200, etc.) | 4, Viral load suppression status | 5, Current pregnancy or breast-feeding status | 6, Current status of any opportunistic infection (OIs) | 7, Patient history of drug reactions or toxicities | 88, Other (specify)",,,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',y,,,,,
+diff_criteria_other,iedea_2020_site_survey_english,,text,"8.6a If other, specify",,,,,,,[diff_criteria(88)]='1',y,,,,,
+q8_7,iedea_2020_site_survey_english, ,descriptive,"8.7	In 2019, which of the following types of <u>differentiated ART delivery models were offered</u> to eligible patients enrolled in care at this HIV clinic and when were these models introduced at this clinic?",,,,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',,,,,,
+client_groups,iedea_2020_site_survey_english,,yesno,"8.7a Patients managed groups (community ART refill group, community patient-led ART delivery, community adherence group, peer support group, etc.)",,Model offered (YES/NO),,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',y,RH,,,,
+client_groups_yr,iedea_2020_site_survey_english,,text,"If model offered, specify year of introduction",,,integer,,2020,,[client_groups] = '1',,,,,,
+client_groups_yr_dk,iedea_2020_site_survey_english,,radio,,"9, Don't know",,,,,,[client_groups] = '1' and [client_groups_yr] = '',,,,,,
+hc_groups,iedea_2020_site_survey_english,,yesno,"8.7b Healthcare worker managed groups (ART adherence clubs, patient adherence club, youth club, teen club, etc.)",,Model offered (YES/NO),,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',y,RH,,,,
+hc_groups_yr,iedea_2020_site_survey_english,,text,"If model offered, specify year of introduction",,,integer,,2020,,[hc_groups] = '1',y,,,,,
+hc_groups_yr_dk,iedea_2020_site_survey_english,,radio,,"9, Don't know",,,,,,[hc_groups] = '1' and [hc_groups_yr] ='',,,,,,
+fac_based_models,iedea_2020_site_survey_english,,yesno,"8.7c Facility-based individual models (fast track, quick pick up, pharmacy refill only without clinical consultation, etc.) ",,Model offered (YES/NO),,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',y,RH,,,,
+fac_based_models_yr,iedea_2020_site_survey_english,,text,"If model offered, specify year of introduction",,,integer,,2020,,[fac_based_models] = '1',,,,,,
+fac_based_models_yr_dk,iedea_2020_site_survey_english,,radio,,"9, Don't know",,,,,,[fac_based_models] = '1' and [fac_based_models_yr] ='',,,,,,
+outoffac_models,iedea_2020_site_survey_english,,yesno,"8.7d. Out-of-facility individual models (mobile outreach, fixed community ART distribution points, community pharmacy, home delivery, etc.) ",,Model offered (YES/NO),,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',y,RH,,,,
+outoffac_models_yr,iedea_2020_site_survey_english,,text,"If model offered, specify year of introduction",,,integer,,2020,,[outoffac_models] = '1',,,,,,
+outoffac_models_yr_dk,iedea_2020_site_survey_english,,radio,,"9, Don't know",,,,,,[outoffac_models] = '1' and [outoffac_models_yr]='',,,,,,
+diff_care_contact,iedea_2020_site_survey_english, ,yesno,8.8 Is there someone at this HIV clinic who may be contacted for additional information about differentiated HIV care?,,,,,,,[diff_care_pt_type(1)]='1' OR [diff_care_pt_type(2)]='1' OR [diff_care_pt_type(3)]='1' OR [diff_care_pt_type(4)]='1',y,RH,,,,
+diff_care_contact_info,iedea_2020_site_survey_english,,descriptive,"If yes, please provide name and email address",,,,,,,[diff_care_contact] = '1',,,,,,
+investigator_name,iedea_2020_site_survey_english,,text,8.8a Full Name:,,,,,,,[diff_care_contact] = '1',,,,,,
+investigator_name_2,iedea_2020_site_survey_english,,text,8.8b Email address:,,,email,,,,[diff_care_contact] = '1',,,,,,
+care_preg_women,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">9. HIV CARE FOR PREGNANT AND POSTPARTUM WOMEN
+<i>Describe practices/service delivery prior to COVID-19 </i></div>",yesno,"9.1	In 2019, did this health facility provide HIV care and treatment to HIV+ pregnant women living with HIV?",,,,,,,[diff_care_yn] = '0' or [diff_care_yn] = '1' or [diff_care_yn] = '' or [diff_care_pt_type(77)]='1',y,RH,,,,
+care_preg_site,iedea_2020_site_survey_english,,checkbox,"9.2 	Where was HIV care provided for <u>patients who become pregnant while already enrolled in HIV care</u> at this site</u>?
+
+<i>Check all that apply.</i>","1, HIV clinic | 2, Antenatal/prenatal clinic | 88, Other",,,,,,[care_preg_women]='1',y,,,,,
+preg_site_other,iedea_2020_site_survey_english,,text,"9.2a If Other, please specify",,,,,,,[care_preg_site(88)] = '1',y,,,,,
+care_preg_art_site,iedea_2020_site_survey_english,,checkbox,"9.3 	Where did <u>pregnant women newly diagnosed with HIV during pregnancy initiate ART</u> at this health facility?
+
+<i>Check all that apply.</i>","1, HIV clinic | 2, Antenatal/prenatal clinic | 88, Other",,,,,,[care_preg_women]='1',y,,,,,
+care_preg_art_site_other,iedea_2020_site_survey_english,,text,"9.3a If Other, please specify",,,,,,,[care_preg_art_site(88)] = '1',y,,,,,
+care_postpartum_women,iedea_2020_site_survey_english,,yesno,"9.4	In 2019, did this health facility provide HIV care and treatment to <u>postpartum women</u> (< 24 months after delivery) living with HIV?",,,,,,,[care_preg_women] = '0' or [care_preg_women]='1',y,RH,,,,
+care_postpartum_site,iedea_2020_site_survey_english,,checkbox,"9.5	Where was HIV care provided for <u>postpartum women</u> (< 24 months after delivery) at this health facility?
+
+<i>Check all that apply.</i>","1, HIV clinic | 2, Postnatal clinic for postpartum women only | 3, Maternal and child health (MCH) clinic for women and infants | 88, Other",,,,,,[care_postpartum_women]='1',y,,,,,
+care_postpartum_site_other,iedea_2020_site_survey_english,,text,"9.5a If Other, please specify",,,,,,,[care_postpartum_site(88)] = '1',y,,,,,
+care_postpartum_art_site,iedea_2020_site_survey_english,,checkbox,"9.6	Where did <u>women newly diagnosed with HIV during the postpartum period initiate ART</u> at this health facility?
+
+<i>Check all that apply.</i>","1, HIV clinic | 2, Postnatal clinic for postpartum women only | 3, Maternal and child health (MCH) clinic for women and infants | 88, Other",,,,,,[care_postpartum_women]='1',y,,,,,
+care_postpartum_art_site_other_2,iedea_2020_site_survey_english,,text,"9.6a If Other, please specify",,,,,,,[care_postpartum_art_site(88)] = '1',y,,,,,
+services_peds2_b,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">10. SERVICES PROVIDED TO PEDIATRIC HIV PATIENTS
+<i>Describe practices/service delivery prior to COVID-19</i></div>",checkbox,"10.1 In 2019, which of the following services were provided to <u>pediatric HIV patients</u> (< 10 years) at this facility? 
+
+
+
+<i>Check all that apply OR select ""Not applicable"" if no pediatric patients are served at this facility.</i>","77, Not applicable <i>(No pediatric patients served at this facility)</i> | 1, Postnatal ARV prophylaxis/prevention of mother-to-child transmission services to HIV-exposed infants | 1b, ART initiation | 2, Infant feeding counseling | 3, Male circumcision for infants | 4, Immunizations | 5, Nutritional support | 6, Growth monitoring | 7, Integrated Management of Childhood Illness (IMCI) | 8, Screening for tuberculosis (TB) disease | 10, Testing for latent tuberculosis infection(LTBI)",,,,,,[care_postpartum_women]='1' or [care_postpartum_women]='0' or [care_postpartum_women]='',y,,,,, @NONEOFTHEABOVE=77
+care_infants,iedea_2020_site_survey_english,,yesno,"10.2 In 2019, did this health facility provide HIV care and treatment to infants < 24 months of age?",,,,,,,[services_peds2_b(1)] = '1' or [services_peds2_b(1b)] = '1' or [services_peds2_b(2)] = '1' or [services_peds2_b(3)] = '1' or [services_peds2_b(4)] = '1' or [services_peds2_b(5)] = '1' or [services_peds2_b(6)] = '1' or [services_peds2_b(7)] = '1' or [services_peds2_b(8)] = '1' or [services_peds2_b(10)] = '1',y,RH,,,,
+care_infants_site,iedea_2020_site_survey_english,,checkbox,"10.3 Where was HIV care provided for HIV-exposed infants (< 24 months of age) at this health facility?
+
+<i>Check all that apply.</i>","1, HIV clinic | 2, Well-baby clinic (for infants and children only) | 3, Maternal and child health (MCH) clinic for women and infants | 88, Other",,,,,,[care_infants]='1',y,,,,,
+care_infants_site_other,iedea_2020_site_survey_english,,text,"10.3a. If Other, please specify",,,,,,,[care_infants_site(88)] = '1',y,,,,,
+care_infants_art_site,iedea_2020_site_survey_english,,checkbox,"10.4 In 2019, where did infants (< 24 months) diagnosed with HIV initiate ART at this health facility?
+
+<i>Check all that apply</i>","1, HIV clinic | 2, Well-baby clinic (for infants and children only) | 3, Maternal and child health (MCH) clinic for women and infants | 88, Other",,,,,,[care_infants]='1',y,,,,,
+care_infants_art_site_other,iedea_2020_site_survey_english,,text,"If Other, please specify",,,,,,,[care_infants_art_site(88)] = '1',y,,,,,
+services_youth_b,iedea_2020_site_survey_english,,checkbox,"10.5 In 2019, did this health facility offer any of the following services for adolescent/youth HIV patients?  
+
+
+
+<i>Check all that apply OR select ""None""</i>","77, None  <i>(No dedicated services for adolescent patients)</i> | 1, Dedicated hours or space for youth/adolescent HIV testing & counseling services | 2, Dedicated hours or space for youth/adolescent HIV care and treatment services | 3, Peer counseling for youth/adolescent HIV patients | 4, Support groups specifically for youth/adolescent HIV patients | 5, Services to support transition to adult HIV care",,,,,,[care_infants]='1' or [care_infants]='0' or [services_peds2_b(77)]='1',y,,,,, @NONEOFTHEABOVE=77
+dtg_firstline,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">11. ROLL-OUT OF DOLUTEGRAVIR (DTG)-BASED ART REGIMENS
+<i>Describe current status of DTG roll-out.</i></div>",yesno,11.1 Have DTG-based regimens been introduced at this HIV clinic as <u>first-line ART regimens</u>?,,,,,,,,y,RH,,,,
+dtg_year,iedea_2020_site_survey_english,,radio,"11.2 When do you plan to introduce first-line dolutegravir (DTG)-based regimens?
+
+
+<i>Check one best response.</i>
+","77, No plans for introducing first-line DTG-based regimens | 2, 2020 | 3, 2021 | 9, Do not know",,,,,,[dtg_firstline]='0',y,,,,, @NONEOFTHEABOVE='77'
+insti_firstline,iedea_2020_site_survey_english,,checkbox,"11.3 Have any of the following other integrase strand transfer inhibitor (INSTI)-based regimens been introduced as first-line ART regimens at this HIV clinic?
+
+<i>Check all that apply</i>","77, None | 1, Elvitegravir (brand name Vitekta) | 2, Raltegravir (brand name Isentress) | 3, Bictegravir",,,,,,[dtg_firstline]='0',y,,,,, @NONEOFTHEABOVE=77
+dtg_intro_dt,iedea_2020_site_survey_english,,text,"11.4 When (which month and year) was DTG introduced as a <u>first-line ART regimen</u>?
+
+<i>Enter ""01"" for ""day"". 
+If month is unknown, enter ""06"" for month</i>",,DD-MM-YYYY,date_dmy,,,,[dtg_firstline]='1',,,,,,
+dtg_intro_dt_unk,iedea_2020_site_survey_english,,radio,,"99, Do not know",,,,,,[dtg_firstline]='1' AND [dtg_intro_dt]='',,,,,,
+dtg_type,iedea_2020_site_survey_english,,checkbox,"11.5 Currently, which of the following patients are eligible for DTG-based <u>first-line regimens</u>?
+
+<i>Check all that apply</i>
+","1, ART-naive patients | 2, Patients with suppressed viral load (as defined locally) | 3, Patients with unsuppressed viral load (as defined locally) | 4, Patients without known drug resistance | 5, Patients with known drug resistance | 6, Women not of reproductive age (≥50 years) | 7, Women of reproductive age (15-49 years) | 8, Pregnant women | 10, Men | 11, Adolescents | 12, Children | 88, Other types of patients",,,,,,[dtg_firstline]='1',y,,,,,
+dtg_type_other_3,iedea_2020_site_survey_english,,text,"11.5a If Children, specify minimum weight in Kg",,,integer,,,,[dtg_type(12)] = '1',y,,,,,
+dtg_type_other,iedea_2020_site_survey_english,,text,"11.5b If Other types of patients, please specify",,,,,,,[dtg_type(88)] = '1',y,,,,,
+dtg_2line,iedea_2020_site_survey_english,,yesno,11.6 Has DTG been introduced as a <u>2<sup>nd</sup> line ART regimen</u> at this site?,,,,,,,[dtg_firstline]='0' or [dtg_firstline]='1' or [insti_firstline(1)]='1' or [insti_firstline(2)]='1' or [insti_firstline(3)]='1' or [insti_firstline(77)]='1',y,RH,,,,
+dtg_2line_year,iedea_2020_site_survey_english,,radio,"11.7 When do you plan to introduce <u>2<sup>nd</sup> line DTG-based regimens</u>?
+
+
+<i>Check one best response.</i>
+","77, No plans for introducing 2<sup>nd</sup> line DTG-based regimens | 2, 2020 | 3, 2021 | 9, Do not know",,,,,,[dtg_2line]='0',y,,,,, @NONEOFTHEABOVE='77'
+dtg_2line_intro_dt,iedea_2020_site_survey_english,,text,"11.8 When (which month and year)  was DTG introduced as a <u>2<sup>nd</sup> line ART regimen</u>?
+
+<i>Enter ""01"" for ""day"". 
+If month is unknown, enter ""06"" for month.</i>",,,date_dmy,,,,[dtg_2line]='1',,,,,,
+dtg_2intro_dt_unk,iedea_2020_site_survey_english,,radio,,"99, Do not know",,,,,,[dtg_2line]='1' AND [dtg_2line_intro_dt]='',,,,,,
+dtg_2line_type,iedea_2020_site_survey_english,,checkbox,"11.9 Currently, which of the following patients are eligible for DTG-based <u>2<sup>nd</sup> line ART regimens</u>?
+
+<i>Check all that apply</i>
+","2, Patients with suppressed viral load (as defined locally) | 3, Patients with unsuppressed viral load (as defined locally) | 4, Patients without known drug resistance | 5, Patients with known drug resistance | 6, Women not of reproductive age (≥50 years) | 7, Women of reproductive age (15-49 years) | 8, Pregnant women | 10, Men | 11, Adolescents | 12, Children | 88, Other types of patients",,,,,,[dtg_2line]='1',y,,,,,
+dtg_2line_type_other_3,iedea_2020_site_survey_english,,text,"11.9a If Children, specify minimum weight in Kg",,,integer,,,,[dtg_2line_type(12)] = '1',y,,,,,
+dtg_2line_type_other,iedea_2020_site_survey_english,,text,"11.9b If Other types of patients, please specify",,,,,,,[dtg_2line_type(88)] = '1',y,,,,,
+dtg_3line,iedea_2020_site_survey_english,,yesno,11.10 Has DTG been introduced as a <u>3<sup>rd</sup> line ART regimen</u> at this site?,,,,,,,[dtg_2line]='0' or [dtg_2line]='1',y,RH,,,,
+dtg_3line_year,iedea_2020_site_survey_english,,radio,"11.11 When do you plan to introduce <u>3<sup>rd</sup> line DTG-based regimens</u>?
+
+
+<i>Check one best response.</i>
+","77, No plans for introducing 3<sup>rd</sup> line DTG-based regimens | 2, 2020 | 3, 2021 | 9, Do not know",,,,,,[dtg_3line]='0',y,,,,, @NONEOFTHEABOVE='77'
+dtg_3line_intro_dt,iedea_2020_site_survey_english,,text,"11.12 When (which month and year)  was DTG introduced as a <u>3<sup>rd</sup> line ART regimen</u>?
+
+<i>Enter ""01"" for ""day"". 
+If month is unknown, enter ""06"" for month.</i>",,,date_dmy,,,,[dtg_3line]='1',,,,,,
+dtg_3line_intro_dt_unk,iedea_2020_site_survey_english,,radio,,"99, Do not know",,,,,,[dtg_3line]='1' AND [dtg_3line_intro_dt]='',,,,,,
+dtg_3line_type,iedea_2020_site_survey_english,,checkbox,"11.13 Currently, which of the following patients are eligible for DTG-based <u>3<sup>rd</sup> line ART regimens</u>?
+
+<i>Check all that apply</i>
+","2, Patients with suppressed viral load (as defined locally) | 3, Patients with unsuppressed viral load (as defined locally) | 4, Patients without known drug resistance | 5, Patients with known drug resistance | 6, Women not of reproductive age (≥50 years) | 7, Women of reproductive age (15-49 years) | 8, Pregnant women | 10, Men | 11, Adolescents | 12, Children | 88, Other types of patients",,,,,,[dtg_3line]='1',y,,,,,
+dtg_3line_type_other_3,iedea_2020_site_survey_english,,text,"11.13a If Children, specify minimum weight in Kg",,,,,,,[dtg_3line_type(12)] = '1',y,,,,,
+dtg_3line_type_other,iedea_2020_site_survey_english,,text,"11.13b If Other types of patients, please specify",,,,,,,[dtg_3line_type(88)] = '1',y,,,,,
+dtg_rollout_type,iedea_2020_site_survey_english,,radio,11.14 Have DTG-based regimens been rolled out at this HIV clinic as part of a national initiative or an institutional or practice-level initiative?,"1, National roll-out of DTG-based regimens | 2, Institutional/practice-level roll-out of DTG-based regimens | 77, Not applicable (no introduction of DTG-based regimens)",,,,,,,y,,,,,
+dtg_transition,iedea_2020_site_survey_english,,yesno,11.15 Is the transition of patients to DTG-based regimens based on viral load monitoring?,,,,,,,[dtg_rollout_type]='1' OR [dtg_rollout_type]='2',y,RH,,,,
+dtg_trans_vl,iedea_2020_site_survey_english,,radio,"11.16  How recent a viral load measure do you require a patient to have before transitioning to DTG-based regimens?
+
+
+<i>Select one best response</i>
+","1, Viral load measure within previous 6 months | 2, Viral load measure within previous 12 months | 3, Viral load monitoring criteria varies by patient group",,,,,,[dtg_transition]='1',y,,,,,
+dtg_genotyping,iedea_2020_site_survey_english,,yesno,11.17 Is HIV genotypic drug resistance testing performed at the time of switching to DTG-based regimen?,,,,,,,[dtg_transition]='0' OR [dtg_trans_vl]<>'',y,RH,,,,
+dtg_genotyping_pt,iedea_2020_site_survey_english,,checkbox,"11.18 For which types of patients is HIV genotypic drug resistance testing performed at the time of switching to DTG-based regimen?
+
+
+<i>Check all that apply</i>
+","1, Adult patients starting on or switching 1st-line DTG-based regimen | 2, Adult patients switching to a 2nd-line DTG-based regimen | 3, Adult patients switching to a 3rd-line DTG-based regimen | 4, Children switching from a PI to a DTG-based regimen | 5, Children switching from a NNRTI to a DTG-based regimen | 88, Other",,,,,,[dtg_genotyping]='1',y,,,,,
+other_dtg_geno,iedea_2020_site_survey_english,,text,"11.18a If Other, please specify",,,,,,,[dtg_genotyping_pt(88)] = '1',,,,,,
+tb_algorithm,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">12. TB SCREENING, DIAGNOSIS AND PREVENTIVE THERAPY 
+<i>Describe practices/service delivery prior to COVID-19 </i></div>",yesno,12.1 Did this HIV clinic have a <u>TB disease screening algorithm</u> for adult and/or pediatric patients in 2019? ,,,,,,,,y,RH,,,,
+desc_12_2,iedea_2020_site_survey_english,,descriptive,"12.2 For each of the following symptoms, please indicate whether it was included in the <u>TB disease screening algorithm </u>at this HIV clinic for <u>adult</u> patients, <u>pediatric</u> patients, <u>adult and pediatric</u> patients or for <u>none.</u>                 ",,,,,,,[tb_algorithm]='1',,,,,,
+cough_algorithm,iedea_2020_site_survey_english,,radio,12.2a. Cough,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,,
+fever_algorithm,iedea_2020_site_survey_english,,radio,12.2b. Fever,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,,
+nsweats_algorithm,iedea_2020_site_survey_english,,radio,12.2c. Night sweats,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,,
+wloss_algorithm,iedea_2020_site_survey_english,,radio,12.2d. Weight loss,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,,
+contacthx_algorithm,iedea_2020_site_survey_english,,radio,12.2e. History of contact with a case of TB,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,,
+thrivefail_algorithm,iedea_2020_site_survey_english,,radio,12.2f. Poor weight gain/failure to thrive,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,," @MAXCHOICE(1=0, 3=0)"
+fatigue_algorithm,iedea_2020_site_survey_english,,radio,12.2g. Fatigue/decreased playfulness,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,," @MAXCHOICE(1=0, 3=0)"
+other_algorithm,iedea_2020_site_survey_english,,radio,12.2h. Other,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_algorithm]='1',y,,,tb_screening_algor,,
+other_algorith_oth,iedea_2020_site_survey_english,,text,"12.2h1 If Other, please specify",,,,,,,[other_algorithm] = '1' or [other_algorithm] = '2' or [other_algorithm] = '3',y,,,,,
+description_12_3,iedea_2020_site_survey_english,,descriptive,12.3 For what ages are these screening algorithms used? ,,,,,,,"([cough_algorithm]=1 OR [fever_algorithm]=1 OR [nsweats_algorithm]=1 OR 
+[wloss_algorithm]=1 OR [contacthx_algorithm]=1 OR  [other_algorithm]=1 OR [cough_algorithm]=3 OR 
+[fever_algorithm]=3 OR [nsweats_algorithm]=3 OR [wloss_algorithm]=3 OR [contacthx_algorithm]=3 OR  [other_algorithm]=3) OR
+[cough_algorithm]=2 OR [fever_algorithm]=2 OR [nsweats_algorithm]=2 OR 
+[wloss_algorithm]=2 OR [contacthx_algorithm]=2 OR  [other_algorithm]=2 OR [thrivefail_algorithm]=2 OR [fatigue_algorithm]=2 OR  [thrivefail_algorithm]=3 OR [fatigue_algorithm]=3",,,,,,
+min_age,iedea_2020_site_survey_english,,text,12.3a. Please provide the <u>minimum age</u> for the adult screening algorithm,,"Enter the minimum age (in years) or enter ""NA"" (not applicable) ",,,,,"[tb_algorithm]='1' AND ([cough_algorithm]=1 OR [fever_algorithm]=1 OR [nsweats_algorithm]=1 OR 
+[wloss_algorithm]=1 OR [contacthx_algorithm]=1 OR  [other_algorithm]=1 OR [cough_algorithm]=3 OR 
+[fever_algorithm]=3 OR [nsweats_algorithm]=3 OR [wloss_algorithm]=3 OR [contacthx_algorithm]=3 OR  [other_algorithm]=3)",y,,,,,
+max_age,iedea_2020_site_survey_english,,text,12.3b. Please provide the <u>maximum age</u> for the child screening algorithm,,"Enter the maximum age (in years) or enter ""NA"" (not applicable) ",,,,,"[tb_algorithm]=1 AND ([cough_algorithm]=2 OR [fever_algorithm]=2 OR [nsweats_algorithm]=2 OR 
+[wloss_algorithm]=2 OR [contacthx_algorithm]=2 OR  [other_algorithm]=2 OR [thrivefail_algorithm]=2 OR [fatigue_algorithm]=2 OR [cough_algorithm]=3 OR [fever_algorithm]=3 OR [nsweats_algorithm]=3 OR 
+[wloss_algorithm]=3 OR [contacthx_algorithm]=3 OR  [other_algorithm]=3 OR [thrivefail_algorithm]=3 OR [fatigue_algorithm]=3)",y,,,,,
+tb_dx,iedea_2020_site_survey_english,,yesno,12.4 Did this HIV clinic diagnose TB disease in adult and/or pediatric HIV patients in 2019? ,,,,,,,,y,RH,,,,
+desc_12_5,iedea_2020_site_survey_english,,descriptive,"<div class=""rich-text-field-label""><p>12.5 For each of the following diagnostic tools, please indicate whether it was used in 2019 to evaluate <u>TB disease or infection</u> in <u>adult</u> patients, <u>children</u>, <u>adult and children</u></u> or for <u><u>none</u></u>.</u></p></div>",,,,,,,[tb_dx]='1',,,,,,
+afb_smear_tool,iedea_2020_site_survey_english,,radio,12.5a. AFB Smear,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+xpert_tool,iedea_2020_site_survey_english,,radio,12.5b. Gene Xpert,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+cxr_tool,iedea_2020_site_survey_english,,radio,12.5c. Chest X-ray,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+culture_tool,iedea_2020_site_survey_english,,radio,12.5d. Culture,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+lam_tool,iedea_2020_site_survey_english,,radio,12.5e. Urine LAM,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+tbdrtest_tool,iedea_2020_site_survey_english,,radio,12.5f. TB drug resistance testing,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+tst_ltbi_tool,iedea_2020_site_survey_english,,radio,12.5g. Tuberculin skin testing (TST)/PPD for latent TB infection (LTBI),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+igra_ltbi_tool,iedea_2020_site_survey_english,,radio,"12.5h. IGRA (e.g., Quantiferon Gold, T-spot) for latent TB infection (LTBI)","1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+other_tool,iedea_2020_site_survey_english,,radio,12.5i. Other <br><i>(please specify or select None)</i>,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_tools,,
+other_tools_ad,iedea_2020_site_survey_english,,text,"12.5i1. If Other, please specify",,,,,,,[other_tool]='1' OR [other_tool]='2' OR [other_tool]='3',y,,,,,
+desc_12_6,iedea_2020_site_survey_english, ,descriptive,"12.6 For each of the following types of samples used for <u>microbiological diagnosis of TB</u>, please indicate whether they were collected in 2019 for <u>adult</u> patients, <u>children</u>, <u>adults and children</u>, or <u>for none.",,,,,,,[tb_dx]='1',,,,,,
+sputum,iedea_2020_site_survey_english,,radio,12.6a. Expectorated sputum,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,,
+induced_sp,iedea_2020_site_survey_english,,radio,12.6b. Induced sputum,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,,
+gastric_asp,iedea_2020_site_survey_english,,radio,12.6c. Gastric aspirates,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,,
+urine,iedea_2020_site_survey_english,,radio,12.6d. Urine,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,,
+biopsy,iedea_2020_site_survey_english,,radio,12.6e. Biopsy,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,,
+stringtest,iedea_2020_site_survey_english,,radio,"12.6f. ""String test""","1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,," @MAXCHOICE(1=0, 3=0)"
+other_dx,iedea_2020_site_survey_english,,radio,12.6g. Other <br><i>(please specify or select None)</i>,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[tb_dx]='1',y,,,tb_screening_dx,,
+other_samples_ad,iedea_2020_site_survey_english,,text,"12.6g1. If Other, please specify",,,,,,,[other_dx]='1' OR [other_dx]='2' OR [other_dx]='3',y,,,,,
+desct_12_7,iedea_2020_site_survey_english, ,descriptive,"12.7  During 2019, where were the following <u>TB diagnostic tests</u> typically performed for adult and/or pediatric patients enrolled in care at this HIV clinic? 
+
+<i>Check on best response.</i>
+
+<i>Confirm whether specimen collection/diagnostics were performed in the HIV clinic, elsewhere at the same health facility, off-site or were not available for routine patient care.</i>",,,,,,,[tb_dx]='1' OR [tb_dx]='0',,,,,,
+afb_smear,iedea_2020_site_survey_english,,radio,12.7a AFB Smear,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+gene_xpert,iedea_2020_site_survey_english,,radio,12.7b Gene Xpert,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+cxray,iedea_2020_site_survey_english,,radio,12.7c Chest X-ray,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+culture,iedea_2020_site_survey_english,,radio,12.7d Culture,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+urine_lam,iedea_2020_site_survey_english,,radio,12.7e Urine LAM,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+tb_dr_test,iedea_2020_site_survey_english,,radio,12.7f TB drug resistance testing,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+tst_ltbi,iedea_2020_site_survey_english,,radio,12.7g Tuberculin skin testing (TST)/PPD for latent TB infection (LTBI),"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+igra,iedea_2020_site_survey_english,,radio,"12.7h IGRA (e.g., Quantiferon Gold, T-spot) for latent TB infection (LTBI)","1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+tb_dx_other,iedea_2020_site_survey_english,,radio,12.7i Other <br><i>(please specify or select Not Available)</i>,"1, Provided in <br>HIV Clinic | 2, Elsewhere in <br>health facility | 3, Only offsite <br>(referral) | 77, Not available",,,,,,[tb_dx]='1' OR [tb_dx]='0',y,,,tb_diagnostics,,
+other_tb_dx,iedea_2020_site_survey_english,,text,"12.7i1. If Other TB diagnostic tests, please specify",,,,,,,[tb_dx_other]='1' OR [tb_dx_other]='2' OR [tb_dx_other]='3',y,,,,,
+desc_12_8,iedea_2020_site_survey_english, ,descriptive,"12.8   In 2019, did <u>HIV patients typically pay any fee</u> (other than insurance co-pays) for the following screening/diagnostics for TB?
+
+<i>Check one best response.</i>
+
+<i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i>",,,,,,,,,,,,,
+afb_smear_fee,iedea_2020_site_survey_english,,radio,12.8a AFB Smear,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+gene_xpert_fee,iedea_2020_site_survey_english,,radio,12.8b Gene Xpert,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+cxray_fee,iedea_2020_site_survey_english,,radio,12.8c Chest X-ray,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+culture_fee,iedea_2020_site_survey_english,,radio,12.8d Culture,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+urine_lam_fee,iedea_2020_site_survey_english,,radio,12.8e Urine LAM,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+tb_dr_fee,iedea_2020_site_survey_english,,radio,12.8f TB drug resistance testing,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+tst_ltbi_fee,iedea_2020_site_survey_english,,radio,12.8g Tuberculin skin testing (TST)/PPD for latent TB infection (LTBI),"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+igra_fee,iedea_2020_site_survey_english,,radio,"12.8h IGRA (e.g., Quantiferon Gold, T-spot) for latent TB infection (LTBI)","1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,,y,,,tb_dx_fee,,
+hiv_patients_tb_tx,iedea_2020_site_survey_english,"<div class=""rich-text-field-label""></div>",checkbox,"12.9  Which types of HIV patients can <u>be treated for TB disease</u> at this health facility (either within the HIV clinic or in a co-located TB clinic)?
+
+<i>Check all that apply. If patients are referred elsewhere for TB treatment select ""None""</i>
+","77, None <i>(all patients referred offsite for TB treatment)</i> | 1, Adults patients | 2, Pediatric patients",,,,,,,y,,,,, @NONEOFTHEABOVE=77
+tracing_type,iedea_2020_site_survey_english,,radio,"12.10 In 2019, what type of tracing was performed for the <u>household contacts of HIV patients diagnosed with active TB?</u>
+
+<i>Select one best response</i>
+","0, No tracing or systematic documentation of contacts of active TB cases | 1, Site staff performed contact tracing and maintain a TB contact register | 2, Site staff recorded information about contacts of TB cases, but no dedicated register | 3, Contact tracing performed, but not by HIV clinic staff (e.g, performed by health department or a separate public health team)",,,,,,[hiv_patients_tb_tx(77)]!= '1',y,,,,,
+hh_contacts_scr,iedea_2020_site_survey_english,,radio,"12.11  In 2019, did this site (either the HIV clinic or a co-located TB clinic) confirm whether <u>household contacts of active TB cases were screened for TB and provided tuberculosis preventive therapy</u> (TPT), if TB was ruled out?
+
+
+<i>Select one best response.</i>
+","1, Yes, the site maintained this information in a TB contact register | 2, Yes, the site documented this information, but not in a dedicated register | 3, No, this was done by a separate public health team (e.g. the health department) | 4, No systematic documentation done for contacts of active TB cases",,,,,,[hiv_patients_tb_tx(77)]!= '1',y,,,,,
+hh_contacts_ltbi,iedea_2020_site_survey_english,,radio,"12.12 In 2019, did this site (either the HIV clinic or a co-located TB clinic) confirm whether <u>household contacts of active TB cases completed tuberculosis preventive therapy</u> (TPT)?
+
+
+<i>Select one best response.</i>
+","1, Yes, the site maintained this information in a TB contact register | 2, Yes, the site documented this information, but not in a dedicated register | 3, No, this was done by a separate public health team (e.g. the health department) | 4, No systematic documentation done for contacts of active TB cases",,,,,,[hiv_patients_tb_tx(77)]!= '1',y,,,,,
+tb_patient_track,iedea_2020_site_survey_english,,checkbox,"12.13 What is done to <u>track patients with TB disease who miss appointments</u>?   
+
+<i>Check all that apply, OR select ""Nothing /No follow-up""""</i>
+","77, Nothing/No follow-up with patients with TB disease who miss appointments | 1, Phone call to individual and/or family | 2, Send message via letter, email, SMS, or online patient portal | 3, Home visit by clinic staff | 4, Home visit by community outreach worker | 5, Outreach by peer supporter/mentor | 88, Other (specify)",,,,,,[hiv_patients_tb_tx(77)]!= '1',y,,,,, @NONEOFTHEABOVE=77
+tb_patient_track_oth,iedea_2020_site_survey_english,,text,"12.13a If Other, please specify",,,,,,,[tb_patient_track(88)] = '1',y,,,,,
+ltfu_def,iedea_2020_site_survey_english,,radio,"12.14 How are patients defined as lost to follow-up from <u>TB treatment</u>? 
+
+<i>Select one best response.</i>
+","99, Do not know | 1, Treatment interruption for more than 2 weeks | 2, Treatment interruption for more than 1 month | 3, Treatment interruption for more than 2 months | 4, Treatment interruption for more than 3 months | 88, Other",,,,,,[hiv_patients_tb_tx(77)]!= '1',y,,,,,
+ltfu_def_oth,iedea_2020_site_survey_english,,text,"12.14a If Other, please specify",,,,,,,[ltfu_def] = '88',y,,,,,
+ltbi_tx_neg,iedea_2020_site_survey_english,,yesno,"12.15 In 2019, did this HIV clinic (or a co-located TB clinic) provide <u>TB preventive therapy (TPT)</u> for patients who screened negative for TB disease? ",,,,,,,,y,RH,,,,
+desct_12_16,iedea_2020_site_survey_english,,descriptive,"12.16 Please indicate whether the following <u>TB preventive therapy (TPT) eligibility criteria</u> were used in 2019 with <u>adult patients</u>, <u>children</u>, <u>adults & children,</u> or with <u>none</u>. ",,,,,,,[ltbi_tx_neg]='1',,,,,,
+new_hiv_pt,iedea_2020_site_survey_english,,radio,12.16a Patients newly diagnosed with HIV,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,,
+onart_pt,iedea_2020_site_survey_english,,radio,12.16b Patients currently receiving ART,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,,
+hx_contact_pt,iedea_2020_site_survey_english,,radio,12.16c Patients with history of contact with TB case,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,,
+non_prevtb_pt,iedea_2020_site_survey_english,,radio,12.16d Patients who have not previously received TPT,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,,
+prevtb_pt,iedea_2020_site_survey_english,,radio,12.16e Patients who have previously been treated for TB disease,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,,
+non_preg_pos_pt,iedea_2020_site_survey_english,,radio,"12.16f Among non-pregnant adults, TST or IGRA positive","1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(2=0, 3=0)"
+all_preg_pt,iedea_2020_site_survey_english,,radio,12.16g All pregnant women,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(2=0, 3=0)"
+preg_pos_pt,iedea_2020_site_survey_english,,radio,"12.16h. Among pregnant women, TST or IGRA positive only","1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(2=0, 3=0)"
+less_5yr_pt,iedea_2020_site_survey_english,,radio,12.16i.  Children under 5 years,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(1=0, 3=0)"
+six_15yr_pt,iedea_2020_site_survey_english,,radio,12.16j. Children ages 6-15 years,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(1=0, 3=0)"
+children_pos_pt,iedea_2020_site_survey_english,,radio,"12.16k.  Among children, TST or IGRA positive only","1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(1=0, 3=0)"
+children_contact_pt,iedea_2020_site_survey_english,,radio,"12.16l. Children who are household contacts, regardless of TST or IGRA status","1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,," @MAXCHOICE(1=0, 3=0)"
+other_pt_spec,iedea_2020_site_survey_english,,radio,12.16m. Other <br><i>(please specify or select None)</i>,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_patients,,
+other_pt_ad,iedea_2020_site_survey_english,,text,"12.16m1. If Other, please specify",,,,,,,[other_pt_spec]='1' OR [other_pt_spec]='2' OR [other_pt_spec]='3',y,,,,,
+desct_12_17,iedea_2020_site_survey_english,,descriptive,"12.17 Please indicate whether the following <u>TB preventive therapy (TPT) regimens</u>, were provided in 2019, to <u>adult</u> patients, <u>children</u>, <u>adults & children</u>, or to <u>none</u>?
+	",,,,,,,[ltbi_tx_neg]='1',,,,,,
+inh6,iedea_2020_site_survey_english,,radio,12.17a 6-month isoniazid (6H),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+inh9,iedea_2020_site_survey_english,,radio,12.17b 9-month isoniazid (9H),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+inh12,iedea_2020_site_survey_english,,radio,12.17c 12-month isoniazid (12H),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+inh36,iedea_2020_site_survey_english,,radio,12.17d 36/Lifetime isoniazid (36/Lifetime H),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+rif3,iedea_2020_site_survey_english,,radio,12.17e 3-month rifampicin (3R),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+rif4,iedea_2020_site_survey_english,,radio,12.17f 4-month rifampicin (4R),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+inh_rif3,iedea_2020_site_survey_english,,radio,12.17g  3-month isoniazid-rifampicin (3HR),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+inh_rif4,iedea_2020_site_survey_english,,radio,12.17h.4-month isoniazid-rifampicin (4HR),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+hp3_12weeks,iedea_2020_site_survey_english,,radio,12.17i. Once-weekly isoniazid-rifapentine for 12 weeks (3HP),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+hp3_1month,iedea_2020_site_survey_english,,radio,12.17j. Once-daily isoniazid-rifapentine for 1 month (1HP),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+mdrtb_specify,iedea_2020_site_survey_english,,radio,12.17k. Regimens for MDR-TB exposure (Specify),"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+other_specify,iedea_2020_site_survey_english,,radio,12.17l.  Other <br><i>(Please specify or select None)</i>,"1, ADULTS | 2, CHILDREN | 3, ADULTS & CHILDREN | 77, NONE",,,,,,[ltbi_tx_neg]='1',y,,,tb_regimens,,
+other_tpt_ad,iedea_2020_site_survey_english,,text,"12.17l1. If Other, please specify",,,,,,,[other_specify]='1' OR [other_specify]='2' OR [other_specify]='3',y,,,,,
+tpt_contraindications,iedea_2020_site_survey_english,,checkbox,"12.18 Which contraindications are patients screened for prior to TPT initiation? 
+
+<i>Check all that apply, OR select ""Not applicable""</i>
+","77, Not applicable <i>(patients are not screened for TPT contraindications)</i> | 1, Jaundice, liver disease | 2, Numbness, tingling (peripheral neuropathy) | 3, Previous adverse reaction <i>(e.g. hypersensitivity/flu-like symptoms, rash)</i> | 4, Alcohol misuse | 5, Age | 6, TB disease | 88, Other",,,,,,[ltbi_tx_neg]='1',y,,,,, @NONEOFTHEABOVE=77
+tpt_contraindications_oth,iedea_2020_site_survey_english,,text,"12.18a If Other, please specify",,,,,,,[tpt_contraindications(88)] = '1',y,,,,,
+tpt_diff_care,iedea_2020_site_survey_english,,yesno,12.19 Are HIV patients receiving TPT eligible for differentiated services delivery of HIV care?,,,,,,,[ltbi_tx_neg]='1',y,RH,,,,
+tpt_ae,iedea_2020_site_survey_english,,checkbox,"12.20 Which signs/symptoms of adverse events are monitored in patients receiving TPT?
+
+<i>Check all that apply, OR select ""Not applicable""</i>
+","77, Not applicable <i>(patients receiving TPT are not monitored for adverse events)</i> | 1, Hepatitis symptoms <i>(nausea, vomiting, abdominal pain)</i> | 2, Numbness, tingling <i>(peripheral neuropathy)</i> | 3, Elevated liver enzymes | 4, Flu-like symptoms | 5, Rash | 88, Other",,,,,,[ltbi_tx_neg]='1',y,,,,, @NONEOFTHEABOVE='77'
+tpt_ae_oth,iedea_2020_site_survey_english,,text,"12.20a If Other, please specify",,,,,,,[tpt_ae(88)] = '1',y,,,,,
+tpt_patient_track,iedea_2020_site_survey_english,,checkbox,"12.21 In 2019, what was done to <u>track TPT patients with HIV who missed appointments</u>?   
+
+<i>Check all that apply, OR select ""Nothing /No follow-up""""</i>
+","77, Nothing/No follow-up with TPT patients who miss appointments | 1, Phone call to individual and/or family | 2, Send message via letter, email, SMS, or online patient portal | 3, Home visit by clinic staff | 4, Home visit by community outreach worker | 5, Outreach by peer supporter/mentor | 88, Other (specify)",,,,,,[ltbi_tx_neg]='1',y,,,,, @NONEOFTHEABOVE=77
+tpt_patient_track_oth,iedea_2020_site_survey_english,,text,"12.21a If Other, please specify",,,,,,,[tpt_patient_track(88)] = '1',y,,,,,
+tb_site_contact,iedea_2020_site_survey_english,,yesno,12.22 Is there someone at this site who can be contacted for additional information about treatment of TB at this health facility?,,,,,,,[ltbi_tx_neg]='0' OR [ltbi_tx_neg]='1',y,RH,,,,
+tb_contact_info,iedea_2020_site_survey_english,,descriptive,"If Yes, please provide name and email address",,,,,,,[tb_site_contact]='1',,,,,,
+tb_contact_name,iedea_2020_site_survey_english,,text,12.22a Full Name,,,,,,,[tb_site_contact]='1',,,,,,
+tb_contact_email,iedea_2020_site_survey_english,,text,12.22b Email address,,,email,,,,[tb_site_contact]='1',,,,,,
+au_disorder_screen,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">13. PATIENT SCREENING AND TREATMENT FOR SUBSTANCE USE DISORDERS
+<i>Describe practices prior to COVID-19</i></div>",yesno,"13.1 Are any HIV patients screened for <u>alcohol use disorders?</u>
+
+<i>Screening refers to any type of structured or unstructured assessment</i>",,,,,,,[tb_site_contact]='1' OR [tb_site_contact]='0' OR  [tb_site_contact]='',y,RH,,,,
+aud_patient,iedea_2020_site_survey_english,,checkbox,"13.2 Which HIV patients are screened for <u>alcohol use disorders?</u>
+
+<i>Check all that apply.</i>
+","1, All patients | 2, Patients with symptoms of possible alcohol use disorders | 3, Patients with therapeutic failure | 4, Patients who are not adherent to ART | 88, Other types of patients",,,,,,[au_disorder_screen]='1',y,,,,, @NONEOFTHEABOVE='1'
+aud_patient_oth,iedea_2020_site_survey_english,,text,"13.2 If Other, please specify",,,,,,,[aud_patient(88)] = '1',y,,,,,
+aud_screen_tools,iedea_2020_site_survey_english,,checkbox,"13.3 Which structured instrument(s) are used to screen patients for <u>alcohol use disorders?</u>
+
+ <i>Check all that apply.</i>
+","77, None <i>(no structured or standardized screening tool used)</i> | 1, Alcohol Use Disorders Identification Test (AUDIT) | 2, Alcohol Use Disorders Identification Test-C (AUDIT-C) | 3, Alcohol, Smoking, and Substance Involvement Screening Test (ASSIST) | 4, Cut down, Annoyed, Guilty, Eye-opener (CAGE) | 88, Other",,,,,,[au_disorder_screen]='1',y,,,,, @NONEOFTHEABOVE='77'
+aud_screen_tools_oth,iedea_2020_site_survey_english,,text,"13.3a If Other, please specify",,,,,,,[aud_screen_tools(88)] = '1',y,,,,,
+aud_biomarkers,iedea_2020_site_survey_english,,checkbox,"13.4 Which of the following biomarkers can be assessed at this health facility in screening for <u>alcohol use disorders?</u>
+
+<i>Check all that apply</i>
+","77, None - biomarkers not used in screening for alcohol use disorders | 1, Aspartate transaminase (AST) | 2, Aspartate transaminase, Alanine transaminase ratio (AST/ALT) | 3, Blood alcohol concentration (BAC) | 4, Ethyl glucuronide (EtG) | 88, Other",,,,,,[au_disorder_screen]='1',y,,,,, @NONEOFTHEABOVE='77'
+aud_biomarkers_oth,iedea_2020_site_survey_english,,text,"13.4.a If Other, please specify",,,,,,,[aud_biomarkers(88)] = '1',y,,,,,
+aud_pos_tx,iedea_2020_site_survey_english,,checkbox,"13.5 For patients who screen positive for <u>alcohol use disorders</u>, what treatment interventions are available at this health facility?
+
+<i>Check all that apply.</i>
+","77, None <i>(no treatment available at this health facility)</i> | 1, Counseling | 2, Brief Intervention | 3, Detox hospitalization | 4, Pharmacological treatment (Disulfiram, Naltrexone, Acamprosate) | 5, Psychotherapy (motivational interview, cognitive-behavioral therapy (CBT), relapse prevention) | 6, Screening, Brief Intervention, and Referral to Treatment (SBIRT) | 88, Other",,,,,,[au_disorder_screen]='1',y,,,,, @NONEOFTHEABOVE='77'
+aud_pos_tx_oth,iedea_2020_site_survey_english,,text,"13.5.a If Other, please specify",,,,,,,[aud_pos_tx(88)] = '1',y,,,,,
+other_aud_screen,iedea_2020_site_survey_english,,checkbox,"13.6 Which of the following <u>other substance use disorders</u> are patients screened for in the HIV clinic?
+
+Screening refers to any type of structured or unstructured assessment.
+
+<i>Check all that apply.</i>
+","77, None | 1, Cannabis (marijuana) | 2, Cocaine/crack | 3, Ecstasy and other club drugs | 4, Hallucinogens | 5, Methamphetamine | 6, Opioids | 88, Other",,,,,,[au_disorder_screen]='1' OR [au_disorder_screen]='0',y,,,,, @NONEOFTHEABOVE='77'
+other_aud_screen_oth,iedea_2020_site_survey_english,,text,"13.6.a If Other, please specify",,,,,,,[other_aud_screen(88)]='1',y,,,,,
+other_aud_patients,iedea_2020_site_survey_english,,checkbox,"13.7 Which patients are screened for <u>other substance use disorders?</u>
+
+<i>Check all that apply</i>
+","1, All patients | 2, Patients with symptoms of possible drug use disorders | 3, Patients with therapeutic failure | 4, Patients who are not adherent to ART | 88, Other types of patients",,,,,,[other_aud_screen(77)]<> '1',y,,,,, @NONEOFTHEABOVE='1'
+other_aud_patients_oth,iedea_2020_site_survey_english,,text,"13.7.a If Other, please specify",,,,,,,[other_aud_patients(88)] = '1',y,,,,,
+sud_tools,iedea_2020_site_survey_english,,checkbox,"13.8 Which structured instrument(s) are used to screen patients for <u>substance use disorders (other than alcohol use)?</u>
+
+<i>Check all that apply.</i>
+","77, None <i>(no structured or standardized screening tool used)</i> | 1, Addiction Severity Index (ASI) | 2, Alcohol, Smoking, and Substance Involvement Screening Test (ASSIST) | 3, Drug Abuse Screening Test (DAST) | 88, Other (specify",,,,,,[other_aud_screen(77)]<> '1',y,,,,, @NONEOFTHEABOVE='77'
+sud_tools_oth,iedea_2020_site_survey_english,,text,"13.8a If Other, please specify",,,,,,,[sud_tools(88)] = '1',y,,,,,
+sud_pos_tx,iedea_2020_site_survey_english,,checkbox,"13.9 For patients who screen positive for <u>substance use disorders</u> (other than alcohol use) what treatment interventions are available at this health facility?
+
+Check all that apply
+","77, None <i>(no treatment available at this health facility)</i> | 1, Counseling | 2, Brief Intervention | 3, Detox hospitalization | 4, Methadone replacement therapy | 5, Pharmacological treatment | 6, Psychotherapy <i>(motivational interview, cognitive-based therapy (CBT), relapse prevention)</i> | 7, Screening, Brief Intervention, and Referral to Treatment (SBIRT) | 8, Syringe exchange | 88, Other",,,,,,[other_aud_screen(77)]<> '1',y,,,,, @NONEOFTHEABOVE='77'
+sud_pos_tx_oth,iedea_2020_site_survey_english,,text,"13.9a If Other, please specify",,,,,,,[sud_pos_tx(88)] = '1',y,,,,,
+depression_screen,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">14. PATIENT SCREENING AND TREATMENT FOR MENTAL HEALTH DISORDERS
+<i>Describe practices prior to COVID-19</i> </div>",yesno,"14.1 Are any HIV patients screened for <u>depression</u>? 
+
+<i>Screening refers to any type of structured or unstructured assessment.</i>",,,,,,,,y,RH,,,,
+depression_screen_pt,iedea_2020_site_survey_english,,checkbox,"14.2 Which patients are screened for depression?
+
+<i>Check all that apply.</i>
+","1, All patients, including those not presenting with mental health symptoms | 2, Patients presenting with mental health symptoms | 3, Patients with therapeutic failure | 4, Patients who are not adherent to ART | 88, Other",,,,,,[depression_screen]='1',y,,,,, @NONEOFTHEABOVE='1'
+depression_screen_pt_oth,iedea_2020_site_survey_english,,text,"14.2a If other, please specify",,,,,,,[depression_screen_pt(88)] = '1',y,,,,,
+depression_screen_tools,iedea_2020_site_survey_english,,checkbox,"14.3 Which structured instrument(s) are used to screen patients for <u>depression?</u> 
+
+<i>Check all that apply.</i>
+","77, None <i>(no structured or standardized depression screening tool used)</i> | 1, Beck Depression Inventory (BDI) | 2, Center for Epidemiologic Studies Depression Scale (CES-D) | 3, Hamilton Rating Scale for Depression (HAM-D) | 4, Hospital Anxiety and Depression Scale (HAD) | 5, Patient Health Questionnaire-2 (PHQ-2) | 6, Patient Health Questionnaire-9 (PHQ-9) | 88, Other",,,,,,[depression_screen]='1',y,,,,, @NONEOFTHEABOVE=77
+depres_screen_tools_oth,iedea_2020_site_survey_english,,text,"14.3a If other, please specify",,,,,,,[depression_screen_tools(88)] = '1',y,,,,,
+depression_tx,iedea_2020_site_survey_english,,checkbox,"14.4 For patients who screen positive for depression, what treatment interventions are available at this health facility?
+
+<i>Check all that apply.</i>
+","77, None <i>(no treatment available at this health facility)</i> | 1, Individual counseling or psychotherapy | 2, Group counseling or psychotherapy | 3, Medication | 4, Peer support | 5, Psychosocial support | 88, Other",,,,,,[depression_screen]='1',y,,,,, @NONEOFTHEABOVE=77
+depres_tx_oth,iedea_2020_site_survey_english,,text,"14.4a If other, please specify",,,,,,,[depression_tx(88)] = '1',y,,,,,
+ptsd_screen,iedea_2020_site_survey_english,,yesno,14.5 Are any HIV patients <u>screened for post-traumatic stress disorder (PTSD)</u>? ,,,,,,,[depression_screen]='1' OR [depression_screen]='0',y,RH,,,,
+ptsd_screen_pt,iedea_2020_site_survey_english,,checkbox,"14.6 Which patients are screened for <u>PTSD</u>?
+
+<i>Check all that apply.</i>
+","1, All patients, including those not presenting with mental health symptoms | 2, Patients presenting with mental health symptoms | 3, Patients with therapeutic failure | 4, Patients who are not adherent to ART | 88, Other",,,,,,[ptsd_screen]='1',y,,,,, @NONEOFTHEABOVE='1'
+ptsd_screen_pt_oth,iedea_2020_site_survey_english,,text,"14.6a If other, please specify",,,,,,,[ptsd_screen_pt(88)] = '1',y,,,,,
+ptsd_screen_tools,iedea_2020_site_survey_english,,checkbox,"14.7 Which structured instrument(s) are used to screen patients for <u>PTSD</u>? 
+
+<i>Check all that apply.</i>
+","77, None <i>(no structured or standardized depression screening tool used)</i> | 1, Life Event Checklist | 2, Primary Care PTSD Screen (PC-PTSD) | 3, PTSD Checklist - Civilian version (PCL-C) | 4, PTSD Checklist for DSM-5 (PCL-5) | 5, Short PTSD Rating Interview (SPRINT) | 6, Trauma Screening Questionnaire  (TSQ) | 88, Other",,,,,,[ptsd_screen]='1',y,,,,, @NONEOFTHEABOVE=77
+ptsd_screen_tools_oth,iedea_2020_site_survey_english,,text,"14.7a If other, please specify",,,,,,,[ptsd_screen_tools(88)] = '1',y,,,,,
+ptsd_tx,iedea_2020_site_survey_english,,checkbox,"14.8 For patients who screen positive for PTSD, what treatment interventions are available at this health facility?
+
+<i>Check all that apply.</i>
+","77, None <i>(no treatment available at this health facility)</i> | 1, Individual counseling or psychotherapy | 2, Group counseling or psychotherapy | 3, Medication | 4, Peer support | 5, Psychosocial support | 88, Other",,,,,,[ptsd_screen]='1',y,,,,, @NONEOFTHEABOVE=77
+ptsd_tx_oth,iedea_2020_site_survey_english,,text,"14.8a If other, please specify",,,,,,,[ptsd_tx(88)] = '1',y,,,,,
+anxiety_screen,iedea_2020_site_survey_english,,yesno,14.9 Are any HIV patients screened for <u>anxiety disorders</u>? ,,,,,,,[ptsd_screen]='1' OR [ptsd_screen]='0',y,RH,,,,
+anxiety_screen_pt,iedea_2020_site_survey_english,,checkbox,"14.10 Which patients are screened for <u>anxiety disorders</u>?
+
+<i>Check all that apply.</i>
+","1, All patients, including those not presenting with mental health symptoms | 2, Patients presenting with mental health symptoms | 3, Patients with therapeutic failure | 4, Patients who are not adherent to ART | 88, Other",,,,,,[anxiety_screen]='1',y,,,,, @NONEOFTHEABOVE='1'
+anxiety_screen_pt_oth,iedea_2020_site_survey_english,,text,"14.10a If other, please specify",,,,,,,[anxiety_screen_pt(88)] = '1',y,,,,,
+anxiety_screen_tools,iedea_2020_site_survey_english,,checkbox,"14.11 Which structured instrument(s) are used to screen patients for <u>anxiety disorders</u>? 
+
+<i>Check all that apply.</i>
+","77, None <i>(no structured or standardized depression screening tool used)</i> | 1, Beck Anxiety Inventory (BAI) | 2, Generalized Anxiety Disorder 7-item scale (GAD-7) | 3, Hospital Anxiety and Depression Scale (HAD) | 4, State-Trait Anxiety Inventory (STAI) | 88, Other",,,,,,[anxiety_screen]='1',y,,,,, @NONEOFTHEABOVE=77
+anxiety_screen_tools_oth,iedea_2020_site_survey_english,,text,"14.11a If other, please specify",,,,,,,[anxiety_screen_tools(88)] = '1',y,,,,,
+anxiety_tx,iedea_2020_site_survey_english,,checkbox,"14.12 For patients who screen positive for <u>anxiety disorders</u>, what treatment interventions are available at this health facility?
+
+<i>Check all that apply.</i>
+","77, None <i>(no treatment available at this health facility)</i> | 1, Individual counseling or psychotherapy | 2, Group counseling or psychotherapy | 3, Medication | 4, Peer support | 5, Psychosocial support | 88, Other",,,,,,[anxiety_screen]='1',y,,,,, @NONEOFTHEABOVE=77
+anxiety_tx_oth,iedea_2020_site_survey_english,,text,"14.12a If other, please specify",,,,,,,[anxiety_tx(88)] = '1',y,,,,,
+screen_other,iedea_2020_site_survey_english,,checkbox,"14.13 Are HIV patients screened for any of the following mental health conditions?
+
+<i>Check all that apply.</i>
+","1, Other mental health disorders <i>(bipolar, schizophrenia, etc.)</i> | 2, Cognitive impairment | 3, Suicide risk | 77, None of the above",,,,,,[anxiety_screen]='1' OR [anxiety_screen]='0',y,,,,, @NONEOFTHEABOVE='77'
+protocol_suicide,iedea_2020_site_survey_english,,yesno,14.14 Is there a standard safety protocol for responding to patients with suicidal or homicidal intentions? ,,,,,,,,y,RH,,,,
+ks_dx,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">15. DIAGNOSIS OF KAPOSI'S SARCOMA
+<i>Describe practices prior to COVID-19</i></div>",yesno,"15.1 During 2019, were any patients diagnosed with Kaposi's sarcoma at this site (either the HIV clinic or another unit of the health facility)?",,,,,,,,y,RH,,,,
+desc_15_2,iedea_2020_site_survey_english,,descriptive,"15.2 During 2019, which of the following procedures were used to diagnose Kaposi's sarcoma and where was the procedure performed for HIV patients?
+
+<i>Check all that apply</i>",,,,,,,[ks_dx]='1',,,,,,
+ks_clin_exam,iedea_2020_site_survey_english,,checkbox,15.2a Clinical exam (visual inspection of skin or mucosal surfaces),"1, In HIV Clinic | 2, Outpatient or inpatient ward | 3, Operating theatre | 77, Not available",,,,,,[ks_dx]=1,y,,,ks_dx,, @NONEOFTHEABOVE=77
+ks_biopsy,iedea_2020_site_survey_english,,checkbox,15.2b Skin punch biopsy,"1, In HIV Clinic | 2, Outpatient or inpatient ward | 3, Operating theatre | 77, Not available",,,,,,[ks_dx]=1,y,,,ks_dx,, @NONEOFTHEABOVE=77
+ks_excision,iedea_2020_site_survey_english,,checkbox,15.2c Surgical wedge/excision,"1, In HIV Clinic | 2, Outpatient or inpatient ward | 3, Operating theatre | 77, Not available",,,,,,[ks_dx]=1,y,,,ks_dx,, @NONEOFTHEABOVE=77
+ks_other,iedea_2020_site_survey_english,,checkbox,15.2d Other <br><i>(please specify or select Not Available)<i>,"1, In HIV Clinic | 2, Outpatient or inpatient ward | 3, Operating theatre | 77, Not available",,,,,,[ks_dx]=1,y,,,ks_dx,, @NONEOFTHEABOVE=77
+ks_dx_oth,iedea_2020_site_survey_english,,text,"15.2d1. If other, please specify",,,,,,,[ks_other(1)] = '1' or [ks_other(2)] = '1' or [ks_other(3)] = '1',y,,,,,
+desc_15_3,iedea_2020_site_survey_english, ,descriptive,"15.3 In 2019, did HIV patients  <u>typically pay any fee (other than insurance co-pays)</u> for the following procedures for diagnosing Kaposi's sarcoma? 
+
+<i>Please indicate if patients paid fees other than insurance co-pays. Select NA for services not available for routine care.</i>",,,,,,,[ks_dx]='1',,,,,,
+fee_clin_exam,iedea_2020_site_survey_english,,radio,15.3a Clinical exam (visual inspection of skin or mucosal surfaces),"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,[ks_dx]=1,y,,,ks_fee,,
+fee_biopsy,iedea_2020_site_survey_english,,radio,15.3b Skin punch biopsy,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,[ks_dx]=1,y,,,ks_fee,,
+fee_excision,iedea_2020_site_survey_english,,radio,15.3c Surgical wedge/excision,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,[ks_dx]=1,y,,,ks_fee,,
+fee_other,iedea_2020_site_survey_english,,radio,15.3d Other <br><i>(please specify or select Not Applicable)</i>,"1, Yes | 2, No | 3, Don't Know | 77, NA (Not applicable)",,,,,,[ks_dx]=1,y,,,ks_fee,,
+fee_other_spec,iedea_2020_site_survey_english,,text,"15.3d1. If Other, please specify",,,,,,,[fee_other]='1',y,,,,,
+ks_contact,iedea_2020_site_survey_english,,yesno,15.4. Is there someone at this site who can be contacted for additional information about diagnosis and treatment of Kaposi's sarcoma at this health facility?,,,,,,,[ks_dx]=1,,RH,,,,
+ks_contact_info,iedea_2020_site_survey_english,,descriptive,"If yes, please provide full name and email address",,,,,,,[ks_contact]=1,,,,,,
+ks_contact_name,iedea_2020_site_survey_english,,text,15.4a Full Name,,,,,,,[ks_contact]=1,,,,,,
+ks_contact_email,iedea_2020_site_survey_english,,text,15.4b Email address,,,,,,,[ks_contact]=1,,,,,,
+pharmacy,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">16. PHARMACY
+<i>Describe practices prior to COVID-19</i></div>",yesno,16.1 Is there a pharmacy located at this health facility?,,,,,,,[ks_dx]='1' OR [ks_dx]='0' OR [ks_dx]='',y,RH,,,,
+first_line_arv2,iedea_2020_site_survey_english,"16.2  For each of the following medications, please indicate whether they were <u> dispensed/available at this health facility</u> during 2019.",radio,16.2a First-line HIV antiretroviral medications (ARVs),"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1,,
+second_line_arv2,iedea_2020_site_survey_english,,radio,16.2b Second-line HIV ARVs,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1,,
+third_line_arv2,iedea_2020_site_survey_english,,radio,16.2c Third-line HIV ARVs,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1,,
+isoniazid2,iedea_2020_site_survey_english,,radio,16.2d Isoniazid,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1,,
+rifapentine2,iedea_2020_site_survey_english,,radio,16.2e Rifapentine,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1,,
+other_tb_meds2,iedea_2020_site_survey_english,,radio,16.2f TB medications other than isoniazid and rifapentine,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1,,
+cotrimoxazole2,iedea_2020_site_survey_english,,radio,"16.2g Cotrimoxazole (Bactrim, Septra, TMP-SMX)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+malaria_tx2,iedea_2020_site_survey_english,,radio,16.2h Malaria treatment,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+fluconazole2,iedea_2020_site_survey_english,,radio,16.2i Fluconazole,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+amphotercin2,iedea_2020_site_survey_english,,radio,16.2j Amphotercin B,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+flucytosine2,iedea_2020_site_survey_english,,radio,16.2k Flucytosine,"1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+contraceptives_short2,iedea_2020_site_survey_english,,radio,"16.2l Short-acting contraceptives (pills, injectables, condoms)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+contraceptives_long2,iedea_2020_site_survey_english,,radio,"16.2m Long-acting reversible contraceptives (implants, intrauterine devices)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1b,,
+ssris2,iedea_2020_site_survey_english,,radio,"16.2n Selective serotonin reuptake inhibitors (SSRIs: e.g., Prozac, Zoloft, Paxil)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+snris2,iedea_2020_site_survey_english,,radio,"16.2o Serotonin and norepinephrine reuptake inhibitors (SNRIs:e.g., Cymbalta, Effexor, Fetzima)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+antidepressants2,iedea_2020_site_survey_english,,radio,"16.2p Tricyclic Antidepressanta (e.g., amitriptyline, amoxapine, doxepin)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+benzodiazepines2,iedea_2020_site_survey_english,,radio,"16.2q Benzodiazepines (e.g., Xanax, Lorazepan, Klonopin)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+antipsychotics2,iedea_2020_site_survey_english,,radio,"16.2r Antipsychotic medications (e.g., Haloperidol, Chlorpromazine, Fluphenazine, Risperidone, Seroquel, Abilify)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+mood_stab2,iedea_2020_site_survey_english,,radio,"16.2s Mood stabilizers (e.g., Carbamazepine, Lithium, Valproate, Lamotrigine)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+alc_meds2,iedea_2020_site_survey_english,,radio,"16.2t Alcohol dependence medications (Disulfiram, Naltrexone, Acamprosate)","1, Yes | 0, No",,,,,,[pharmacy]=1,y,,,pharmacy1c,,
+desc_16_2,iedea_2020_site_survey_english,,descriptive," <div style=""border: 1px solid #19B5FE;background: #A2C0D9  ; font-size:13px; color: #000000; text-align:left;padding:10px;"">Please indicate whether there were any supply disruptions/stock-outs lasting at least one week during 2019 at this health facility for each of the following medications</div>",,,,,,,"[first_line_arv2]=1 OR [second_line_arv2]=1 OR [third_line_arv2]=1 OR [isoniazid2]=1 OR [rifapentine2]=1 OR
+[other_tb_meds2] =1 OR [cotrimoxazole2]=1 OR [malaria_tx2]=1 OR [contraceptives_short2]=1 OR 
+[contraceptives_long2]=1 OR [fluconazole2]=1 OR [amphotercin2]=1 OR [flucytosine2]=1 OR [ssris2]=1 OR
+[snris2]=1 OR [antidepressants2]=1 OR [benzodiazepines2]=1 OR [antipsychotics2]=1 OR [mood_stab2]=1 OR
+[alc_meds2]=1",,,,,,
+first_line_arv_out2,iedea_2020_site_survey_english,,radio,16.2a1 First-line HIV ARVs,"1, Yes | 0, No",,,,,,[first_line_arv2] = '1',y,,,pharmacy2,,
+second_line_arv_out2,iedea_2020_site_survey_english,,radio,16.2b1 Second-line HIV ARVs,"1, Yes | 0, No",,,,,,[second_line_arv2] = '1',y,,,pharmacy2,,
+third_line_arv_out2,iedea_2020_site_survey_english,,radio,16.2c1 Third-line HIV ARVs,"1, Yes | 0, No",,,,,,[third_line_arv2]=1,y,,,pharmacy2,,
+isoniazid_out2,iedea_2020_site_survey_english,,radio,16.2d1 Isoniazid,"1, Yes | 0, No",,,,,,[isoniazid2]=1,y,,,pharmacy2,,
+rifapentine_out2,iedea_2020_site_survey_english,,radio,16.2e1 Rifapentine,"1, Yes | 0, No",,,,,,[rifapentine2]=1,y,,,pharmacy2,,
+other_tb_out2,iedea_2020_site_survey_english,,radio,16.2f1 TB medications other than isoniazid and rifapentine,"1, Yes | 0, No",,,,,,[other_tb_meds2]=1,y,,,pharmacy2,,
+cotrimoxazole_out2,iedea_2020_site_survey_english,,radio,16.2g1 Cotrimoxazole,"1, Yes | 0, No",,,,,,[cotrimoxazole2]=1,y,,,pharmacy2b,,
+malaria_out2,iedea_2020_site_survey_english,,radio,16.2h1 Malaria treatment,"1, Yes | 0, No",,,,,,[malaria_tx2]=1,y,,,pharmacy2b,,
+fluconazole_out2,iedea_2020_site_survey_english,,radio,16.2i1 Fluconazole,"1, Yes | 0, No",,,,,,[fluconazole2]='1',y,,,pharmacy2b,,
+amphotercin_out2,iedea_2020_site_survey_english,,radio,16.2j1 Amphotercin B,"1, Yes | 0, No",,,,,,[amphotercin2]=1,y,,,pharmacy2b,,
+flucytosine_out2,iedea_2020_site_survey_english,,radio,16.2k1 Flucytosine,"1, Yes | 0, No",,,,,,[flucytosine2]=1,y,,,pharmacy2b,,
+contraceptive_short_out2,iedea_2020_site_survey_english,,radio,"16.2l1 Short-acting contraceptives (pills, injectables, condoms)","1, Yes | 0, No",,,,,,[contraceptives_short2]=1,y,,,pharmacy2b,,
+contraceptives_long_out2,iedea_2020_site_survey_english,,radio,"16.2m1 Long-acting reversible contraceptives (implants, intrauterine devices)","1, Yes | 0, No",,,,,,[contraceptives_long2]=1,y,,,pharmacy2b,,
+ssris_out2,iedea_2020_site_survey_english,,radio,"16.2n1 Selective serotonin reuptake inhibitors (SSRIs: e.g., Prozac, Zoloft, Paxil)","1, Yes | 0, No",,,,,,[ssris2]=1,y,,,pharmacy2c,,
+snris_out2,iedea_2020_site_survey_english,,radio,"16.2o1 Serotonin and norepinephrine reuptake inhibitors (SNRIs: e.g., Cymbalta, Effexor, Fetzima)","1, Yes | 0, No",,,,,,[snris2]=1,y,,,pharmacy2c,,
+antidepressants_out2,iedea_2020_site_survey_english,,radio,"16.2p1 Tricyclic Antidepressants (e.g., amitriptyline, amoxapine, doxepin)","1, Yes | 0, No",,,,,,[antidepressants2]=1,y,,,pharmacy2c,,
+benzodiazepines_out2,iedea_2020_site_survey_english,,radio,"16.2q1 Benzodiazepines (e.g., Xanax, Lorazepam, Klonopin)","1, Yes | 0, No",,,,,,[benzodiazepines2]=1,y,,,pharmacy2c,,
+antipsychotics_out2,iedea_2020_site_survey_english,,radio,"16.2r1 Antipsychotic medications (e.g., Haloperidol, Chlorpromazine, Fluphenazine, Risperidone, Seroquel, Abilify)","1, Yes | 0, No",,,,,,[antipsychotics2]=1,y,,,pharmacy2c,,
+mood_stab_out2,iedea_2020_site_survey_english,,radio,"16.2s1 Mood stabilizers (e.g., Carbamazepine, Lithium, Valproate, Lamotrigine)","1, Yes | 0, No",,,,,,[mood_stab2]=1,y,,,pharmacy2c,,
+alc_meds_out2,iedea_2020_site_survey_english,,radio,"16.2t1 Alcohol dependence medications (Disulfiram, Naltrexone, Acamprosate)","1, Yes | 0, No",,,,,,[alc_meds2]=1,y,,,pharmacy2c,,
+wait_list,iedea_2020_site_survey_english,,radio,"16.3 In 2019, did this HIV clinic have patients on a <u>waiting list to receive ART</u>? 
+","1, Yes | 2, No | 3, Don't Know",,,,,,[pharmacy]='1',y,,,,,
+track_ltfu,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">17. MEDICAL RECORDS AND PATIENT TRACKING
+<i>Describe practices prior to COVID-19</i></div>",yesno,"17.1 In 2019, did your clinic  track the outcomes of patients who were lost to follow-up (e.g. outcomes such as patient deaths, transfers to other facilities, ART status, etc.)? 
+",,,,,,,[pharmacy]='1' OR [pharmacy]='0' OR [pharmacy]='',y,RH,,,,
+track_ltfu_edms,iedea_2020_site_survey_english,,yesno,"17.2 Were the outcomes of tracked patients recorded in electronic databases?
+
+",,,,,,,[track_ltfu] = '1',y,RH,,,,
+track_ltfu_info2,iedea_2020_site_survey_english,,checkbox,"17.3 After tracking patients lost to follow-up at this HIV clinic, what information was recorded in electronic databases?
+ 
+
+<i>Check all that apply.</i>","1, Transfers to other facilities | 1b, Loss to follow-up | 5, Deaths | 88, Other",,,,,,[track_ltfu_edms] = '1',y,,,,,
+other_specify222,iedea_2020_site_survey_english,,text,"17.3a. If Other, please specify",,,,,,,[track_ltfu_info2(88)] = '1',y,,,,,
+covid_emergency,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">18. COVID-19 RESPONSE & IMPACT ON HIV CARE AND TREATMENT
+<i>Describe how COVID-19 has affected HIV service delivery at this clinic.</i></div>",yesno,"18.1 Was the geographic location surrounding this HIV clinic subject to any form of COVID-19 restrictions on travel, service provision, or business operations? 
+",,,,,,,,y,RH,,,,
+covid_emergency_dt,iedea_2020_site_survey_english,,dropdown,"18.1a. When were COVID-19-related restrictions issued for the geographic location surrounding this HIV clinic?  
+
+<i>Please provide month when COVID-19 related restrictions were first issued. If month is not known, select ""Do not Know""</i>","1, January | 2, February | 3, March | 4, April | 5, May | 6, June | 7, July | 8, August | 9, September | 10, October | 11, November | 12, December | 99, Do not Know",,,,,,[covid_emergency] = '1',,,,,,
+covid_emergency_dt_lift,iedea_2020_site_survey_english,,dropdown,"18.1b. When were COVID-19-related restrictions first lifted or eased? 
+
+
+<i>Please provide month.  If unknown, select ""Do not Know""
+If restrictions remain in place, select ""NA- not applicable""</i>","1, January | 2, February | 3, March | 4, April | 5, May | 6, June | 7, July | 8, August | 9, September | 10, October | 11, November | 12, December | 99, Do not Know | 77, NA (not applicable)",,,,,,[covid_emergency] = '1',,RH,,,,
+suspend_hivservices,iedea_2020_site_survey_english,,yesno,18.2 Did this HIV clinic suspend HIV service provision in response to COVID-19? ,,,,,,,,y,RH,,,,
+suspend_hivservices_dt,iedea_2020_site_survey_english,,dropdown,"18.2a. When were HIV-related services suspended at this hospital/clinic?
+
+<i>Please provide month when HIV-related services were suspended.  If month is not known, select ""Do not Know""</i>","1, January | 2, February | 3, March | 4, April | 5, May | 6, June | 7, July | 8, August | 9, September | 10, October | 11, November | 12, December | 99, Do not Know",,,,,,[suspend_hivservices] = '1',,RH,,,,
+suspend_hivservices_dt_res,iedea_2020_site_survey_english,,dropdown,"18.2b. When were HIV-related services first resumed at this hospital/clinic?
+
+<i>Please provide month.  If unknown, select ""Do not Know""
+If restrictions remain in place, select ""NA- not applicable""</i>","1, January | 2, February | 3, March | 4, April | 5, May | 6, June | 7, July | 8, August | 9, September | 10, October | 11, November | 12, December | 99, Do not Know | 77, NA (not applicable)",,,,,,[suspend_hivservices] = '1',,RH,,,,
+desc_18_3,iedea_2020_site_survey_english,,descriptive,"18.3 At any time since the start of the pandemic, has the COVID-19 response resulted in any of the following changes in the <u>operations of the HIV clinic</u>, and are any of these changes currently in effect?  
+<div style=""font-size:12.5px"">
+<i>Please indicate whether the following changes are <u>currently, previously, or were never</u> in effect at this HIV clinic.</div>",,,,,,,,,,,,,
+susp_enrolment2,iedea_2020_site_survey_english,,radio,"18.3a.	Suspension or postponement of the enrollment of new patients in HIV care","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+susp_appointments2,iedea_2020_site_survey_english,,radio,"18.3b.	Suspension or postponement of non-urgent appointments for HIV patients","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+dercrease_hrs2,iedea_2020_site_survey_english,,radio,"18.3c.	Decreases in the number of hours or days of service delivery for HIV patients","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+reassign_providers2,iedea_2020_site_survey_english,,radio,"18.3d.	Re-assignment of HIV care providers to assist with the COVID-19 response","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+reduced_providers2,iedea_2020_site_survey_english,,radio,"18.3e.	Reduced availability of HIV care providers due to COVID-19-related illness, self-isolation, or quarantine","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+reconfig_clinic2,iedea_2020_site_survey_english,,radio,"18.3f.	Reconfiguration of hospital/clinic space to accommodate COVID-19-related services","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+increase_ppe2,iedea_2020_site_survey_english,,radio,"18.3g.	Increased use of personal protective equipment (masks, gloves, gowns, etc.) by HIV clinic staff?","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+increase_telemed2,iedea_2020_site_survey_english,,radio,"18.3h.	Increased use of telemedicine (i.e., consultations by phone/web) in HIV-related care","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+interrup_records2,iedea_2020_site_survey_english,,radio,"18.3i.	Interruptions or changes in recording of data (either paper or electronic records) related to clinical management of patients","2, Currently | 1, Previously | 0, Never",,,,,,,y,,,covid192,,
+susp_hiv_diag2,iedea_2020_site_survey_english,"At the time since the start of the pandemic, has the COVID-19 response resulted in any of the following changes in the <u>operations of the HIV clinic</u>, and are any of these changes currently in effect?  
+
+<div style=""font-size:12.5px""><i>Please indicate whether the following changes are <u>currently, previously, or were never</u> in effect at this HIV clinic.
+Select NA (not applicable) for operations (e.g. HIV testing, research, etc.) that were not in place prior to the COVID-19 pandemic.</i></div>",radio,18.3j. Suspension or decreases in the availability of HIV testing/diagnostic services,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_b2,,
+susp_research2,iedea_2020_site_survey_english,,radio,"18.3k. Suspension or postponement of ongoing research activities (e.g., enrollment or follow-up of patients in ongoing research studies)","2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_b2,,
+interr_data_recording2,iedea_2020_site_survey_english,,radio,18.3l. Interruptions or changes in recording of data (either paper or electronic records) for ongoing research,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_b2,,
+new_research2,iedea_2020_site_survey_english,,radio,18.3m. Interruptions or delays in initiation of or planning for new research activities unrelated to COVID-19,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_b2,,
+susp_ngo_partner2,iedea_2020_site_survey_english,,radio,18.3n. Withdrawal/suspension of activities of non-governmental partners that support care provision in the clinic,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_b2,,
+susp_hivtesting2,iedea_2020_site_survey_english,"18.4  At any time since the start of the pandemic, has the COVID-19 response resulted in partial or complete suspension of any of the following <u>community-based HIV services</u> (i.e., services provided in community settings outside the hospital/clinic) for patients referred to or enrolled in care at this HIV clinic?  
+
+<div style=""font-size:12.5px""><i>Please indicate whether the following community-based services are <u>currently, previously, or were never</u> suspended.
+Select NA (not applicable) for community activities that were not in place prior to the COVID-19 pandemic.</i></div>",radio,"18.4a.	Community-based HIV testing","2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_c2,,
+susp_artrefills2,iedea_2020_site_survey_english,,radio,"18.4b.	Community-based ART refills","2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_c2,,
+susp_groupmeet2,iedea_2020_site_survey_english,,radio,"18.4c.	Community-based support group meetings/activities","2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_c2,,
+susp_tracing2,iedea_2020_site_survey_english,,radio,"18.4d.	Community-based tracing of patients who are lost to follow-up (LTFU)","2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_c2,,
+susp_ngo_parnters2,iedea_2020_site_survey_english,,radio,"18.4e.	Withdrawal/suspension of activities of non-governmental partners that support community-based  programs for patients enrolled in HIV care at this clinic","2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_c2,,
+art_shutdown,iedea_2020_site_survey_english,"18.5  At any time since the start of the pandemic, have <u>routine ART services</u> at this HIV clinic been impacted by COVID-19?	
+
+<div style=""font-size:12.5px""><i>Please indicate whether the following changes are <u>currently, previously, or were <u>never</u> experienced at this HIV clinic.
+Select NA (not applicable) for services that were not in place prior to the COVID-19 pandemic.</i></div>",radio,18.5a. ART clinics have been suspended or shut down,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18b,,
+art_pickup,iedea_2020_site_survey_english,,radio,18.5b. ART pick-up points have been designated in the community,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18b,,
+art_extra,iedea_2020_site_survey_english,,radio,18.5c. Patients are being given extra supplies/refills of ART to reduce the frequency of refills,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18b,,
+oth_art_sevices,iedea_2020_site_survey_english,,radio,18.5d. Other <br><i>(please specify or select Not Applicable)</i>,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18b,,
+other_art_affected_3,iedea_2020_site_survey_english,,text,"18.5d1 If Other ART services at this clinic have been affected, please specify",,,,,,,[oth_art_sevices] = '1' or [oth_art_sevices] = '2',,,,,,
+art_init_suspended,iedea_2020_site_survey_english,"18.6 At any time since the start of the pandemic, have <u>ART initiation services</u> at this clinic been impacted by COVID-19?
+
+<div style=""font-size:12.5px""><i>Please indicate whether the following impacts are <u>currently, previously, or were never</u> experienced at this HIV clinic.
+Select NA (not applicable) for services that were not available prior to the COVID-19 pandemic.</i></div>",radio,18.6a ART initiation services have been suspended,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid19_18_6,,
+same_day_art_exp,iedea_2020_site_survey_english,,radio,18.6b Same-day or rapid ART initiation services introduced or expanded,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid19_18_6,,
+art_counseling_red,iedea_2020_site_survey_english,,radio,18.6c Adherence counseling requirements prior to ART initiation reduced or streamlines,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid19_18_6,,
+oth_art_init,iedea_2020_site_survey_english,,radio,18.6d Other <br><i>(please specify or select Not Applicable)</i>,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid19_18_6,,
+other_art_init,iedea_2020_site_survey_english,,text,"18.6d1 If Other ART initiation services at this clinic have been impacted, please specify",,,,,,,[oth_art_init] = '1' or [oth_art_init] = '2',,,,,,
+vl_suspended,iedea_2020_site_survey_english,"18.7 At any time since the start of the pandemic, have <u>HIV viral load testing services</u> at this HIV clinic been impacted by COVID-19?
+
+<div style=""font-size:12.5px""><i>Please indicate whether the following impacts are <u>currently, previously, or were never</u> experienced at this HIV clinic. 
+Select NA (not applicable) for services that were not available prior to the COVID-19 pandemic.</i></div>",radio,18.7a Sample collection for HIV viral load testing has been suspended,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18c,,
+vl_notaccepted,iedea_2020_site_survey_english,,radio,18.7b. Laboratory not accepting HIV viral load samples,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18c,,
+vl_tat_longer,iedea_2020_site_survey_english,,radio,18.7c. Turnaround time for HIV viral load testing is longer,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18c,,
+oth_vl_testing,iedea_2020_site_survey_english,,radio,18.7d. Other <br><i>(please specify or select Not Applicable)</i>,"2, Currently | 1, Previously | 0, Never | 77, Not applicable",,,,,,,y,,,covid_19_18c,,
+other_vl_test,iedea_2020_site_survey_english,,text,"18.7d1 If Other viral load testing services at this clinic have been impacted, please specify",,,,,,,[oth_vl_testing] = '1' or [oth_vl_testing] = '2',,,,,,
+stockouts_hivtest2,iedea_2020_site_survey_english,"18.8 At any time since the start of the pandemic, has the HIV clinic experienced stockouts of any of the following for care of HIV patients?
+
+<i>Please indicate whether the following stockouts are <u>currently, previously, or were never</u> experienced. 
+Select NA (not applicable) for commodities and supplies that were not routinely available/provided at this clinic prior to the COVID-19 pandemic.</i>
+",radio,18.8a. HIV test kits,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_d2,,
+stockouts_prep2,iedea_2020_site_survey_english,,radio,18.8b. PrEP medications,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_d2,,
+stockouts_1stline2,iedea_2020_site_survey_english,,radio,18.8c. First-line antiretroviral regimens,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_d2,,
+stockouts_2ndline2,iedea_2020_site_survey_english,,radio,18.8d. Second-line antiretroviral regimens,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_d2,,
+stockouts_3rdline2,iedea_2020_site_survey_english,,radio,18.8e. Third-line antiretroviral regimens,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_d2,,
+vl_testing2,iedea_2020_site_survey_english,,radio,18.8f. Supplies for viral load testing,"2, Currently | 1, Previously | 0, Never | 77, NA",,,,,,,y,,,covid19_d2,,
+time_end,iedea_2020_site_survey_english,,text," <div style=""border: 1px solid #19B5FE;background: #A2C0D9  ; font-size:13px; color: #000000; text-align:left;padding:10px;"">Please press the ""Now"" button to help us know how long it took to complete this survey.</div>
+",,,datetime_ymd,,,,[track_ltfu] = '1' OR [track_ltfu] = '0' OR [track_ltfu_edms]='0',,,,,,
+banner_completed,iedea_2020_site_survey_english,,descriptive,"<div style=""color:green; font-size:larger;text-align:center"">You have reached the end of the survey.</div>",,,,,,,,,,,,,
+acknowledge,iedea_2020_site_survey_english,"<div style=""border: 1px solid #19B5FE;background: #4682B4; font-size:18px; color: #000000; text-align:center;padding:10px;"">19. ACKNOWLEDGEMENTS
+ (OPTIONAL)</div>",notes,"<div style=""border: 1px solid #19B5FE; background: #A2C0D9  ; font-size:13px; color: #000000; text-align:left;padding:10px;"">We would like to acknowledge clinic team members who participated in the completion of this survey. If your team members would like their names included, please enter their full names, separated by commas, so we can acknowledge their contribution.</div>",,,,,,,,,,,,,
+banner_completed_2,iedea_2020_site_survey_english,,descriptive,"<div style=""float:right;font-weight:normal;font-size:10px"">18-MAR-20</div>
+<div style=""color:green; font-size:larger;text-align:center"">Thank you for your participation.</div>
+",,,,,,,,,,,,,
+status_general,survey_status,,dropdown,Status of 2020 Site Assessment Survey for this Site,"1, Complete/Validated | 2, Queries | 3, e-Survey submitted | 4, Pending data entry (paper) | 5, Unknown | 6, Site not participating",,,,,,,,,,,,
+status_notparticipating,survey_status,,notes,Why is the site not participating in the IeDEA 2020 Site Assessment?,,,,,,,[status_general] = '6',,,,,,
+status_date,survey_status,,text,Date of Status Update,,,date_ymd,,,,,,,,,,
+status_qual,survey_status,Optional Qualifiers,checkbox,Original data collection was...,"1, On paper form | 2, In English survey version | 3, In French survey version",,,,,,,,,,,,
+coordinator_notes,survey_status,Notes,notes,Survey Coordinator Notes,,,,,,,,,,,,,

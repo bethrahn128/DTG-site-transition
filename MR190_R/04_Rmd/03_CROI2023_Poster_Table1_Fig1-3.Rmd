@@ -1,0 +1,927 @@
+
+---
+title: 'IeDEA MR190: DTG rollout <br> 03_CROI2023_Poster_Table1_Fig1-3'
+author: "Elizabeth Zaniewski, Veronika Whitesell, Marie Ballif"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::robobook:
+    code_folding: show
+    self_contained: true
+    highlight: pygments
+    keep_md: no
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "05_html") })
+---
+
+```{r r-setup, include = FALSE}
+options(scipen = 999)
+options(max.print = "75")
+set.seed(12345)
+
+library(pacman)
+p_load(
+  kableExtra, tidyverse, dplyr, Hmisc,
+  scales, ggplot2,
+  fst, data.table, psych, readxl,
+  sjmisc, flextable
+)
+
+import::from("psych", "geometric.mean")
+import::from("sjmisc", "frq")
+import::from("gmodels", "CrossTable")
+```
+
+```{r conflicts, include = FALSE}
+conflicted::conflict_scout()
+```
+
+```{r knit-setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+knitr::opts_chunk$set(
+  cache = FALSE,
+  prompt = FALSE,
+  tidy = FALSE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE,
+  echo = TRUE
+)
+
+knitr::opts_knit$set(width = 75)
+```
+
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- ----------------------------------------------------- -->
+
+
+```{r include=FALSE}
+#Clear existing data and graphics
+rm(list=ls())
+graphics.off()
+```
+
+<!-- ----------------------------------------------------- -->
+
+
+# CROI Poster presentation
+
+https://www.croiconference.org/wp-content/uploads/sites/2/posters/2023/MR190_CROI2023_poster_14Feb2023-133208724161778484.pdf
+
+
+TRANSITION TO DOLUTEGRAVIR-BASED ART IN LOW- AND MIDDLE-INCOME COUNTRIES IN IEDEA
+
+
+<!-- ----------------------------------------------------- -->
+
+# Table 1: Type of DTG policy initiative  
+
+Table 1: Type of initiative used to rollout DTG regimens
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(sjmisc)
+library(gmodels)
+library(Hmisc)
+library(readxl)
+library(writexl)
+library(table1)
+library(gtsummary)
+library(stats)
+library(rstatix)
+
+import::from("sjmisc", "frq")
+import::from("gmodels", "CrossTable")
+
+
+import::from("psych", "geometric.mean")
+import::from("sjmisc", "frq")
+import::from("gmodels", "CrossTable")
+```
+
+
+## Load wrangled data
+```{r}
+df <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+df %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+## Re-wrangle data
+
+HIV prevalence category headings
+
+```{r}
+df$Prev_cat.factor <- factor(df$Prev_cat, levels = c( "Low","Medium" ,"High"),
+                        labels = c("Low", "Medium", "High" ))
+
+label(df$dtg_rollout_type.factor)="Initiative type"
+
+```
+
+
+## Create table
+
+Table 1: Type of initiative used to rollout DTG regimens
+
+## Include function used to define table
+```{r}
+
+
+my.render.cat <- function(x) {
+  c("", sapply(stats.default(x), function(y) with(y,
+                                                  sprintf("%0.0f%% (%d)", PCT, FREQ))))
+}
+
+```
+
+## Final Table 1 
+
+(with Total percent and number)
+```{r echo=FALSE}
+
+table1 <- table1::table1(~ dtg_rollout_type.factor | Prev_cat.factor, data = df, overall=c(right="Total"), render.categorical = my.render.cat)
+
+table1
+
+table1 <- as.data.frame(table1)
+
+
+```
+
+
+Remove "Total" column and export to Excel
+
+```{r echo=FALSE}
+table1b <- table1::table1(~ dtg_rollout_type.factor | Prev_cat.factor, data = df, overall=c(right="Total"), render.categorical = my.render.cat)
+
+table1b <- as.data.frame(table1b)
+
+# remove Total column
+table1b <- table1b[, 1:4]
+
+Final_table1 <- as.data.frame(table1b)
+
+html_table1 <- qflextable(Final_table1)
+
+
+#table1b
+
+```
+
+
+```{r}
+html_table1
+```
+
+
+Table 1: Type of initiative used to rollout DTG regimens
+
+
+
+## Output Table 1
+
+```{r}
+   
+    # Print plot to a png file
+write_xlsx(Final_table1, "03_Output/CROI_poster/Table_1.xlsx")
+    
+```
+
+```{r include=FALSE}
+
+rm(df)
+rm("table1", "table1b", "html_table1")
+
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Figure 1: DTG rollout or planned rollout   
+
+Figure 1: Transition to DTG regimens by HIV prevalence category and treatment line
+
+For each first-, second-, third-line and across all three lines by HIV prev cat
+
+
+## Load wrangled data
+```{r}
+df <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+df %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+
+## Re-wrangle data: overall
+
+Create numerators overall
+
+Rollout or planned rollout
+```{r}
+
+# Outcome ab = rolled out
+
+# dtg1 
+dtg1_ab_all <- df %>%
+   summarise(
+    numer = sum(dtg1),
+    denom = n()) %>%
+  mutate(line = "dtg1") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg2 by Prev_cat
+dtg2_ab_all <- df %>%
+  summarise(
+    numer = sum(dtg2),
+    denom = n()) %>%
+  mutate(line = "dtg2") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg3 by Prev_cat
+dtg3_ab_all <- df %>%
+   summarise(
+    numer = sum(dtg3),
+    denom = n()) %>%
+  mutate(line = "dtg3") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+```
+
+Create numerators overall
+
+No rollout
+
+```{r}
+# Outcome c = no planned rollout or unknown
+
+# dtg1 
+dtg1_c_all <- df %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg1),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg1") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+
+# dtg2 by Prev_cat
+dtg2_c_all <- df %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg2),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg2") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+
+# dtg3 by Prev_cat
+dtg3_c_all <- df %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg3),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg3") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+```
+
+
+Append files
+```{r}
+dtg_all <- rbind(rbind(dtg1_ab_all, dtg1_c_all, dtg2_ab_all, dtg2_c_all, dtg3_ab_all, dtg3_c_all))
+dtg_all <- dtg_all %>%
+  mutate(Prev_cat = "All")
+```
+
+Rollout or planned rollout all three lines
+```{r}
+# Roll out of DTG for all three lines
+dtg123_ab_all <- df %>%
+    summarise(
+    denom = n(),
+    numer = sum(dtg123)) %>%
+  mutate(line = "dtg123") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+```
+
+No rollout all three lines
+```{r}
+
+# All for no roll out of DTG for all three  lines
+dtg123_c_all <- df %>%
+    summarise(
+    denom = n(),
+    numer_ab = sum(dtg123, na.rm =TRUE),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg123") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+
+```
+
+Append files
+```{r}
+dtg123_all <- rbind(dtg123_ab_all, dtg123_c_all)
+dtg123_all <- dtg123_all %>%
+  mutate(Prev_cat = "All")
+```
+
+
+
+## Re-wrangle data: by HIV prevalence
+
+We linked site data to national HIV prevalence estimates for 2020, obtained from UNAIDS1 and other sources, and categorized as low (<1%), medium (1-4.9%), or high (≥5%) HIV prevalence.
+
+Rollout or planned rollout
+```{r}
+
+# Outcome ab = rolled out
+
+# dtg1 by Prev_cat
+dtg1_ab <- df %>%
+  group_by(Prev_cat) %>% 
+  summarise(
+    numer = sum(dtg1),
+    denom = n()) %>%
+  mutate(line = "dtg1") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg2 by Prev_cat
+dtg2_ab <- df %>%
+  group_by(Prev_cat) %>% 
+  summarise(
+    numer = sum(dtg2),
+    denom = n()) %>%
+  mutate(line = "dtg2") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg3 by Prev_cat
+dtg3_ab <- df %>%
+  group_by(Prev_cat) %>% 
+  summarise(
+    numer = sum(dtg3),
+    denom = n()) %>%
+  mutate(line = "dtg3") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+```
+
+No rollout
+```{r}
+# Outcome c = no planned rollout or unknown
+
+# dtg1 by Prev_cat
+dtg1_c <- df %>%
+  group_by(Prev_cat) %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg1),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg1") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+
+# dtg2 by Prev_cat
+dtg2_c <- df %>%
+  group_by(Prev_cat) %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg2),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg2") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+
+# dtg3 by Prev_cat
+dtg3_c <- df %>%
+  group_by(Prev_cat) %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg3),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg3") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+```
+
+Append files
+```{r}
+dtg_HIVprev <- rbind(rbind(dtg1_ab, dtg1_c, dtg2_ab, dtg2_c, dtg3_ab, dtg3_c))
+
+```
+
+Rollout all three lines
+
+```{r}
+dtg123_ab <- df %>%
+  group_by(Prev_cat) %>%
+  summarise(
+    denom = n(),
+    numer = sum(dtg123)) %>%
+  mutate(line = "dtg123") %>%
+  mutate(outcome = "ab") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+```
+
+No rollout all three lines
+
+```{r}
+dtg123_c <- df %>%
+  group_by(Prev_cat) %>%
+  summarise(
+    denom = n(),
+    numer_ab = sum(dtg123, na.rm =TRUE),
+    numer = denom - numer_ab) %>%
+  mutate(line = "dtg123") %>%
+  mutate(outcome = "c") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per, numer_ab))
+```
+
+Append files
+
+```{r}
+dtg123_HIVprev<- rbind(dtg123_ab, dtg123_c)
+#dim(dtg123_HIVprev)  
+```
+
+
+
+## Append files overall and HIV prevalence
+```{r}
+Prev_cat_all <- rbind(dtg_all, dtg123_all, dtg_HIVprev, dtg123_HIVprev)
+#dim(Prev_cat_all)  
+```
+
+
+## Final Figure 1
+
+Figure 1: Transition to DTG regimens by HIV prevalence category and treatment line
+
+Define plot labels
+
+```{r}
+data1 <- Prev_cat_all
+
+
+data1 <- data1 %>%
+  mutate(text = ifelse(data1$outcome =="ab", round(value), "")) %>%
+  mutate(text2 = "%")
+
+data1$text3 <- paste(data1$text, data1$text2, sep="")
+
+data1 <- data1 %>%
+  mutate(text4 = ifelse(data1$outcome =="ab", text3, "")) 
+
+```
+
+Define plot factors
+
+```{r}
+data1$outcome <- factor(data1$outcome, levels = c("ab","c"),
+                       labels = c("Rolled out or planned rollout", "No rollout or unknown")) 
+  
+data1$Prev_cat <- factor(data1$Prev_cat, levels = c( "Low","Medium" ,"High", "All"),
+            labels = c("Low HIV prevalence \n (n=35)", "Medium HIV prevalence \n (n=83)", "High HIV prevalence \n (n=57)", "Overall \n (n=175)"))
+  
+  
+data1$line <- factor(data1$line, levels = c("dtg1","dtg2", "dtg3", "dtg123"),
+                          labels = c("1st line","2nd line", "3rd line", "All lines"))
+  
+fill <- c("#3F6D9B", "#a94c4c")
+   
+```
+
+
+
+HIV prev cat only (legend on bottom)
+
+Final Figure 1 in CROI Poster
+```{r}
+ # stacked bar chart (without overall plot; don't need overall as included in poster text)
+    data2 <- data1[-c(1:8), ]
+
+ # legend on bottom
+    Final_figure1 <- ggplot(data=data2, aes(x=line, y=value, fill=outcome, label = text4))  + 
+      geom_bar(position = position_stack(reverse = TRUE), stat="identity") +
+      facet_grid(. ~ Prev_cat) +
+      theme(strip.text = element_text(size=11)) +
+      theme(legend.position="bottom", 
+            legend.box.background = element_rect(color = "black"),
+            legend.direction="horizontal", 
+            legend.margin=margin(0,0,0,0),
+            legend.box.margin = margin(-5, -5, -5, -5), 
+            legend.title = element_blank(),
+            legend.text = element_text(size=11)) +
+      labs(x="", y="Percentage (%)") +
+      theme(axis.text.x = element_text(angle =90, hjust =1, vjust =0.5, size =11)) +
+      theme(axis.text.y = element_text(size =11)) +
+      theme(axis.title.y = element_text(size=11)) +
+      scale_y_continuous(n.breaks = 5) +
+      scale_fill_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill)  +
+      scale_color_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill) +
+      guides(fill = guide_legend(reverse=FALSE, bycol=TRUE)) +
+      geom_text(size = 3.5, colour = "white", fontface = "bold", position = position_stack(reverse = TRUE, vjust = 0.8))
+    
+   
+    
+```
+
+```{r}
+ Final_figure1
+```
+
+
+Figure 1: Transition to DTG regimens by HIV prevalence category and treatment line
+
+
+
+## Output Figure 1
+
+```{r}
+   
+    # Print plot to a png file
+    ggsave("03_Output/CROI_poster/Figure1_DTG_rollout_by_HIVprev.png", width = 6, height =3)
+    
+```
+
+
+
+```{r include=FALSE}
+rm(df)
+rm(list=ls(pattern="dtg"))
+rm(list=ls(pattern="data"))
+rm(Prev_cat_all)
+
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Figure 2: VL monitoring and DR testing availability   
+
+Figure 2: VL monitoring and DR testing availability and use at switch to DTG regimens by HIV prevalence category
+
+
+## Load wrangled data
+```{r}
+df <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+df %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+## Re-wrangle data: for availability
+
+```{r}
+
+# create new variables for availability
+
+# VL
+
+df$pcr_vl_yn <- ifelse(df$pcr_vl_na =="1", 0, 1)
+CrossTable(df$pcr_vl_yn, df$pcr_vl_na, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+#frq(df,pcr_vl_clinic)
+#frq(df,pcr_vl_samefacility)
+#frq(df,pcr_vl_offsite)
+CrossTable(df$Prev_cat, df$pcr_vl_yn,
+           prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+
+# DR
+df$dr_yn <- ifelse(df$dr_na ==1, 0, 1)
+CrossTable(df$dr_yn, df$dr_na, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+#frq(df,dr_clinic)
+#frq(df,dr_samefacility)
+#frq(df,dr_offsite)
+CrossTable(df$Prev_cat, df$dr_yn,
+           prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+
+```
+
+
+
+
+## Re-wrangle data: for availability and use at switch
+
+Viral load testing
+
+```{r}
+
+# create 5 categories
+# 1 Available and used for switch
+# 2 Available but not used for switch
+# 3 (Available but not known if used for switch --NA)
+# 4 Not available
+# 5 Not available, but used for switch
+
+
+# VL
+df1_VL <- df %>%
+    mutate(testVL_cat1 = ifelse(pcr_vl_yn ==1 & (dtg_trans_vl_yn ==1), 1, 0)) %>%  # VL available and used for switch
+    mutate(testVL_cat2 = ifelse(pcr_vl_yn ==1 & (dtg_trans_vl_yn ==0), 1, 0)) %>%   # VL available and not used for switch
+    mutate(testVL_cat3 = ifelse(pcr_vl_yn ==1 & is.na(dtg_trans_vl_yn), 1, 0)) %>%   # VL available but switch is NA
+    mutate(testVL_cat4 = ifelse(pcr_vl_yn ==0 & (dtg_trans_vl_yn ==0), 1, 0)) %>%    # VL not available and not used for switch
+    mutate(testVL_cat5 = ifelse(pcr_vl_yn ==0 & (dtg_trans_vl_yn ==1), 1, 0)) %>%   # VL not available but used for switch 
+    mutate(testVL_cat6 = ifelse(pcr_vl_yn ==0 & is.na(dtg_trans_vl_yn), 1, 0)) %>%   # VL not available but switch is NA
+    mutate(outcome = ifelse(testVL_cat1 ==1, "1", "0")) %>%
+    mutate(outcome = ifelse(testVL_cat2 ==1, "2", outcome)) %>%
+    mutate(outcome = ifelse(testVL_cat3 ==1, "3", outcome)) %>%
+    mutate(outcome = ifelse(pcr_vl_yn ==0, "4", outcome)) %>%
+    mutate(test = "VL") %>%
+    mutate(temp1 =1) 
+
+# 1 = available, used at switch
+# 2 = available, not used at switch
+# 3 = available, unknown if used at switch
+# 4 = not available
+
+frq(df1_VL$outcome)
+
+df2_VL <- df1_VL %>%
+  group_by(Prev_cat) %>%
+  mutate(denom = sum(temp1))
+
+df3_VL <- df2_VL %>%
+  group_by(Prev_cat, outcome) %>%
+  mutate(numer = sum(temp1)) %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 0)) %>%
+  select(-c(per))
+
+df4_VL <- df3_VL %>%
+  group_by(Prev_cat, test, numer, denom, value, outcome) %>%
+  summarise()
+
+
+# Overall VL
+
+df3_VL_all <- df2_VL %>%
+  mutate(denom = sum(temp1)) %>%
+  mutate(Prev_cat = "All") 
+
+df3_VL_all <- df3_VL_all %>%
+  group_by(outcome) %>%
+  mutate(numer = sum(temp1)) %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 0)) %>%
+  select(-c(per))
+
+df4_VL_all <- df3_VL_all %>%
+  group_by(Prev_cat, test, numer, denom, value, outcome) %>%
+  summarise()
+```
+
+
+Drug resistance testing
+
+
+```{r}
+
+# DR 
+df1_DR <- df %>%
+  mutate(testDR_cat1 = ifelse(dr_na ==0 & dtg_genotyping ==1, 1, 0)) %>%  # DR available and used for switch
+  mutate(testDR_cat2 = ifelse(dr_na ==0 & dtg_genotyping ==0, 1, 0)) %>%   # DR available and not used for switch
+  mutate(testDR_cat3 = ifelse(dr_na ==0 & is.na(dtg_genotyping), 1, 0)) %>%   # DR available but switch is NA
+  mutate(testDR_cat4 = ifelse(dr_na ==1 & dtg_genotyping ==0, 1, 0)) %>%    # DR not available and not used for switch
+  mutate(testDR_cat5 = ifelse(dr_na ==1 & dtg_genotyping ==1, 1, 0)) %>%   # DR not available but used for switch 
+  mutate(testDR_cat6 = ifelse(dr_na ==1 & is.na(dtg_genotyping), 1, 0)) %>%   # DR not available but switch is NA
+  mutate(outcome = ifelse(testDR_cat1 ==1, "1", 0)) %>%
+  mutate(outcome = ifelse(testDR_cat2 ==1, "2", outcome)) %>%
+  mutate(outcome = ifelse(testDR_cat3 ==1, "3", outcome)) %>%
+  mutate(outcome = ifelse(dr_yn ==0, "4", outcome)) %>%
+  mutate(test = "DR") %>%
+  mutate(temp1 =1) 
+
+# 1 = available, used at switch
+# 2 = available, not used at switch
+# 3 = available, unknown if used at switch
+# 4 = not available
+
+frq(df1_DR$outcome)
+
+
+df2_DR <- df1_DR %>%
+  group_by(Prev_cat) %>%
+  mutate(denom = sum(temp1))
+
+
+df3_DR <- df2_DR %>%
+  group_by(Prev_cat, outcome) %>%
+  mutate(numer = sum(temp1)) %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 0)) %>%
+  select(-c(per)) 
+
+  
+df4_DR <- df3_DR %>%
+  group_by(Prev_cat, test, numer, denom, value, outcome) %>%
+  summarise()
+
+
+# Overall DR
+
+df3_DR_all <- df2_DR %>%
+  mutate(denom = sum(temp1)) %>%
+  mutate(Prev_cat = "All") 
+
+df3_DR_all <- df3_DR_all %>%
+  group_by(outcome) %>%
+  mutate(numer = sum(temp1)) %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 0)) %>%
+  select(-c(per))
+
+df4_DR_all <- df3_DR_all %>%
+  group_by(Prev_cat, test, numer, denom, value, outcome) %>%
+  summarise()
+```
+
+## Append files
+
+```{r}
+data3 <- rbind(df4_VL, df4_VL_all, df4_DR, df4_DR_all)
+```
+
+
+
+## Final Figure 2
+
+Figure 2: VL monitoring and DR testing availability and use at switch to DTG regimens by HIV prevalence category
+
+Define plot labels
+
+```{r}
+
+data3 <- data3 %>%
+  mutate(text1 = value) %>%
+  mutate(text2 = "%") %>%
+  mutate(text3 = paste(text1, text2, sep="")) %>%
+  mutate(text4 = ifelse(outcome =="1", text3, ""))
+```
+
+Define plot factors
+
+```{r}
+data3 <- data3 %>% filter(Prev_cat != "All")
+
+data3$test <- factor(data3$test, levels = c("VL", "DR"),
+              labels = c("VL", "DR"))
+  
+  
+data3$outcome <- factor(data3$outcome, levels = c(1, 2, 3, 4),
+                       labels = c("Available, used at switch", "Available, not used at switch", "Available, unknown if used at switch", "Not available")) 
+
+
+data3$Prev_cat <- factor(data3$Prev_cat, levels = c( "Low","Medium", "High"),
+                        labels = c("Low \n  HIV prevalence \n (n=35)", "Medium \n HIV prevalence \n (n=83)", "High \n HIV prevalence \n (n=57)"))
+
+
+fill <- c("royalblue4", "deepskyblue3", "lightskyblue1", "#a94c4c")
+
+
+   
+```
+
+
+
+Viral load and drug resistance (legend on bottom)
+```{r}
+
+# stacked bar chart with legend on bottom  
+Final_figure2 <- ggplot(data=data3, aes(x=test, y=value, fill=outcome, label = text4))  + 
+  geom_bar(position = position_stack(reverse = TRUE), stat="identity") +
+  facet_grid(. ~ Prev_cat) +
+  theme(strip.text = element_text(size=14)) +
+  theme(legend.position="bottom", 
+        legend.box.background = element_rect(color = "black"),
+        legend.direction="horizontal", 
+        legend.margin=margin(0,0,0,0),
+        legend.box.margin = margin(-5, -5, -5, -5), 
+        legend.title = element_blank(),
+        legend.key.size = unit(0.7, "cm"), 
+        legend.text = element_text(size=14)) +
+  labs(x="", y="Percentage (%)") +
+  theme(axis.text.x = element_text(angle =90, hjust =1, vjust =0.5, size =14)) +
+  theme(axis.text.y = element_text(size =14)) +
+  theme(axis.title.y = element_text(size=14)) +
+  scale_y_continuous(n.breaks = 5) +
+  scale_fill_manual(labels = ~ stringr::str_wrap(.x, width = 12), values = fill)  +
+  scale_color_manual(labels = ~ stringr::str_wrap(.x, width = 12), values = fill) +
+  guides(fill = guide_legend(reverse=FALSE, byrow=TRUE)) +
+  geom_text(size = 5, colour = "white", fontface = "bold", position = position_stack(reverse = TRUE, vjust = 0.8))
+
+
+```
+
+```{r}
+Final_figure2
+```
+
+
+Figure 2: VL monitoring and DR testing availability and use at switch to DTG regimens by HIV prevalence category
+
+
+
+## Output Figure 2
+
+```{r}
+   
+    # Print plot to a png file
+ggsave("03_Output/CROI_poster/Figure2_VL_DR_availability.png", width = 7, height =4.5)
+    
+```
+
+
+```{r include=FALSE}
+
+rm(list=ls(pattern="df"))
+rm(list=ls(pattern="data"))
+
+```
+
+
+
+<!-- ----------------------------------------------------- -->
+
+# Session info
+
+```{r}
+sessionInfo()
+
+```

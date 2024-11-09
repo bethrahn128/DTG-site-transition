@@ -1,0 +1,396 @@
+
+---
+title: "IeDEA MR190: DTG rollout <br> 02_CROI2023_Abstract"
+subtitle: " "
+author: "Elizabeth Zaniewski, Veronika Whitesell, Marie Ballif"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::robobook:
+    code_folding: show
+    self_contained: true
+    highlight: pygments
+    keep_md: no
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "05_html") })
+---
+
+```{r r-setup, include = FALSE}
+options(scipen = 999)
+options(max.print = "75")
+set.seed(12345)
+
+library(pacman)
+p_load(
+  kableExtra, tidyverse, dplyr, Hmisc,
+  scales, ggplot2,
+  fst, data.table, psych, readxl,
+  sjmisc
+)
+
+import::from("psych", "geometric.mean")
+import::from("sjmisc", "frq")
+import::from("gmodels", "CrossTable")
+```
+
+```{r conflicts, include = FALSE}
+conflicted::conflict_scout()
+```
+
+```{r knit-setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+knitr::opts_chunk$set(
+  cache = FALSE,
+  prompt = FALSE,
+  tidy = FALSE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE,
+  echo = TRUE
+)
+
+knitr::opts_knit$set(width = 75)
+```
+
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+getwd()
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+
+```{r echo=TRUE}
+#Clear existing data and graphics
+rm(list=ls())
+graphics.off()
+```
+
+
+# Abstract
+
+https://www.croiconference.org/abstract/transition-to-dolutegravir-based-art-in-low-and-middle-income-countries-in-iedea/
+
+
+
+## Title
+
+**TRANSITION TO DOLUTEGRAVIR-BASED ART IN LOW- AND MIDDLE-INCOME COUNTRIES IN IEDEA**
+
+
+## Coauthors
+
+Authors (max 15 + 1): Elizabeth Zaniewski1, Veronika Whitesell1, Matthias Egger1, Aggrey Semeere2, Cordelia Kunzekwenyika3, Sanjay Mundhe4, Peter Vanes Ebasone5, Thierry Tiendrebeogo6, Lara E. Coelho7, Kara Wools-Kaloustian8, Jonathan Euvrard9, Vohith Khol10, Dominique Mahambou-Nsonde11, Stefanie Hossmann1, Marie Ballif1 on behalf of the IeDEA consortium. 
+
+## Affiliations
+
+
+1)	Institute of Social and Preventive Medicine, University of Bern, Bern, Switzerland.
+2)	Infectious Diseases Institute, Makerere University, Kampala, Uganda.
+3)	SolidarMed, Carey Street 33, Masvingo, Zimbabwe.
+4)	BJ Government Medical College and Sassoon General Hospital, Pune, India.
+5)	Clinical Research Education, Networking and Consultancy, Yaounde, Cameroon.
+6)	University of Bordeaux, National Institute for Health and Medical Research (INSERM) UMR 1219, Research Institute for Sustainable Development (IRD) EMR 271, Bordeaux Population Health Research Centre, Bordeaux, France.
+7)	Instituto Nacional de Infectologia Evandro Chagas, Fundação Oswaldo Cruz, Rio de Janeiro, Brazil.
+8)	Department of Medicine, Indiana University School of Medicine, Indianapolis, Indiana, USA.
+9)	Centre for Infectious Disease Epidemiology and Research, School of Public Health and Family Medicine, University of Cape Town, Cape Town, South Africa.
+10)	National Centre for HIV/AIDS, Dermatology and STDs, Phnom Penh, Cambodia.
+11)	Centre de Traitement Ambulatoire de Brazzaville, enceinte du CHU de Brazzaville, Brazzaville, Republic of Congo.
+
+## Key words
+
+Key words/search terms (min 2/max 5): HIV, Dolutegravir, ART, LMIC, Drug Resistance
+Submission category: Y, Implementation and Scale-Up of Prevention and Treatment for HIV and Impact of COVID-19 and Other Emerging Infections on HIV-Related Programs
+
+
+## Background
+
+
+The World Health Organization recommended dolutegravir (DTG)-based antiretroviral therapy (ART) for first-, second-, and third-line regimens in mid-2019 due to its tolerability and increasing levels of resistance to other ART regimens. The proportion of HIV treatment sites in low- and middle-income countries (LMICs) that have rolled out or plan to roll out DTG-based ART is unknown.
+
+
+## Methods
+
+
+Between September 2020 and March 2021, the International epidemiology Databases to Evaluate AIDS (IeDEA) research consortium surveyed 179 HIV treatment sites in 35 LMICs to document the transition to DTG-based ART regimens and related clinical testing practices. Descriptive statistics were stratified by region.
+
+## Results
+
+
+Ninety-eight percent (175) of sites completed the survey, of which 78% (137) were from 21 countries in Africa, 17% (30) from 8 countries in the Asia-Pacific, and 5% (8) from 6 countries in Latin America. DTG-based ART rollout or planned rollout by 2021 for first-, second-, and third-line regimens was reported by 95% (166), 68% (119) and 42% (73) of sites, respectively. 37% (64) of sites reported rollout or planned rollout for all three ART regimen lines; 31% (42) in Africa, 53% (16) in the Asia-Pacific, and 75% (6) in Latin America. While 97% (170) of sites reported routine viral load (VL) monitoring for patient care, 79% (139) reported that switching to DTG-based ART was based on VL testing [83% (114) in Africa, 60% (18) in the Asia-Pacific, 88% (7) in Latin America], with 70% (97) of these sites relying on VLs obtained in the prior 6 months, 20% (28) within 12 months, and 10% (14) reporting criteria that varied by patient group. 79% (139) of sites reported that HIV-1 genotypic drug resistance testing was available for routine patient care [78% (107) in Africa, 87% (26) in the Asia-Pacific, 75% (6) in Latin America], however, only 15% (26) reported performing drug resistance testing at the time of switch to DTG-based ART [12% (16) in Africa, 30% (9) in the Asia-Pacific, 13% (1) in Latin America].
+
+## Conclusion
+
+Although global HIV treatment guidelines recommend DTG-based ART for first-, second-, and third-line ART to mitigate increasing drug resistance levels, fewer than half of sites in our large global HIV consortium had or planned to fully implement these recommendations, with substantial regional variation. Incomplete rollout of DTG-based ART and suboptimal drug resistance monitoring may impede efforts to reduce HIV drug resistance, particularly in high HIV-burden settings.
+
+
+<!-- ----------------------------------------------------- -->
+
+
+# Figure
+
+Proportion of sites that have rolled out or plan to roll out dolutegravir-based antiretroviral therapy by 2021 for first-, second- and third-line ART in low- and middle-income countries in IeDEA.
+
+## Load wrangled data
+
+```{r}
+df2 <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+## Create  numerators by region
+
+Rolled out by region
+
+```{r}
+# Outcome a = rolled out
+
+# dtg1 by region
+reg_dtg1_a <- df2 %>%
+  group_by(region) %>% 
+  summarise(
+    numer = sum(dtg_1),
+    denom = n()) %>%
+  mutate(line = "dtg1") %>%
+  mutate(outcome = "a") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg2 by region
+reg_dtg2_a <- df2 %>%
+  group_by(region) %>% 
+  summarise(
+    numer = sum(dtg_2),
+    denom = n()) %>%
+  mutate(line = "dtg2") %>%
+  mutate(outcome = "a") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+  
+# dtg3 by region
+  reg_dtg3_a <- df2 %>%
+  group_by(region) %>% 
+    summarise(
+      numer = sum(dtg_3),
+      denom = n()) %>%
+    mutate(line = "dtg3") %>%
+    mutate(outcome = "a") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per))
+
+  
+```
+
+
+Planned rollout by region
+```{r}
+
+  # Outcome b = planned rollout
+  
+# dtg1 by region
+  reg_dtg1_b <- df2 %>%
+    group_by(region) %>%
+    summarise(
+      numer = sum(dtg_1_plan, na.rm =TRUE),
+      denom = n()) %>%
+    mutate(line = "dtg1") %>%
+    mutate(outcome = "b") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per))
+  
+# dtg2 by region
+  reg_dtg2_b <- df2 %>%
+    group_by(region) %>%
+    summarise(
+      numer = sum(dtg_2_plan, na.rm =TRUE),
+      denom = n()) %>%
+    mutate(line = "dtg2") %>%
+    mutate(outcome = "b") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per))
+  
+# dtg3 by region
+  reg_dtg3_b <- df2 %>%
+    group_by(region) %>%
+    summarise(
+      numer = sum(dtg_3_plan, na.rm =TRUE),
+      denom = n()) %>%
+    mutate(line = "dtg3") %>%
+    mutate(outcome = "b") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per))
+  
+```
+
+No rollout or planned rollout by region
+```{r}
+# Outcome c = no planned rollout or unknown
+  
+  # dtg1 by region
+  reg_dtg1_c <- df2 %>%
+    group_by(region) %>%
+    summarise(
+      denom = n(),
+      numer_a = sum(dtg_1),
+      numer_b = sum(dtg_1_plan, na.rm =TRUE),
+      numer_ab = numer_a + numer_b,
+      numer = denom - numer_ab) %>%
+    mutate(line = "dtg1") %>%
+    mutate(outcome = "c") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per, numer_a, numer_b, numer_ab))
+  
+  # dtg2 by region
+  reg_dtg2_c <- df2 %>%
+    group_by(region) %>%
+    summarise(
+      denom = n(),
+      numer_a = sum(dtg_2),
+      numer_b = sum(dtg_2_plan, na.rm =TRUE),
+      numer_ab = numer_a + numer_b,
+      numer = denom - numer_ab) %>%
+    mutate(line = "dtg2") %>%
+    mutate(outcome = "c") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per, numer_a, numer_b, numer_ab))
+  
+  # dtg3 by region
+  reg_dtg3_c <- df2 %>%
+    group_by(region) %>%
+    summarise(
+      denom = n(),
+      numer_a = sum(dtg_3),
+      numer_b = sum(dtg_3_plan, na.rm =TRUE),
+      numer_ab = numer_a + numer_b,
+      numer = denom - numer_ab) %>%
+    mutate(line = "dtg3") %>%
+    mutate(outcome = "c") %>%
+    mutate(per = numer/denom *100) %>%
+    mutate(value = round(per, 1)) %>%
+    select(-c(per, numer_a, numer_b, numer_ab))
+```
+
+## Append files and save
+
+```{r}
+# Append files
+  #dim(reg_dtg1_a)
+  #dim(reg_dtg2_b)
+  #dim(reg_dtg3_c)
+  income_dtg_abc <- rbind(reg_dtg1_a, reg_dtg1_b, reg_dtg1_c, reg_dtg2_a, reg_dtg2_b, reg_dtg2_c, reg_dtg3_a, reg_dtg3_b, reg_dtg3_c)
+  #dim(income_dtg_abc)  
+  
+  
+# save as a final analysis data object (in folder, so can be reloaded later)
+  saveRDS(income_dtg_abc, file="03_Output/Data/data_income_dtg_rollout_stacked_bar.Rda") 
+```
+
+
+## Reload file
+
+```{r}
+#Clear existing data and graphics
+  rm(list=ls())
+  graphics.off()
+  
+  
+# reload the data object
+  data <- readRDS("03_Output/Data/data_income_dtg_rollout_stacked_bar.Rda") 
+  #class(data)  #to check that dataframe
+  #colnames(data)
+  #head(data) ## 54 variables, 6 rows
+  
+```
+
+
+## Create/define factors for plot
+
+```{r}
+data$outcome <- factor(data$outcome, levels = c("a","b","c"),
+                       labels = c("Rolled out","Planned rollout", "No planned rollout or unknown")) 
+  
+data$region <- factor(data$region, levels = c( "AP","CN","CA","EA","SA","WA"),
+                        labels = c("Asia-Pacific \n (n=30)", "Latin America \n (n=8)", "Central Africa \n (n=21)","East Africa \n (n=74)", "Southern Africa \n (n=28)", "West Africa \n (n=14)" ))
+  
+  
+data$line <- factor(data$line, levels = c("dtg1","dtg2", "dtg3"),
+                          labels = c("First-line","Second-line", "Third-line"))
+  
+  
+  #fill <- c("#3F6D9B", "#6E8DAB", "#a94c4c")
+  
+fill <- c("#3F6D9B", "lightskyblue3", "#a94c4c")
+  
+  
+```
+
+
+
+## Create figure
+
+```{r}
+
+ggplot(data=data, aes(x=line, y=value, fill=outcome))  + 
+    geom_bar(position = position_stack(reverse = TRUE), stat="identity", color = "black") +
+    facet_wrap(. ~ region, ncol =6) +
+    theme(strip.text = element_text(size=10)) +
+    theme(strip.background = element_rect(fill = "white")) +
+    theme(legend.position="bottom", 
+          legend.box.background = element_rect(color = "black"),
+          legend.direction="horizontal", 
+          legend.box.margin = margin(t = 1, l = 1), 
+          legend.title = element_blank(),
+          legend.text = element_text(size=9)) +
+    labs(x="", y="Percentage (%)") +
+    theme(axis.text.x = element_text(angle =90, hjust =1, vjust =0.5, size =10)) +
+    theme(axis.text.y = element_text(size =10)) +
+    theme(axis.title.y = element_text(size=10)) +
+    scale_y_continuous(n.breaks = 6) +
+    scale_fill_manual(labels = ~ stringr::str_wrap(.x, width = 20), values = fill)  +
+    scale_color_manual(labels = ~ stringr::str_wrap(.x, width = 20), values = fill) +
+   guides(fill = guide_legend(reverse=FALSE))
+
+
+
+```
+Figure: Proportion of sites that have rolled out or plan to roll out dolutegravir-based antiretroviral therapy by 2021 for first-, second- and third-line ART in low- and middle-income countries in IeDEA.
+
+<!-- ----------------------------------------------------- -->
+
+# Output figure
+
+```{r}
+  # Print plot to a png file
+    ggsave("03_Output/CROI_abstract/Figure1_DTG_rollout_by_region.png", width = 7, height =4.5)
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Session info
+
+```{r}
+sessionInfo()
+
+```
+
+
+

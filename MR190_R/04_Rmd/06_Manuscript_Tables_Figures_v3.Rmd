@@ -1,0 +1,2584 @@
+
+---
+title: 'IeDEA MR190: DTG rollout <br> 06_Manuscript_Tables_Figures'
+author: "Elizabeth Zaniewski, Veronika Whitesell, Marie Ballif"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::robobook:
+    code_folding: show
+    self_contained: true
+    highlight: pygments
+    keep_md: no
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "05_html") })
+---
+
+```{r r-setup, include = FALSE}
+options(scipen = 999)
+options(max.print = "300")
+set.seed(12345)
+
+library(pacman)
+p_load(
+  kableExtra, tidyverse, dplyr, Hmisc,
+  scales, ggplot2,
+  fst, data.table, psych, readxl,
+  sjmisc, flextable
+)
+
+import::from("psych", "geometric.mean")
+import::from("sjmisc", "frq")
+import::from("gmodels", "CrossTable")
+```
+
+```{r conflicts, include = FALSE}
+conflicted::conflict_scout()
+```
+
+```{r knit-setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+knitr::opts_chunk$set(
+  cache = FALSE,
+  prompt = FALSE,
+  tidy = FALSE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE,
+  echo = TRUE
+)
+
+knitr::opts_knit$set(width = 75)
+```
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- ----------------------------------------------------- -->
+
+
+```{r include=FALSE}
+#Clear existing data and graphics
+rm(list=ls())
+graphics.off()
+```
+
+
+```{r include=FALSE}
+
+# load library tidyverse
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(sjmisc)
+library(gmodels)
+library(Hmisc)
+library(ggthemes)
+library(ggplot2)
+library(sf)
+library(rnaturalearth)
+library(countrycode)
+library(ggrepel)
+library(rnaturalearth)
+library(table1)
+library(gtsummary)
+library(stats)
+library(rstatix)
+library(writexl)
+library(readxl)
+library(data.table)
+library(cowplot)
+library(ggpubr)
+library(patchwork)
+```
+
+
+
+```{r include=FALSE}
+
+#load library:
+# Data management
+library("tidyverse") 
+library(arsenal)
+# Analysis
+library("MASS")
+library("logistf")
+library("car")
+library("lme4")
+library("marginaleffects")
+# Tables
+library("gtsummary")
+library("eeptools")
+library("kableExtra")
+
+
+library(readstata13)
+library("forestplot")
+library("tiff")
+library("lme4")
+library(ggplot2)
+library(cowplot)
+library(tidyverse)
+library(sjmisc)
+library(lmtest)
+library(data.table)
+
+```
+
+
+```{r include=FALSE}
+
+
+my.render.cat <- function(x) {
+  c("", sapply(stats.default(x), function(y) with(y,
+                                                  sprintf("%d (%0.0f%%)", FREQ, PCT))))
+}
+
+
+```
+
+
+
+```{r}
+# Both the MASS and dplyr libraries have select features and chances are, you may have tried to call select() only to be met with an error. This is an easy thing to fix, but can catch you out.
+# dplyr::select(iris, Species, everything()) or can use select <- dplyr::select
+select <- dplyr::select
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+
+# Manuscript MR190
+
+## Title
+
+Transition to Dolutegravir-Based ART in 35 Low- and Middle-Income Countries: Survey of HIV treatment clinics
+
+<!-- ----------------------------------------------------- -->
+
+# Table 1: Characteristics of HIV clinics participating in the survey.
+
+
+## Load wrangled data
+```{r}
+data <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+data %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+## Re-wrangle data
+
+
+```{r include=FALSE}
+
+# Labels of variables used in Table 1
+label(data$region) <- "Region"
+
+label(data$Income_group)="Country income group"
+
+label(data$Prev_cat.factor)="National HIV prevalence"
+
+label(data$level.factor)="Level of care"
+
+label(data$residence_setting.factor)="Residence of population served"
+
+label(data$age_group_cat3.factor)="Age of population served"
+
+label(data$age_group_ado.factor)="Adolescents (10-24 years) served"
+
+label(data$vl_avail.factor)="Viral load testing"
+
+label(data$dr_avail.factor)="Genotypic resistance testing"
+
+label(data$dtg_rollout_type.factor) <- "Impetus for dolutegravir rollout"
+
+label(data$newdtg_1or2_yn)="Rolled out first- or second-line dolutegravir"
+
+```
+
+### Country income group
+```{r}
+data$Income_group <- factor(data$Income_group, levels = c( "Low income","Lower middle income", "Upper middle income"),
+                     labels = c("Low", "Lower-middle", "Upper-middle"))
+
+frq(data, Income_group)
+```
+
+### National HIV prevalence
+```{r}
+frq(data, Prev_cat.factor)
+```
+
+### Facility level
+```{r}
+frq(data, level.factor)
+```
+### Residence of population served
+```{r}
+frq(data, residence_setting.factor)
+```
+
+
+### Age of population served
+```{r}
+data$age_group_cat3.factor = factor(data$age_group_cat3,levels=c("1", "2", "3", "4"))
+levels(data$age_group_cat3.factor)=c("Paediatric only (0-9 years)", "Adult only (≥20 years)", "Adolescents only (10-24 years)", "Paediatric and adults")
+
+frq(data, age_group_cat3.factor)
+```
+
+### Adolescents (10-24 years) served 
+```{r}
+frq(data, age_group_ado.factor)
+```
+
+
+### Viral load testing
+```{r}
+
+data$vl_avail.factor <- factor(data$vl_avail, levels = c( "1","2", "3"),
+                               labels = c("Available onsite*", "Available offsite", "Not available"))
+
+
+frq(data, vl_avail.factor)
+
+```
+
+### Genotypic drug resistance testing
+```{r}
+
+data$dr_avail.factor <- factor(data$dr_avail, levels = c( "1","2", "3"),
+                               labels = c("Available onsite*", "Available offsite", "Not available"))
+
+frq(data, dr_avail.factor)
+
+```
+
+### Impetus for DTG rollout
+```{r}
+data$dtg_rollout_type.factor <- factor(data$dtg_rollout_type, levels = c( "1","2", "77"),
+                               labels = c("National initiative", "Local initiative", "No initiative reported "))
+
+frq(data, dtg_rollout_type.factor)
+```
+
+
+### Rolled out first- or second-line DTG
+```{r}
+frq(data, newdtg_1or2_yn)
+```
+
+### Rolled out first- or second-line dolutegravir as part of a national or local initiative
+```{r}
+data <- data %>% mutate(initiative = ifelse(newdtg_1or2 ==1 & dtg_rollout_type ==1, 1,
+                                            ifelse(newdtg_1or2 ==1 & dtg_rollout_type ==2, 2,
+                                                   ifelse(newdtg_1or2 ==1 & dtg_rollout_type ==77, 3, 4))))
+
+data$initiative.factor <- factor(data$initiative, levels = c( "1","2", "3", "4"),
+                               labels = c("National initiative", "Local initiative", "No initiative reported", "No first- or second-line rollout"))
+
+frq(data, initiative.factor)
+
+```
+
+
+## Final Table 1
+
+
+### Labels of variables used in Table 1
+```{r}
+
+label(data$region) <- "Region"
+
+label(data$Income_group)="Country income group"
+
+label(data$Prev_cat.factor)="National HIV prevalence"
+
+label(data$level.factor)="Level of care"
+
+label(data$residence_setting.factor)="Residence of population served"
+
+label(data$age_group_cat3.factor)="Age of population served"
+
+label(data$age_group_ado.factor)="Adolescents (10-24 years) served"
+
+label(data$vl_avail.factor)="Viral load testing"
+
+label(data$dr_avail.factor)="Genotypic resistance testing"
+
+label(data$dtg_rollout_type.factor) <- "Impetus for dolutegravir rollout"
+
+label(data$initiative.factor)="Impetus for dolutegravir first- or second-line rollout"
+
+```
+
+
+```{r echo=FALSE}
+table1::table1(~  Income_group + Prev_cat.factor + level.factor + residence_setting.factor + age_group_cat3.factor + age_group_ado.factor + vl_avail.factor + dr_avail.factor + initiative.factor | region.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+```
+
+
+```{r include=FALSE}
+
+# Table1_all
+
+Final_table1 <- table1::table1(~  Income_group + Prev_cat.factor + level.factor + residence_setting.factor + age_group_cat3.factor + age_group_ado.factor + vl_avail.factor + dr_avail.factor + initiative.factor | region.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+
+
+Final_table1 <- as.data.frame(Final_table1)
+
+html_table1 <- qflextable(Final_table1)
+
+
+```
+
+
+```{r eval=FALSE, include=FALSE}
+html_table1
+```
+
+
+## Output Table 1
+```{r}
+
+# Save
+write_xlsx(Final_table1, "03_Output/Manuscript/Table_1_final_region_v3.xlsx")
+```
+
+```{r include=FALSE}
+rm(list=ls(pattern="mytable"))
+rm(data)
+
+```
+
+<!-- ----------------------------------------------------- -->
+
+
+# Table 2: viral load and drug resistance practices
+
+by country income, national HIV prevalence, Level of care
+
+Viral load and genotypic drug resistance testing practices at switch to dolutegravir among HIV clinics that reported rollout of first- or second-line dolutegravir-based ART. 
+
+
+
+## Load wrangled data
+
+
+```{r}
+data <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+data %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+## Re-wrangle data
+
+Only keep clinics that rolled out first- or second-line DTG
+```{r}
+data <- data %>% select(record_id, region, dtg_rollout_type.factor, newdtg_12, newdtg_12_yn, newdtg_1or2, newdtg_1or2_yn, new_VL_trans, new_VL_trans.factor, new_DR_trans, new_DR_trans.factor, Prev_cat, Prev_cat.factor, Income_group, Income_group.factor, level, level.factor) %>%
+filter(newdtg_1or2 ==1)
+
+```
+
+###  Viral load monitoring
+```{r}
+frq(data, new_VL_trans)
+frq(data, new_VL_trans.factor)
+
+# create new variable merging unknown with not required
+data <- data %>% mutate(new_VL_trans2 = ifelse(new_VL_trans == 7, 5, new_VL_trans))
+
+frq(data, new_VL_trans2)
+
+# create new factor
+data$new_VL_trans2.factor = factor(data$new_VL_trans2,levels=c("1","2","3","5", "7"))
+levels(data$new_VL_trans2.factor)=c("Required within previous 6 months",
+                                  "Required within previous 12 months ",
+                                  "Required, varies by patient group",
+                                  "Available, not required", 
+                                  "Unavailable")
+
+
+frq(data, new_VL_trans2.factor)
+
+
+label(data$new_VL_trans2.factor)="Viral load monitoring"
+
+```
+
+
+### Genotypic drug resistance testing
+```{r}
+
+frq(data, new_DR_trans)
+frq(data, new_DR_trans.factor)
+
+# create new variable merging unknown with not performed
+data <- data %>% mutate(new_DR_trans2 = ifelse(new_DR_trans == 3, 2, new_DR_trans))
+#frq(data, new_DR_trans2)
+
+data$new_DR_trans2.factor = factor(data$new_DR_trans2,levels=c("1","2","4"))
+levels(data$new_DR_trans2.factor)=c("Performed","Available, not performed ","Unavailable")
+
+
+frq(data, new_DR_trans2.factor)
+label(data$new_DR_trans2.factor)="Genotypic drug resistance testing"
+```
+
+
+## Table 2 for Income_group.factor
+```{r}
+table1::table1(~  new_VL_trans2.factor + new_DR_trans2.factor  | Income_group.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+mytable2c <- table1::table1(~  new_VL_trans2.factor + new_DR_trans2.factor  | Income_group.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+mytable2_income <- as.data.frame(mytable2c)
+#mytable2 = mytable2[ - c(2:3, 5:6, 8:9, 11:12)]
+
+
+
+```
+
+## Table 2 for Prev_cat.factor
+```{r}
+
+table1::table1(~   new_VL_trans2.factor + new_DR_trans2.factor  | Prev_cat.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+mytable1 <- table1::table1(~  new_VL_trans2.factor + new_DR_trans2.factor  | Prev_cat.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+mytable2_HIVprev <- as.data.frame(mytable1)
+```
+
+## Table 2 for level.factor
+```{r}
+
+table1::table1(~  new_VL_trans2.factor + new_DR_trans2.factor  | level.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+mytable2b <- table1::table1(~  new_VL_trans2.factor + new_DR_trans2.factor  | level.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+mytable2_level <- as.data.frame(mytable2b)
+```
+
+
+## Final Table 2
+
+```{r}
+
+mytable2_income2 <- mytable2_income[, c(1, 2, 3, 4, 5)]
+mytable2_HIVprev2 <- mytable2_HIVprev[, c(3, 4, 5)]
+mytable2_level2 <- mytable2_level[, c(3, 4, 5)]
+
+mytable2_final1 <- cbind(mytable2_income2, mytable2_HIVprev2, mytable2_level2)
+
+# to include in manuscript
+Final_table2 <- as.data.frame(mytable2_final1)
+
+# to display in html
+html_table2 <- qflextable(Final_table2)
+
+html_table2
+
+```
+
+
+
+## Output Table 2
+
+```{r}
+
+# Save
+write_xlsx(Final_table2, "03_Output/Manuscript/Table_2_newdtg_1or2_final_v3.xlsx")
+
+
+```
+
+
+```{r include=FALSE}
+rm(list=ls(pattern="mytable"))
+rm(data)
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Extra Table ?: DTG rollout by region
+
+Shows the characteristics of sites reporting rollout of first- or second-line DTG-based regimens (and 1st+2nd line regimens). 
+
+
+## Load wrangled data
+
+```{r}
+data <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+data %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+## Re-wrangle data
+
+### Only keep clinics that rolled out first- or second-line DTG
+```{r}
+data <- data %>% select(record_id, region, region.factor, 
+                        dtg_rollout_type, dtg_rollout_type.factor, 
+                        dtg_1, newdtg_1_yn, 
+                        dtg_2, newdtg_2_yn, 
+                        newdtg_12, newdtg_12_yn,
+                        newdtg_1or2, newdtg_1or2_yn) %>%
+                        filter(newdtg_1or2 ==1)
+```
+
+
+
+### Impetus for rollout
+```{r}
+data$dtg_rollout_type.factor <- factor(data$dtg_rollout_type, levels = c( "1","2", "77"),
+                               labels = c("National initiative", "Local initiative", "No initiative reported "))
+
+frq(data, dtg_rollout_type.factor)
+```
+
+## Final Table extra
+
+### Labels
+
+```{r}
+label(data$newdtg_1_yn)="Rolled out first-line"
+
+label(data$newdtg_2_yn)="Rolled out second-line"
+
+label(data$newdtg_12_yn)="Rolled out first- and second-line"
+
+label(data$dtg_rollout_type.factor) <- "Impetus for dolutegravir rollout"
+
+```
+
+
+
+### New Table by region
+
+```{r}
+table1::table1(~  dtg_rollout_type.factor + newdtg_1_yn + newdtg_2_yn + newdtg_12_yn + dtg_rollout_type.factor| region.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+```
+
+
+```{r include=FALSE}
+mytable2 = table1::table1(~  dtg_rollout_type.factor + newdtg_1_yn + newdtg_2_yn + newdtg_12_yn + dtg_rollout_type.factor| region.factor, data = data, overall=c(left="Total"), render.categorical = my.render.cat)
+
+Final_table_extra <- as.data.frame(mytable2)
+
+Final_table_extra 
+```
+
+## Output Table extra
+
+```{r}
+# Save
+write_xlsx(Final_table_extra , "03_Output/Manuscript/New_Table_DTGrollout_reg_v3.xlsx")
+
+```
+
+
+
+```{r include=FALSE}
+rm(list=ls(pattern="mytable"))
+rm(data)
+```
+
+
+
+<!-- ----------------------------------------------------- -->
+
+# Figure 1: Map of countries survey in SA4.0   
+
+Figure 1. Location of clinics participating in the survey. 
+
+## Load wrangled data
+```{r}
+MR190 <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+MR190 %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+## Re-wrangle data
+
+Need to rename country name "Economy" to " region" to link with map data
+```{r}
+
+# Need to rename country name "Economy" to " region" to link with map data
+MR190_map <- MR190 %>%
+  select(record_id, country, country_name, region, economy, Prev_num, Prev_cat, geocode_lat, geocode_lon)
+
+
+# Need to create a new "region" that matches region in World Data set
+MR190_map <- MR190_map %>%
+  mutate(region2 = region) %>%
+  mutate(region = ifelse(country_name == "Cote dIvoire", "Ivory Coast",
+                               ifelse(country_name =="United Republic of Tanzania", "Tanzania",
+                              ifelse(country_name == "Viet Nam", "Vietnam",
+                               ifelse(country_name == "Congo", "Republic of Congo", country_name)))))
+
+```
+
+Create new data frame of sites
+```{r}
+
+sites <- MR190_map %>%
+  select(record_id, region, region2, geocode_lat, geocode_lon)
+```
+
+Create new data frame of HIV prevalence information
+```{r}
+HIVprev <- MR190_map %>%
+  select(record_id, region, region2, Prev_num, Prev_cat, geocode_lat, geocode_lon) %>%
+  distinct(record_id, region, region2, Prev_num, Prev_cat, geocode_lat, geocode_lon)
+```
+
+
+Within HIVprev data frame: Create and define HIV prevalence category as factor
+```{r}
+
+HIVprev$Prev_cat <- factor(HIVprev$Prev_cat, levels = c( "High","Medium" ,"Low"),
+                           labels = c( "High (≥5%)", "Medium (1-4.9%)", "Low (<1%)" ))
+```
+
+
+### Import World data
+
+```{r}
+mapdata <- map_data("world")
+```
+
+### Wrangle world data
+
+Remove antartica data
+```{r}
+mapdata <- mapdata %>%
+# remove antarctica
+  filter(region !="Antarctica") %>%
+  filter(! long > 180)
+
+#frq(mapdata, region)
+```
+
+
+### Merge site assessment data and World data
+
+
+```{r}
+mapdata1 <- left_join(mapdata, HIVprev, by = "region")
+frq(mapdata1, Prev_cat)
+```
+
+## Prepare data
+
+If mapped region/country is not in SA4.0 data, then categorize region as "7"
+
+```{r}
+mapdata2 <- mapdata1 %>% mutate(region3 = ifelse(is.na(region2), 7, region2))
+#frq(mapdata2, region3)
+```
+
+If mapped region/country is not in SA4.0 data, then categorize HIV prev as "7"
+
+```{r}
+mapdata3 <- mapdata1 %>% mutate(Prev_cat2 = ifelse(is.na(Prev_cat), 7, Prev_cat))
+#frq(mapdata3, Prev_cat2)
+```
+
+Check that HIV prev data is available for the 35 countries
+
+```{r}
+
+
+# check that contains HIV prev data for 35 countries
+  mapdata1 %>%
+  filter(!is.na(region2)) %>%
+  distinct(region, region2, Prev_num, Prev_cat)
+```
+
+
+
+## Map 1: default colors
+
+Default colors for HIV prevalence categories
+
+```{r}
+
+mapdata2$region3 <- factor(mapdata2$region3, levels = c( "1","3" ,"2", "4", "5", "6", "7"),
+                           labels = c("Asia-Pacific (30)", "Latin America (8)", "Central Africa (21)", "East Africa (74)", "Southern Africa (28)", "West Africa (14)", "Not included in study"))
+
+frq(mapdata2, region2)
+frq(mapdata2, region3)
+
+
+mapdata3$Prev_cat2 <- factor(mapdata3$Prev_cat2, levels = c( "1","2", "3","7"),
+                           labels = c("High (≥5%)", "Medium (1-4.9%)", "Low (<1%)", "Not included in study"))
+
+frq(mapdata3, Prev_cat2)
+
+map1 <- ggplot(mapdata3, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = Prev_cat2), color = "black") +
+  guides(fill = guide_legend(reverse=FALSE)) +
+  theme(plot.background = element_rect(fill = "white", color = NA))
+
+map1
+```
+
+## Map 2: blue color scheme
+
+Use a blue color scheme for HIV prevalence category and grey dots for sites
+
+
+Define color scheme
+
+```{r eval=FALSE, include=FALSE}
+
+palletes <-
+  structure(c("#A6611A", "#D01C8B", "#7B3294", "#E66101", "#CA0020", 
+              "#CA0020", "#D7191C", "#D7191C", "#D7191C", "#7FC97F", "#1B9E77", 
+              "#A6CEE3", "#FBB4AE", "#B3E2CD", "#E41A1C", "#66C2A5", "#8DD3C7", 
+              "#EFF3FF", "#EDF8FB", "#EDF8FB", "#F0F9E8", "#EDF8E9", "#F7F7F7", 
+              "#FEEDDE", "#FEF0D9", "#F1EEF6", "#F6EFF7", "#F1EEF6", "#F2F0F7", 
+              "#FEEBE2", "#FEE5D9", "#FFFFCC", "#FFFFCC", "#FFFFD4", "#FFFFB2", 
+              "#DFC27D", "#F1B6DA", "#C2A5CF", "#FDB863", "#F4A582", "#F4A582", 
+              "#FDAE61", "#FDAE61", "#FDAE61", "#BEAED4", "#D95F02", "#1F78B4", 
+              "#B3CDE3", "#FDCDAC", "#377EB8", "#FC8D62", "#FFFFB3", "#BDD7E7", 
+              "#B2E2E2", "#B3CDE3", "#BAE4BC", "#BAE4B3", "#CCCCCC", "#FDBE85", 
+              "#FDCC8A", "#BDC9E1", "#BDC9E1", "#D7B5D8", "#CBC9E2", "#FBB4B9", 
+              "#FCAE91", "#C2E699", "#A1DAB4", "#FED98E", "#FECC5C", "#80CDC1", 
+              "#B8E186", "#A6DBA0", "#B2ABD2", "#92C5DE", "#BABABA", "#ABD9E9", 
+              "#A6D96A", "#ABDDA4", "#FDC086", "#7570B3", "#B2DF8A", "#CCEBC5", 
+              "#CBD5E8", "#4DAF4A", "#8DA0CB", "#BEBADA", "#6BAED6", "#66C2A4", 
+              "#8C96C6", "#7BCCC4", "#74C476", "#969696", "#FD8D3C", "#FC8D59", 
+              "#74A9CF", "#67A9CF", "#DF65B0", "#9E9AC8", "#F768A1", "#FB6A4A", 
+              "#78C679", "#41B6C4", "#FE9929", "#FD8D3C", "#018571", "#4DAC26", 
+              "#008837", "#5E3C99", "#0571B0", "#404040", "#2C7BB6", "#1A9641", 
+              "#2B83BA", "#FFFF99", "#E7298A", "#33A02C", "#DECBE4", "#F4CAE4", 
+              "#984EA3", "#E78AC3", "#FB8072", "#2171B5", "#238B45", "#88419D", 
+              "#2B8CBE", "#238B45", "#525252", "#D94701", "#D7301F", "#0570B0", 
+              "#02818A", "#CE1256", "#6A51A3", "#AE017E", "#CB181D", "#238443", 
+              "#225EA8", "#CC4C02", "#E31A1C"), .Dim = c(35L, 4L), .Dimnames = list(
+                c("BrBG", "PiYG", "PRGn", "PuOr", "RdBu", "RdGy", "RdYlBu", 
+                  "RdYlGn", "Spectral", "Accent", "Dark2", "Paired", "Pastel1", 
+                  "Pastel2", "Set1", "Set2", "Set3", "Blues", "BuGn", "BuPu", 
+                  "GnBu", "Greens", "Greys", "Oranges", "OrRd", "PuBu", "PuBuGn", 
+                  "PuRd", "Purples", "RdPu", "Reds", "YlGn", "YlGnBu", "YlOrBr", 
+                  "YlOrRd"), NULL))
+```
+
+
+```{r}
+
+fill2 = c("#14447b","#5b88bc", "#B6D4E7", "white")
+
+#fill3 = c("#6A0DAD","#7570B3", "#CCCCFF", "white")
+
+#fill3 = c("#6A0DAD", "mediumpurple", "lavender", "white")
+
+#fill <- c("#E69F00", "#56B4E9", "#009E73", "white")
+
+
+```
+
+Define legend title
+
+```{r}
+legend_title <- "National HIV prevalence"
+```
+
+Map 2: with blue color scheme for HIV prevalence category and grey dots for sites
+
+```{r}
+
+map2 <- map1 + scale_fill_manual(legend_title, values = fill2) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        rect = element_blank(),
+        legend.position= c(0.15, 0.25),  
+        legend.box.background = element_rect(fill = "white", color = "black"),
+        legend.direction="vertical", 
+        legend.box.margin = margin(t = 1, l = 1), 
+        legend.text = element_text(size=12), 
+        legend.title = element_text(size=12, face= "bold")) +
+  theme(legend.key = element_rect(fill = "white"))
+# map2
+
+# Add in grey dots for sites
+map3 <- map2 + 
+  geom_point(
+  color = "black", fill = "gray", shape =21, 
+  size = 2.5, 
+  data = mapdata2,
+  aes(geocode_lon, geocode_lat)) +
+  theme(legend.key = element_rect(fill = "white"),
+        legend.text = element_text(size=12), 
+        legend.title = element_text(size=12, face= "bold"))
+
+map3
+```
+
+
+
+## Prepare table of countries (sites) by region
+
+This will be included below the map
+
+
+```{r}
+
+countries <- MR190 %>% select(region, country, country_name, record_id) %>%
+  mutate(country_name2 = ifelse(country_name == "Cote dIvoire", "Cote d'Ivoire",
+                ifelse(country_name =="United Republic of Tanzania", "Tanzania",
+                ifelse(country_name == "Viet Nam", "Vietnam",
+               ifelse(country_name == "Congo", "Republic of Congo", country_name))))) %>%
+  group_by(region, country_name2) %>%
+  summarise(sites=n()) %>%
+  mutate(text = paste(country_name2, " (", sites, ")", sep ="")) %>%
+  select(-c(country_name2, sites))
+```
+
+
+Define six regional lists and find number of sites in each country
+
+```{r}
+
+reg_AP <- countries %>% filter(region == "AP") %>% rename(AP=text)
+reg_AP$tot <- 1:nrow(reg_AP)
+#write_xlsx(reg_AP, "03_Output/Figures/map_AP.xlsx")
+
+
+reg_CN <- countries %>% filter(region == "CN") %>% rename(CN=text)
+reg_CN$tot <- 1:nrow(reg_CN)
+#write_xlsx(reg_CN, "03_Output/Map/map_CN.xlsx")
+
+reg_CA <- countries %>% filter(region == "CA") %>% rename(CA=text)
+reg_CA$tot <- 1:nrow(reg_CA)
+#write_xlsx(reg_CA, "03_Output/Map/map_CA.xlsx")
+
+
+reg_EA <- countries %>% filter(region == "EA") %>% rename(EA=text)
+reg_EA$tot <- 1:nrow(reg_EA)
+#write_xlsx(reg_EA, "03_Output/Map/map_EA.xlsx")
+
+reg_SA <- countries %>% filter(region == "SA") %>% rename(SA=text)
+reg_SA$tot <- 1:nrow(reg_SA)
+#write_xlsx(reg_SA, "03_Output/Map/map_SA.xlsx")
+
+reg_WA <- countries %>% filter(region == "WA")%>% rename(WA=text)
+reg_WA$tot <- 1:nrow(reg_WA)
+#write_xlsx(reg_WA, "03_Output/Map/map_WA.xlsx")
+
+```
+
+Merge regional lists
+
+```{r}
+
+test <- merge(reg_AP, reg_CN, by ="tot", all.x =TRUE, all.y = FALSE) 
+test <- test %>% select(-c(region.x, region.y))
+
+test <- merge(test, reg_CA, by ="tot", all.x =TRUE, all.y = TRUE) 
+test <- test %>% select(-c(region))
+
+test <- merge(test, reg_EA, by ="tot", all.x =TRUE, all.y = TRUE) 
+test <- test %>% select(-c(region))
+
+test <- merge(test, reg_SA, by ="tot", all.x =TRUE, all.y = TRUE) 
+test <- test %>% select(-c(region))
+
+test <- merge(test, reg_WA, by ="tot", all.x =TRUE, all.y = TRUE) 
+test <- test %>% select(-c(region, tot))
+
+Final_table_map <- test
+```
+
+
+```{r include=FALSE}
+html_table_map <- qflextable(Final_table_map)
+```
+
+```{r}
+html_table_map
+```
+
+
+```{r}
+rm(list=ls(pattern="reg_"))
+rm(test)
+```
+
+
+
+## Prepare text for table
+
+```{r}
+
+ctry_data <- Final_table_map
+
+table_txt1 <- ctry_data %>% select(CN, WA, CA, SA, EA, AP)
+
+
+table_txt1[is.na(table_txt1)] = ""
+
+# edit country name so fits
+table_txt1 <- table_txt1 %>% mutate(CA = ifelse(CA == "Democratic Republic of the Congo (1)", "Dem. Rep. Congo (1)", CA))
+
+# edit country name
+table_txt1 <- table_txt1 %>% mutate(WA = ifelse(WA == "Cote d'Ivoire (7)", "Côte d'Ivoire (7)", WA))
+
+
+# rename regional headings
+table_txt1 <- table_txt1 %>% 
+  rename(" Asia-Pacific      " = "AP") %>%
+  rename("Latin America      " = "CN") %>%
+  rename(" Central Africa    " = "CA") %>%
+  rename("    East Africa    " = "EA") %>%
+  rename("Southern Africa    " = "SA") %>%
+  rename("  West Africa      " = "WA")
+
+```
+
+
+### Table of countries
+
+
+```{r}
+
+p2 <- ggtexttable(table_txt1, rows = NULL, 
+                  theme = ttheme("blank", base_size = 12, base_colour = "white")) %>%
+  tab_add_hline(at.row = 1:2, row.side = "top", linewidth = 2) +
+  bgcolor("white") +
+  border("white")
+p2 
+
+```
+
+```{r eval=FALSE, include=FALSE}
+
+tbody.style = tbody_style(color ="black", fill = c("white"), hjust=0, x=0.1)
+
+
+p2 <- ggtexttable(table_txt1, rows = NULL, 
+                  theme = ttheme("blank", base_size = "default", base_colour = "white",
+                                 tbody.style = tbody.style
+                                                                 )) %>%
+  tab_add_hline(at.row = 1:2, row.side = "top", linewidth = 2) +
+  bgcolor("white") +
+  border("white")
+p2 
+
+```
+
+
+
+## Final Figure 1
+
+```{r echo=FALSE, fig.height=8, fig.width=10}
+
+# combine map with table of countries
+Final_figure1 <- ggarrange(map3, p2, ncol =1, nrow =2, common.legend = F, heights = c(1.7, 0.8)) +
+  theme(legend.key = element_rect(fill = "white"), panel.border = element_blank(), 
+        legend.text = element_text(size=11), 
+        legend.title = element_text(size=11, face= "bold"))
+
+Final_figure1
+```
+
+Figure 1. Location of clinics participating in the survey. 
+
+
+
+## Output Figure 1
+
+```{r}
+ggsave("03_Output/Manuscript/Figure_1_map_Sites_Prevcat_ctry_v6.png", width = 10, height =7.9)
+```
+
+
+```{r}
+
+
+tiff("03_Output/Manuscript/tiff/Figure_1_map_Sites_Prevcat_ctry_v6.tiff", units = "in", width = 10, height =7.9, res=600)
+ggarrange(map3, p2, ncol =1, nrow =2, common.legend = F, heights = c(1.7, 0.8)) +
+  theme(legend.key = element_rect(fill = "white"), panel.border = element_blank(), 
+        legend.text = element_text(size=11), 
+        legend.title = element_text(size=11, face= "bold"))
+
+
+```
+
+
+
+```{r include=FALSE}
+#Clear existing data and graphics
+
+rm(list=ls(pattern="countries"))
+rm(list=ls(pattern="MR190"))
+rm(list=ls(pattern="sites"))
+rm(list=ls(pattern="map"))
+rm(ctry_data)
+rm(HIVprev)
+rm(p2)
+
+
+#graphics.off()
+```
+
+
+
+
+<!-- ----------------------------------------------------- -->
+
+
+```{r echo=FALSE}
+select <- dplyr::select
+```
+
+
+# Figure 2: DTG rollout or planned rollout   
+
+Figure 2: Percentage of clinics that reported rollout of dolutegravir-based first-line, second-line and both first- and second-line ART by country income, HIV prevalence and level of care. 
+
+For each first-, second-, third-line and across all three lines by HIV prev cat
+
+
+## Load wrangled data
+```{r}
+df <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+df %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+## Re-wrangle data: by HIV prevalence
+
+Create numerators by HIV prevalence category, income group, facility level
+
+
+```{r}
+# HIV prev 
+
+# dtg_1
+dtg1 <- df %>%
+  group_by(Prev_cat) %>% 
+  summarise(
+    numer = sum(dtg_1),
+    denom = n()) %>%
+  mutate(line = "dtg1") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg_2 
+dtg2 <- df %>%
+  group_by(Prev_cat) %>% 
+  summarise(
+    numer = sum(dtg_2),
+    denom = n()) %>%
+  mutate(line = "dtg2") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+
+# dtg_12 
+dtg12 <- df %>%
+  group_by(Prev_cat) %>% 
+  summarise(
+    numer = sum(newdtg_12),
+    denom = n()) %>%
+  mutate(line = "dtg12") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+
+dtg_HIVprev <- rbind(dtg1, dtg2, dtg12)
+
+```
+
+## Re-wrangle data: by Income group
+
+```{r}
+
+# dtg1
+dtg1 <- df %>%
+  group_by(Income_group) %>% 
+  summarise(
+    numer = sum(dtg_1),
+    denom = n()) %>%
+  mutate(line = "dtg1") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg2 
+dtg2 <- df %>%
+  group_by(Income_group) %>% 
+  summarise(
+    numer = sum(dtg_2),
+    denom = n()) %>%
+  mutate(line = "dtg2") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg12 
+dtg12 <- df %>%
+  group_by(Income_group) %>% 
+  summarise(
+    numer = sum(newdtg_12),
+    denom = n()) %>%
+  mutate(line = "dtg12") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+
+dtg_Income_group <- rbind(dtg1, dtg2, dtg12)
+```
+
+## Re-wrangle data: by Facility level
+
+```{r}
+# Facility level
+
+# dtg1
+dtg1 <- df %>%
+  group_by(level) %>% 
+  summarise(
+    numer = sum(dtg_1),
+    denom = n()) %>%
+  mutate(line = "dtg1") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+# dtg2 
+dtg2 <- df %>%
+  group_by(level) %>% 
+  summarise(
+    numer = sum(dtg_2),
+    denom = n()) %>%
+  mutate(line = "dtg2") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+
+# dtg12 
+dtg12 <- df %>%
+  group_by(level) %>% 
+  summarise(
+    numer = sum(newdtg_12),
+    denom = n()) %>%
+  mutate(line = "dtg12") %>%
+  mutate(per = numer/denom *100) %>%
+  mutate(value = round(per, 1)) %>%
+  select(-c(per))
+
+dtg_level <- rbind(dtg1, dtg2, dtg12)
+```
+
+
+
+
+## Create figure 
+
+Rollout of first-, second-, and first- and second-line DTG regimens
+
+
+Define colors
+
+```{r}
+# The palette with grey:
+  cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+            "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+  
+  # The palette with black:
+  cbp2 <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
+            "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+  
+  
+fill1 = c( "#E69F00", "#56B4E9", "#009E73")
+fill2 = c( "#009E73", "#0072b2", "#E69F00")
+fill3 = c( "#E69F00", "steelblue", "darkgray")
+fill4 = c(  "#2A6A9E","#B6D4E7", "#B0B0B0")
+fill5 = c(  "#14447b","#5b88bc", "#B0B0B0")
+fill6 = c(  "#0072b2","#56b4e9", "#009e73")
+fill7 = c("#14447b", "steelblue1","#009E73")
+fill8 = c( "#009E73", "#0072b2", "gold2")
+fill9 = c(  "#009E73", "#0072b2","gold3")
+fill0 = c("#14447b","#5b88bc", "#B6D4E7")
+```
+
+## Plot 1: by HIV prev category
+
+Define factors
+
+```{r}
+
+data <- dtg_HIVprev
+  
+
+data$Prev_cat <- factor(data$Prev_cat, levels = c( "Low","Medium", "High"),
+                    labels = c("Low \n (n=35)", "Medium \n (n=83)", "High \n (n=57)"))
+  
+data$line <- factor(data$line, levels = c("dtg1","dtg2", "dtg12"),
+                    labels = c("First-line","Second-line", "First- and second-line"))
+```
+
+
+Define text
+
+```{r}
+
+data <- data %>%
+  mutate(text = round(value)) %>%
+  mutate(text2 = "%") %>%
+  mutate(text3 = paste(text, text2, sep="")) %>%
+  mutate(text4 = paste("(", numer, ")", sep="")) %>%
+  mutate(text5 = paste(text3,"\n ", text4, sep=""))
+```
+
+
+```{r}
+# bar chart
+plot1 <-  ggplot(data=data, aes(x=Prev_cat, y=value, fill = line, label = text5))  + 
+    geom_bar(stat="identity",width = 0.8, position = position_dodge(0.8)) +
+     geom_text(aes(label = text5), size = 4, colour = "white", fontface = "bold", position = position_dodge(width =0.8), vjust = 1.5) +
+    scale_y_continuous(limits = c(0,100)) +
+   ylab("Percentage of clinics (%)") +
+    xlab("") +
+    theme_classic() +
+    theme(axis.text.x = element_text(size =12)) +
+    theme(axis.text.y = element_text(size =12)) +
+    theme(axis.title.x = element_text(size=12)) +
+    theme(axis.title.y = element_text(size=12))+
+   theme(legend.text = element_text(size = 12)) +
+   theme(legend.title = element_blank(),) +
+   ggtitle("National HIV prevalence") +
+ scale_fill_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill0)  +
+ scale_color_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill0) +
+  #guides(fill = guide_legend(reverse=FALSE, byrow=TRUE)) 
+  #scale_color_npg() +
+ # scale_fill_npg() +
+  theme(panel.border = element_blank()) +
+   theme(plot.title = element_text(vjust = 0, hjust =0.5)) +
+   theme(panel.grid.major.y = element_line(),
+         panel.grid.minor.y = element_line())
+   
+ plot1   
+```
+
+
+## Plot 2: by Income group
+
+Define factors
+
+```{r}
+
+data <- dtg_Income_group
+  
+data$Income_group <- factor(data$Income_group, levels = c( "Low income", "Lower middle income", "Upper middle income"),
+                    labels = c("Low \n (n=51)", "Lower-middle \n (n=89)", "Upper-middle \n (n=35)"))
+  
+data$line <- factor(data$line, levels = c("dtg1","dtg2", "dtg12"),
+                    labels = c("First-line","Second-line", "First- and second-line"))
+  
+```
+
+
+
+Define text
+
+```{r}
+  data <- data %>%
+    mutate(text = round(value)) %>%
+    mutate(text2 = "%") %>%
+    mutate(text3 = paste(text, text2, sep="")) %>%
+    mutate(text4 = paste("(", numer, ")", sep="")) %>%
+    mutate(text5 = paste(text3,"\n ", text4, sep=""))
+```
+
+
+
+```{r}
+# bar chart
+  plot2 <-  ggplot(data=data, aes(x=Income_group, y=value, fill = line, label = text5))  + 
+    geom_bar(stat="identity",width = 0.8, position = position_dodge(0.8)) +
+    geom_text(aes(label = text5), size = 4, colour = "white", fontface = "bold", position = position_dodge(width =0.8), vjust = 1.5) +
+    scale_y_continuous(limits = c(0,100)) +
+    ylab("") +
+    xlab("") +
+    scale_fill_grey(name= "Treatment line: ") +
+    theme_classic() +
+    theme(axis.text.x = element_text(size =12)) +
+    theme(axis.text.y = element_text(size =12)) +
+    theme(axis.title.x = element_text(size=12)) +
+    theme(axis.title.y = element_text(size=12)) +
+    theme(legend.text = element_text(size = 12)) +
+    theme(legend.title = element_text(size = 12)) +
+    theme(legend.title = element_blank(),) +
+    ggtitle("Country income group") +
+    scale_fill_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill0)  +
+    scale_color_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill0) +
+    theme(panel.border = element_blank())  +
+    theme(plot.title = element_text(vjust = 0, hjust =0.5))    +
+    theme(panel.grid.major.y = element_line(),
+          panel.grid.minor.y = element_line())
+  
+  plot2
+```
+
+
+## Plot 3: by Facility level
+
+Define factors
+
+```{r}
+
+data <- dtg_level
+  
+  data$level <- factor(data$level,levels=c("1","2","3"),
+                        labels = c("Primary \n (n=93)","Secondary \n (n=17)","Tertiary \n (n=65)"))
+  
+  data$line <- factor(data$line, levels = c("dtg1","dtg2", "dtg12"),
+                      labels = c("First-line","Second-line", "First- and second-line"))
+  
+```
+
+
+Define text
+
+```{r}
+  data <- data %>%
+    mutate(text = round(value)) %>%
+    mutate(text2 = "%") %>%
+    mutate(text3 = paste(text, text2, sep="")) %>%
+    mutate(text4 = paste("(", numer, ")", sep="")) %>%
+    mutate(text5 = paste(text3,"\n ", text4, sep=""))
+```
+
+
+
+```{r}
+# bar chart
+  plot3 <- ggplot(data=data, aes(x=level, y=value, fill = line, label=text5))  + 
+    geom_bar(stat="identity",width = 0.8, position = position_dodge(0.8)) +
+    geom_text(aes(label = text5), size = 4, colour = "white", fontface = "bold", position = position_dodge(width =0.8), vjust = 1.5) +
+    scale_y_continuous(limits = c(0,100)) +
+    ylab("") +
+    xlab("") +
+    scale_fill_grey(name= "Treatment line: ") +
+    theme_classic() +
+    theme(axis.text.x = element_text(size =12)) +
+    theme(axis.text.y = element_text(size =12)) +
+    theme(axis.title.x = element_text(size=12)) +
+    theme(axis.title.y = element_text(size=12)) +
+    theme(legend.text = element_text(size = 12)) +
+    theme(legend.title = element_text(size = 12)) +
+    theme(legend.title = element_blank(),) +
+    ggtitle("Clinic level") +
+    scale_fill_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill0)  +
+    scale_color_manual(labels = ~ stringr::str_wrap(.x, width = 15), values = fill0) +
+    theme(panel.border = element_blank())  +
+    theme(plot.title = element_text(vjust = 0, hjust =0.5))  +
+    theme(panel.grid.major.y = element_line(),
+          panel.grid.minor.y = element_line()) 
+  
+  plot3
+```
+
+
+## Combine plots
+
+```{r} 
+
+Final_figure2 <- ggarrange(plot2,  plot1,  plot3, ncol =1, nrow =3, common.legend = TRUE, legend = "bottom") 
+
+
+```
+
+
+## Final Figure 2
+
+```{r, fig.width = 7, fig.height = 8}
+Final_figure2
+```
+
+
+
+## Output Figure 2
+
+```{r}
+ggsave("03_Output/Manuscript/Figure_2_newdtg_12_stack_blues_v9c.png", width = 7, height =8)  
+```
+
+
+```{r}
+tiff("03_Output/Manuscript/tiff/Figure_2_newdtg_12_stack_blues_v9c.tiff", units = "in", width = 7, height =8, res=600)
+ggarrange(plot2,  plot1,  plot3, ncol =1, nrow =3, common.legend = TRUE, legend = "bottom") 
+```
+
+
+```{r include=FALSE}
+#Clear existing data and graphics
+rm(list=ls(pattern="plot"))
+rm(list=ls(pattern="dtg"))
+rm(data)
+rm(df)
+# graphics.off()
+```
+
+
+
+<!-- ----------------------------------------------------- -->
+
+
+```{r}
+select <- dplyr::select
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+
+# Figure 3: Regression model: Generalized estimating equations
+
+https://library.virginia.edu/data/articles/getting-started-with-generalized-estimating-equations
+
+
+1) The main difference is that it’s a marginal model. It seeks to model a population average. Mixed-effect/multilevel models are subject-specific, or conditional, models. They allow us to estimate different parameters for each subject or cluster. In other words, the parameter estimates are conditional on the subject/cluster. This in turn provides insight to the variability between subjects or clusters. We can also obtain a population-level model from a mixed-effect model, but it’s basically an average of the subject-specific models.
+
+2) GEE is intended for simple clustering or repeated measures. It cannot easily accommodate more complex designs such as nested or crossed groups; for example, nested repeated measures within a subject or group. This is something better suited for a mixed-effect model.
+
+3) GEE computations are usually easier than mixed-effect model computations. GEE does not use the likelihood methods that mixed-effect models employ, which means GEE can sometimes estimate more complex models.
+
+4) Because GEE doesn’t use likelihood methods, the estimated “model” is incomplete and not suitable for simulation.
+
+5) GEE allows us to specify a correlation structure for different responses within a subject or group. For example, we can specify that the correlation of measurements taken closer together is higher than those taken farther apart. This is not something that’s currently possible in the popular lme4 package.
+
+Now let’s try a model with an exchangeable correlation structure. This says all pairs of responses within a subject are equally correlated. To do this we set corstr = "exchangeable".
+
+
+Figure 3. Probability of transitioning to dolutegravir-based first- and second-line ART by country income, HIV prevalence and level of care, urbanization and availability of drug resistance testing.
+
+For each first-, second-, third-line and across all three lines by HIV prev cat
+
+
+## Load wrangled data
+```{r}
+df <- readRDS("03_Output/Data/data_190_variables.Rda") 
+```
+
+```{r}
+frq(df, Prev_cat.factor)
+```
+
+
+```{r}
+#create dummy variable for no levels
+df <- df %>% mutate(country2 = "ISPM")
+
+
+```
+
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+df %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+## Functions
+
+```{r}
+source("02_Scripts/12_myp.R")
+#source("12_myp.R")
+```
+
+
+## Re-wrangle data
+
+### Outcome variable
+
+Rolled out DTG first-line and second-line
+```{r}
+
+frq(df, newdtg_12)
+
+df$newdtg_12_yn <- factor(df$newdtg_12, 
+                          levels = c( "0","1"),
+                          labels = c("No", "Yes"))
+frq(df, newdtg_12_yn)
+```
+
+
+### Explanatory variables
+
+1. Country income
+```{r}
+# "Low", "Lower-middle", "Upper-middle" 
+table(df$Income_group.factor)
+```
+
+
+2. HIV Prevalence
+```{r}
+
+# "Low  (<1%)", "Medium (1-4.9%)", "High (≥5%)"
+table(df$Prev_cat.factor)
+
+```
+
+
+3. Facility Level of care
+```{r}
+# Facility level: "1","2","3"  ("Primary","Secondary","Tertiary")
+table(df$level.factor)
+
+```
+
+
+4. Residence setting
+```{r}
+# residence_setting: 2, Predominantly Urban | 3, Predominantly Rural | 5, Mixed urban/rural
+# frq(df,residence_setting.factor)
+
+df <- df %>% mutate(Rural2 = ifelse(residence_setting == 3, 1, ifelse(residence_setting == 5, 2, 3 )))
+
+df$Rural2.factor <- factor(df$Rural2, levels = c("1", "2", "3"),
+                           labels = c("Rural", "Mixed urban/rural" , "Urban"))
+
+table(df$Rural2.factor)
+```
+
+
+5. Drug resistance testing availability
+```{r}
+table(df$dr_na)
+# (0/1, No/Yes)
+table(df$DR_yn.factor)
+
+```
+
+```{r}
+df <- df %>% select(country, country_name, country2, record_id, region, newdtg_12, newdtg_12_yn, Income_group.factor, Prev_cat, Prev_cat.factor, level.factor, Rural2.factor, DR_yn, DR_yn.factor)
+```
+
+
+## Regression model levels
+
+
+### 1) by country income group
+
+Number of sites by category
+```{r echo=FALSE}
+# frequency of categories
+frq(df, Income_group.factor)
+```
+
+Number of countries by income category
+```{r echo=FALSE}
+# number of LMICs by category
+df %>%
+  distinct(Income_group.factor, country) %>%
+  group_by(Income_group.factor) %>%
+  summarise("ctrys per category" = n())
+```
+
+
+Number of sites by category and country
+```{r echo=FALSE}
+# find number of sites per country per category
+df %>%
+  group_by(Income_group.factor, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+### 2) by national HIV prevalence
+
+Number of sites by  category
+```{r echo=FALSE}
+# frequency of  categories
+
+frq(df, Prev_cat.factor)
+
+
+frq(df, Prev_cat)
+```
+
+
+Number of countries by category
+```{r echo=FALSE}
+# number of LMICs by Prev_cat
+df %>%
+  distinct(Prev_cat.factor, country) %>%
+  group_by(Prev_cat.factor) %>%
+  summarise("ctrys per category" = n())
+```
+
+Number of sites by category and country
+```{r echo=FALSE}
+# find number of sites per country per category
+df %>%
+  group_by(Prev_cat.factor, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+### 3) by Facility Level of care
+
+
+Number of sites by category
+```{r echo=FALSE}
+# frequency of HIV prevalence categories
+
+frq(df, level.factor)
+```
+
+
+Number of countries by category
+```{r echo=FALSE}
+# number of LMICs by Prev_cat
+df %>%
+  distinct(level.factor, country) %>%
+  group_by(level.factor) %>%
+  summarise("ctrys per category" = n())
+```
+
+Number of sites by category and country
+```{r echo=FALSE}
+# find number of sites per country per Prev_cat
+df %>%
+  group_by(level.factor, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+### 4) by Residence setting
+
+
+Number of sites by category
+```{r echo=FALSE}
+# frequency of HIV prevalence categories
+
+frq(df, Rural2.factor)
+```
+
+
+Number of countries by category
+```{r echo=FALSE}
+# number of LMICs by Prev_cat
+df %>%
+  distinct(Rural2.factor, country) %>%
+  group_by(Rural2.factor) %>%
+  summarise("ctrys per category" = n())
+```
+
+Number of sites by category and country
+```{r echo=FALSE}
+# find number of sites per country per Prev_cat
+df %>%
+  group_by(Rural2.factor, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+### 5) by Drug resistance testing availability
+
+
+Number of sites by category
+```{r echo=FALSE}
+# frequency of HIV prevalence categories
+
+frq(df, DR_yn.factor)
+```
+
+
+Number of countries by category
+```{r echo=FALSE}
+# number of LMICs by Prev_cat
+df %>%
+  distinct(DR_yn.factor, country) %>%
+  group_by(DR_yn.factor) %>%
+  summarise("ctrys per category" = n())
+```
+
+Number of sites by category and country
+```{r echo=FALSE}
+# find number of sites per country per Prev_cat
+df %>%
+  group_by(DR_yn.factor, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+## Likelihood Ratio (LR) test
+
+compare each by removing one variable.
+p-values to include in paper
+
+
+### Full model
+**Outcome variable:** rolled out both first-line and second-line DTG
+
+**Explanatory variables:**  
+1. Country income group ("Low", "Lower-middle", "Upper-middle")  
+2. National HIV prevalence ("Low (<1%)", "Medium (1-4.9%)", "High (≥5%)")  
+3. Level of care ("Primary","Secondary","Tertiary")  
+4. Residence of population ("Rural", "Mixed urban/rural" , "Urban")  
+5. Availability of drug resistance testing (0/1, No/Yes)  
+
+factors = c("Income_group.factor", "Prev_cat.factor", "level.factor", "Rural2.factor", "DR_yn.factor")
+
+**id:** ID_ctry
+
+geemm <- geeglm(newdtg_12 ~ Income_group.factor + Prev_cat.factor + level.factor + Rural2.factor +  DR_yn.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+                 
+                 
+ 
+```{r}
+
+library(geepack)
+library(geeasy)
+library(geeM)
+
+frq(df, newdtg_12)
+frq(df, Income_group.factor)
+frq(df, Prev_cat.factor)
+frq(df, level.factor)
+frq(df, Rural2.factor)
+frq(df, DR_yn.factor)
+
+df1 <- df %>% select(newdtg_12,Income_group.factor, Prev_cat.factor, Prev_cat, level.factor, Rural2.factor, DR_yn.factor, country )
+
+
+#create new id that is numeric
+df1$ID <- 1:nrow(df1)
+
+# create new country id that is numeric
+df2 <- transform(df1,    # Create ID by group
+                      ID_ctry = as.numeric(factor(country)))
+
+df2 <- as.data.frame(df2)
+
+
+```                
+                 
+
+```{r}
+multi1 = geeglm(newdtg_12 ~ Income_group.factor + Prev_cat.factor + level.factor + Rural2.factor +  DR_yn.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+```
+
+```{r}
+
+sjPlot::tab_model(multi1)
+#performance::icc(multi1)
+```
+
+
+### remove Country income group
+```{r}
+multi2 = geeglm(newdtg_12 ~  Prev_cat.factor + level.factor + Rural2.factor +  DR_yn.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+
+sjPlot::tab_model(multi2)
+#performance::icc(multi2)
+#lrtest(multi1, multi2)
+anova(multi1, multi2)
+```
+
+
+### remove National HIV prevalence
+```{r}
+multi3 <- geeglm(newdtg_12 ~ Income_group.factor + level.factor + Rural2.factor +  DR_yn.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+
+sjPlot::tab_model(multi3)
+#performance::icc(multi3)
+#lrtest(multi1, multi3)
+anova(multi1, multi3)
+```
+
+
+### remove Level of care
+```{r}
+multi4 <- geeglm(newdtg_12 ~ Income_group.factor + Prev_cat.factor + Rural2.factor +  DR_yn.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+
+sjPlot::tab_model(multi4)
+#performance::icc(multi4)
+anova(multi1, multi4)
+```
+
+
+### remove Residence of population
+```{r}
+multi5 <- geeglm(newdtg_12 ~ Income_group.factor + Prev_cat.factor + level.factor + DR_yn.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+
+sjPlot::tab_model(multi5)
+#performance::icc(multi5)
+anova(multi1, multi5)
+```
+
+
+### remove Availability of drug resistance testing
+```{r}
+multi6 <- geeglm(newdtg_12 ~ Income_group.factor + Prev_cat.factor + level.factor + Rural2.factor,
+                data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+
+sjPlot::tab_model(multi6)
+#performance::icc(multi6)
+anova(multi1, multi6)
+```
+
+
+
+Combine output
+
+```{r} 
+
+test2 <- anova(multi1, multi2, test = "LRT")
+test2 <- test2 %>% mutate(Factor ="Income group")
+#test2 <- test2[-c(1), -c(1:4)]
+
+test3 <- anova(multi1, multi3, test = "LRT")
+test3 <- test3 %>% mutate(Factor ="HIV prevalence")
+#test3 <- test3[-c(1), -c(1:4)]
+
+test4 <- anova(multi1, multi4, test = "LRT")
+test4 <- test4 %>% mutate(Factor ="Clinic level of care")
+#test4 <- test4[-c(1), -c(1:4)]
+
+test5 <- anova(multi1, multi5, test = "LRT")
+test5 <- test5 %>% mutate(Factor ="Clinic setting")
+#test5 <- test5[-c(1), -c(1:4)]
+
+test6 <- anova(multi1, multi6, test = "LRT")
+test6 <- test6 %>% mutate(Factor="Drug resistance testing")
+#test6 <- test6[-c(1), -c(1:4)]
+
+LR <- rbind(test2, test2, test3, test3, test4, test4, test5, test5, test6)
+colnames(LR)
+colnames(LR)[3] = "pvalue"
+colnames(LR)
+LR <- LR %>% mutate(pvalue = round(pvalue, digits =3))
+LR <- LR %>% mutate(pvalue = ifelse(pvalue <0.001, "<0.001", pvalue))
+
+LR$first <- c(1,2,1,2,1,2,1,2,1)
+
+LR <- LR %>% mutate(pvalue2 = ifelse(first ==1, pvalue , ""))
+LR <- LR %>% mutate(pvalue3 = paste(pvalue2, "\n", "\n", sep=""))
+LR <- LR %>% select(Factor, pvalue2, pvalue3)
+
+```
+
+```{r include=FALSE}
+#rm("multi1", "multi2", "multi3", "multi4", "multi5", "multi6", "test2", "test3", "test4", "test5", "test6")
+
+rm(list=ls(pattern="test"))
+rm(list=ls(pattern="multi"))
+```
+
+
+
+
+
+## Model: Univariate GEE (New)
+
+The GEE method is based on the quasi-likelihood theory and no assumption is made about the distribution of response observations (Liang and Zeger, 1986).  
+
+https://library.virginia.edu/data/articles/getting-started-with-generalized-estimating-equations
+
+```{r eval=FALSE, include=FALSE}
+rm(list=ls(pattern="gee"))
+```
+
+
+
+
+```{r}
+# model function univariate
+fun_univariate <- function(dependent, factors, id, df) {
+  table = data.frame(Factor = "", Level= "", Estimate = NA, CI = NA, p.uni = NA)
+  for (v  in factors) {
+    geem = geeglm(formula(paste0(dependent, " ~ ", v )), data = df2, id = ID_ctry, family=binomial(link = "logit"), corstr="exchangeable")
+    coefs <- summary(geem)$coefficients
+    coefs[,1] <- exp(coefs[,1])
+    varnames <- rownames(coefs)
+    nlengthN <- length(varnames)
+    confints <-  exp(confint.default(geem)) # With ML profiling, optimizer finding a fitted value that is significantly better 
+    p <- sapply(coefs[, "Pr(>|W|)"], myp, text = "table") # than the supposed minimum-deviance solution returned in the first place
+    tmp <- data.frame(Factor = v,
+                      Level = varnames,
+                      Estimate = sprintf("%.2f", coefs[, "Estimate"]), 
+                      CI = paste0("[", sprintf("%.2f", confints[c(1:nlengthN), "2.5 %"]),
+                                  ";", sprintf("%.2f", confints[c(1:nlengthN), "97.5 %"]), "]"),
+                     p.uni = p,
+                      stringsAsFactors = FALSE)
+    table <- rbind(table, tmp)
+  }
+  table <- as_tibble(table)
+  table <- table[table$Level != "(Intercept)", ]
+  table$Factor[duplicated(table$Factor)] <- NA
+  return(table[-1,])
+}
+```
+
+
+
+
+```{r}
+dependent = "newdtg_12"
+factors = c("Income_group.factor", "Prev_cat.factor", "level.factor", "Rural2.factor", "DR_yn.factor")
+#id = ID_ctry
+#df = df2
+```
+
+
+```{r}
+
+# Models output
+univariate <- fun_univariate(dependent, factors)
+```
+
+
+```{r}
+
+univariate <- univariate %>%
+  dplyr::mutate(Factor = case_when (Factor == "Income_group.factor" ~ "Country income group",
+                                    Factor == "Prev_cat.factor" ~ "HIV Prevalence",
+                                    Factor == "level.factor" ~ "Level of care",
+                                    Factor == "Rural2.factor" ~ "Residence setting2", 
+                                    Factor == "DR_yn.factor" ~ "Drug resistance testing available"),
+                
+                Level = case_when (Level == "Income_group.factorLower-middle" ~ "Lower-middle (vs. Low)",
+                                   Level == "Income_group.factorUpper-middle" ~ "Upper-middle (vs. Low)",
+                                   
+                                   Level == "Prev_cat.factorMedium (1-4.9%)" ~ "Medium (1-4.9%) (vs. Low (<1%))",
+                                   Level == "Prev_cat.factorHigh (≥5%)" ~ "High (≥5%) (vs. Low (<1%))",
+                                   
+                                   Level == "level.factorSecondary" ~ "Secondary (vs. Primary)",
+                                   Level == "level.factorTertiary" ~ "Tertiary (vs. Primary)",
+                                   
+                                   Level == "Rural2.factorMixed urban/rural" ~ "Mixed urban/rural (vs. Rural)",
+                                   Level == "Rural2.factorUrban" ~ "Urban (vs. Rural)",
+                                   
+                                   Level == "DR_yn.factorYes" ~ "Drug resistance testing available = 'Yes'")) %>%
+dplyr::select(Factor, Level, Estimate, CI, p.uni)
+
+
+```
+
+
+```{r}
+
+univariate2 <- univariate %>% 
+  mutate(CI_lower = substr(CI, 2,5)) %>% 
+        mutate(CI_upper = substr(CI, 7,10)) %>%
+                 mutate(mean_temp = as.numeric(Estimate)) %>%
+                  mutate(lower_temp = as.numeric(CI_lower)) %>%
+                   mutate(upper_temp = as.numeric(CI_upper)) %>%
+                      mutate(mean1 = round(mean_temp, digits =2)) %>%
+                        mutate(lower1 = round(lower_temp, digits =2)) %>%
+                          mutate(upper1 = round(upper_temp, digits =2)) %>%
+                            mutate(uni_txt = paste0(sprintf("%.2f", mean1), " (", sprintf("%.2f", lower1), "-", sprintf("%.2f",upper1), ")")) 
+
+
+
+# table to provide numeric mean, lower, upper
+p_uni_forest_input <-  univariate2 %>% select(Factor, Level, mean1, lower1, upper1, p.uni)
+
+
+# table to paste text for mean and
+p_uni_txt <- univariate2 %>% select(Factor, Level, uni_txt, p.uni)
+
+#colnames(univariate2)[colnames(univariate2) == "p.uni"] <- "Univariate p-value"
+#colnames(univariate2)[colnames(univariate2) == "Estimate"] <- "Univariate Odds-ratio"
+#colnames(univariate2)[colnames(univariate2) == "CI"] <- "Univariate Odds-ratio 95% CI"
+
+univariate2 <- univariate2 %>% select(Factor, Level, Estimate, CI_lower, CI_upper, uni_txt)
+
+p_uni_forest_input2 <-  p_uni_forest_input  %>% select(Factor, Level) 
+
+```
+
+
+## Model: Multivariate GEE (New)
+
+
+The GEE method is based on the quasi-likelihood theory and no assumption is made about the distribution of response
+observations (Liang and Zeger, 1986).  
+
+The generalized linear model (GLM) method is based on the maximum likelihood theory of independent observations and an assumption about the distribution of response observations. 
+
+The generalized linear mixed model (GLMM) method is based on extending the fixed effects GLM to include random effects and covariance patterns, as it was discussed in Chapter 3. 
+
+Unlike the GLM and GLMM methods, the generalized estimating equation (GEE) method is based on the quasi-likelihood theory and no assumption is made about the distribution of response observations (Liang and Zeger, 1986).
+
+
+```{r eval=FALSE, include=FALSE}
+rm(list=ls(pattern="gee"))
+```
+
+
+
+```{r}
+
+geemm <- geeglm(newdtg_12 ~ Income_group.factor + Prev_cat.factor + level.factor + Rural2.factor +  DR_yn.factor,
+                 data=df2,
+                 id=ID_ctry,
+                 family=binomial(link = "logit"),
+                 corstr="exchangeable")
+
+summary(geemm)
+
+#mp <- model_parameters(gee_model)
+
+coef(geemm)
+
+geemm_coefs <- summary(geemm)$coefficients
+summary(geemm_coefs)
+
+geemm_coefs_orig <- geemm_coefs 
+geemm_coefs[,1] <- exp(geemm_coefs[,1])
+summary(geemm_coefs)
+summary(geemm_coefs_orig)
+
+
+geemm_varnames <- rownames(geemm_coefs)
+geemm_nlengthN <- length(geemm_varnames)
+
+
+confint(geemm)
+
+exp(confint(geemm))
+
+
+# https://stackoverflow.com/questions/21221280/confidence-interval-of-coefficients-using-generalized-estimating-equation-gee
+# The base function confint.default() gives Wald intervals and can be used with a GEE. It should give the same results as Ben's function above.
+
+geemm_confints_orig <-  (confint.default(geemm)) 
+geemm_confints <-  exp(confint.default(geemm)) # With ML profiling, optimizer finding a fitted value that is significantly better 
+geemm_confints <- as.data.frame(geemm_confints)
+
+
+
+geemm_p <- sapply(geemm_coefs[, "Pr(>|W|)"], myp, text = "table") # than the supposed minimum-deviance solution returned in the first place
+
+
+letters[seq( from = 1, to = 10 )]
+
+
+#cats <- c("", "Country income group", "", "", "National HIV prevalence", "", "", "Level of care", "", "",                                "Residence of population","", "", "Drug resistance testing" )
+
+#table <- data.frame(cats)
+
+
+geemm_coefs$names <- rownames(geemm_coefs)
+geemm_coefs$nrow <- letters[seq( from = 1, to = 10 )]
+geemm_confints$names <- rownames(geemm_confints)
+
+colnames(geemm_confints)[colnames(geemm_confints) == "2.5 %"] <- "CI_lower"
+colnames(geemm_confints)[colnames(geemm_confints) == "97.5 %"] <- "CI_upper"
+
+#gee_tmp3 <- cbind(gee_coefs, gee_confints)
+
+geemm_tmp2 <- merge(geemm_coefs, geemm_confints, by = "names")
+geemm_tmp2 = geemm_tmp2[order(geemm_tmp2$nrow), ]
+
+
+geemm_tmp2 <- geemm_tmp2 %>% mutate(multi_txt = paste0(sprintf("%.2f", geemm_coefs[, "Estimate"]), " ", "(", sprintf("%.2f", geemm_confints[c(1:geemm_nlengthN), "CI_lower"]),
+  "-", sprintf("%.2f",geemm_confints[c(1:geemm_nlengthN), "CI_upper"]), ")"))
+
+
+geemm_table <- geemm_tmp2 %>%  
+  mutate(Estimate2 = round(Estimate, digits = 2)) %>%
+  mutate(CI_lower = round(CI_lower, digits = 2)) %>%
+  mutate(CI_upper = round(CI_upper, digits = 2)) 
+
+geemm_table <- geemm_tmp2 %>% filter(nrow !="a")
+geemm_table$nrow <- letters[seq( from = 1, to = 9 )]
+
+geemm_table <- geemm_table %>%  mutate(Level = names)
+
+
+multi_table <- geemm_table %>% 
+  mutate(mean_temp = as.numeric(Estimate)) %>%
+  mutate(lower_temp = CI_lower) %>%
+  mutate(upper_temp = CI_upper) %>%
+  mutate(mean2 = round(mean_temp, digits =2)) %>%
+  mutate(lower2 = round(lower_temp, digits =2)) %>%
+  mutate(upper2 = round(upper_temp, digits =2)) %>%
+  mutate(multi_txt2 = paste0(sprintf("%.2f", mean2), " (", sprintf("%.2f", lower2), "-", sprintf("%.2f",upper2), ")"))
+
+multi_table <- multi_table %>%
+  dplyr::mutate(Level = case_when (Level == "Income_group.factorLower-middle" ~ "Lower-middle (vs. Low)",
+                                   Level == "Income_group.factorUpper-middle" ~ "Upper-middle (vs. Low)",
+                                   
+                                   Level == "Prev_cat.factorMedium (1-4.9%)" ~ "Medium (1-4.9%) (vs. Low (<1%))",
+                                   Level == "Prev_cat.factorHigh (≥5%)" ~ "High (≥5%) (vs. Low (<1%))",
+                                   
+                                   Level == "level.factorSecondary" ~ "Secondary (vs. Primary)",
+                                   Level == "level.factorTertiary" ~ "Tertiary (vs. Primary)",
+                                   
+                                   Level == "Rural2.factorMixed urban/rural" ~ "Mixed urban/rural (vs. Rural)",
+                                   Level == "Rural2.factorUrban" ~ "Urban (vs. Rural)",
+                                   
+                                   Level == "DR_yn.factorYes" ~ "Drug resistance testing available = 'Yes'")) 
+
+#lr_table <- rbind(table, lr_tmp)
+   
+```
+
+
+
+## More data Wrangling
+
+
+
+Create table to provide numeric mean, lower, upper
+
+```{r}
+p_multi_forest_input <-  multi_table %>% select(Level, mean2, lower2, upper2) 
+```
+
+
+### Final_forest_input file
+
+Combine both uni text and multivariate tables (Factor, Level, mean, lower, upper)
+
+```{r}
+Final_forest_input <- plyr::join_all(list(p_uni_forest_input, p_multi_forest_input), by = c("Level"), type = "left")
+
+```
+
+Create table to paste text for mean and pvalues
+
+```{r}
+p_multi_txt <- multi_table %>% select(Level, multi_txt)
+```
+
+
+Combine the two txt tables for uni and multi by "Level"
+```{r}
+table_txt <- plyr::join_all(list(p_uni_txt,p_multi_txt), by = c("Level"), type = "left") %>% select(-c(p.uni))
+```
+
+
+Combine odds and CIs from both models
+```{r}
+
+table_txt$cbindoddsCI1 <- paste0("1\n",table_txt$uni_txt,"\n", table_txt$multi_txt)
+
+table_txt$cbindoddsCI2 <- paste0(table_txt$uni_txt,"\n", table_txt$multi_txt)
+
+```
+
+Need to ID which oddsCI to include 1 == with 1, 2 == no 1
+```{r}
+table_txt$first <- c(1,2,1,2,1,2,1,2,1)
+
+table_txt <- table_txt %>% 
+  mutate(cbindoddsCI = ifelse(first ==1, cbindoddsCI1, cbindoddsCI2)) 
+```
+
+
+Keep only needed variables
+```{r}
+table_txt1 <- table_txt %>% select(Factor, Level, cbindoddsCI) %>% mutate(Level2 = Level)
+```
+
+
+Create category headings for plot
+```{r}
+table_txt1[-c(2,4,6,8),1] <- c("Country income group", "National HIV prevalence", "Clinic level", 
+                               "Residence of population","Drug resistance testing     ")
+```
+
+
+Create category headings for plot -> leave blank spaces when no text
+```{r}
+table_txt1[c(2,4,6,8),1] <- ""
+
+```
+
+Create factor names for plot
+```{r}
+table_txt1[,2] <- c("Low  \nLower-middle\n", "Upper-middle\n", 
+                        "Low  \nMedium\n", "High\n",
+                        "Primary  \nSecondary\n", "Tertiary\n",
+                        "Rural  \nMixed urban/rural     \n", "Urban\n", 
+                        "Not available  \nAvailable\n")
+
+```
+
+
+Check frequency of factors
+```{r}
+frq(df, Income_group.factor)
+frq(df, Prev_cat.factor)
+frq(df, level.factor)
+frq(df, Rural2.factor)
+frq(df, DR_yn.factor)
+```
+
+
+Get the Ns for each factor level
+```{r}
+table_txt1[,5] <- c(paste0(table(df$Income_group.factor=="Low")[2],"\n", 
+                                table(df$Income_group.factor=="Lower-middle")[2],"\n"), 
+                        paste0(table(df$Income_group.factor=="Upper-middle")[2], "\n"),
+                        
+                        paste0(table(df$Prev_cat=="Low")[2],"\n", 
+                               table(df$Prev_cat=="Medium")[2],"\n"), 
+                        paste0(table(df$Prev_cat=="High")[2], "\n"),
+                        
+                        paste0(table(df$level.factor=="Primary")[2],"\n", 
+                               table(df$level.factor=="Secondary")[2],"\n"), 
+                        paste0(table(df$level.factor=="Tertiary")[2], "\n"),
+                        
+                        paste0(table(df$Rural2.factor=="Rural")[2],"\n", 
+                               table(df$Rural2.factor=="Mixed urban/rural")[2],"\n"), 
+                        paste0(table(df$Rural2.factor=="Urban")[2], "\n"),
+                        
+                        paste0(table(df$DR_yn.factor=="No")[2],"\n", 
+                               table(df$DR_yn.factor=="Yes")[2],"\n"))
+
+```
+
+
+Only keep those variables needed
+```{r}
+table_txt2 <- table_txt1 %>% select(Factor, Level, V5, cbindoddsCI)
+```
+
+
+## Final Figure 3
+
+### Final_text file
+
+Create a row that contains the title name for the plot
+```{r}
+Final_text <- cbind(c("Categories",as.character(table_txt2[,1])),
+                    c("Factors",as.character(table_txt2[,2])), 
+                    c(paste0("N=",length(df[,1])), 
+                      table_txt2[,3]),
+                    c("OR (95% CI)              ", table_txt2$cbindoddsCI),
+                    c("p-value*     ", LR$pvalue3))
+
+```
+
+```{r include=FALSE}
+
+rm(list=ls(pattern="gee"))
+rm(list=ls(pattern="table_txt"))
+rm(list=ls(pattern="p_"))
+rm(list=ls(pattern="multi_"))
+rm(list=ls(pattern="univariate"))
+rm(list=ls(pattern="df"))
+
+```
+
+
+
+
+Define forest plot options for png version
+```{r}
+ticks <- c(log(0.1),log(1),log(10), log(100)) # xaxis labeling due to bug for log
+attr(ticks, "labels") <- as.character(c(0.1, 1, 10, 100)) # # xaxis labeling  ADDITION due to bug for log
+
+own <- fpTxtGp(label = gpar(cex=2.5),ticks = gpar(cex=2.5),summary=gpar(cex=2.5),
+               xlab =gpar(cex=2.5), legend = gpar(cex=3),
+               legend.title = gpar(cex=2), title = gpar(cex=2)
+              
+               ) # adjust text size of forestplot
+```
+
+
+
+```{r eval=FALSE, include=FALSE}
+ 
+# Forest plot: png
+
+png(file = "03_Output/Manuscript/Figure_3_log_regression_Forestplot_gee.png",
+    height = 20, width = 23, units = 'in', res=500)
+
+forestplot(Final_text, graph.pos=4, align = c("l","l","l","l","l","l"),
+           legend =  c("", "univariable", "multivariable"),
+           legend_args = fpLegend(pos = list(x=0.5, y=1), 
+                                  gp=gpar(cex=5)),
+           mean = cbind(c(NA, rep(NA, 8)),
+                        c(NA,Final_forest_input$mean1), 
+                        c(NA,Final_forest_input$mean2)),
+           lower = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$lower1), 
+                         c(NA,Final_forest_input$lower2)),
+           upper = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$upper1), 
+                         c(NA,Final_forest_input$upper2)),
+           is.summary=c(TRUE,rep(FALSE,14)),
+           txt_gp = own, 
+           hrzl_lines = list("2" = gpar(lty=1, lwd=2), 
+                             "4" = gpar(lty=1, lwd=2), 
+                             "6" = gpar(lty=1, lwd=2), 
+                             "8" = gpar(lty=1, lwd=2), 
+                             "10" = gpar(lty=1, lwd=2),
+                             "11" = gpar(lty=1, lwd=2)), 
+                             
+           title="",     
+           xlab="Reported rollout of first- and second-line dolutegravir-based ART",
+           clip= c(0.1,1,10), zero = 1, boxsize = c(0.1),
+           colgap=unit(1,"mm"),lwd.ci=6, ci.vertices=TRUE, ci.vertices.height = 0.1,
+           col=fpColors(box=c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        lines = c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        zero=c(1, "lightsteelblue4")),
+           xticks = ticks, xlog=TRUE)
+
+dev.off()
+```
+
+
+
+
+Define forest plot options for tiff version
+```{r}
+ticks <- c(log(0.1),log(1),log(10), log(100)) # xaxis labeling due to bug for log
+attr(ticks, "labels") <- as.character(c(0.1, 1, 10, 100)) # # xaxis labeling  ADDITION due to bug for log
+
+own_tiff <- fpTxtGp(label = gpar(cex=1),ticks = gpar(cex=1),summary=gpar(cex=1),
+               xlab =gpar(cex=1), legend = gpar(cex=1),
+               legend.title = gpar(cex=1), title = gpar(cex=1)
+              
+               ) # adjust text size of forestplot
+```
+
+
+
+
+```{r include=FALSE}
+
+# Forest plot: tiff 
+
+tiff(file="03_Output/Manuscript/tiff/Figure_3_log_regression_Forestplot_gee.tiff", width = 9.2, height=8.7, units = "in", res=600)
+forestplot(Final_text, graph.pos=4, align = c("l","l","l","l","l", "l"),
+           legend =  c("", "univariable", "multivariable"),
+           legend_args = fpLegend(pos = list(x=0.5, y=1), 
+                                  gp=gpar(size=5)),
+           mean = cbind(c(NA, rep(NA, 8)),
+                        c(NA,Final_forest_input$mean1), 
+                        c(NA,Final_forest_input$mean2)),
+           lower = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$lower1), 
+                         c(NA,Final_forest_input$lower2)),
+           upper = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$upper1), 
+                         c(NA,Final_forest_input$upper2)),
+           is.summary=c(TRUE,rep(FALSE,14)),
+           txt_gp = own_tiff, 
+           hrzl_lines = list("2" = gpar(lty=1, lwd=2), 
+                             "4" = gpar(lty=1, lwd=2), 
+                             "6" = gpar(lty=1, lwd=2), 
+                             "8" = gpar(lty=1, lwd=2), 
+                             "10" = gpar(lty=1, lwd=2),
+                             "11" = gpar(lty=1, lwd=2)), 
+           title="",     
+           xlab="Reported rollout of first- and second-line dolutegravir-based ART",
+           clip= c(0.1,1,10) , zero = 1,boxsize= c(0.1),
+           colgap=unit(1,"mm"),lwd.ci=3, ci.vertices=TRUE, ci.vertices.height = 0.1,
+           col=fpColors(box=c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        lines = c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        zero=c(1, "lightsteelblue4")),
+           xticks = ticks,xlog=TRUE)
+
+dev.off()
+
+
+```
+
+
+
+
+```{r echo=FALSE}
+
+# Forest plot: jpeg
+
+jpeg(file="03_Output/manuscript/tiff/Figure_3_log_regression_Forestplot_gee.jpeg", width = 9.5, height=8.6, units = "in", res=600)
+forestplot(Final_text, graph.pos=4, align = c("l","l","l","l","l","l"),
+           legend =  c("", "univariable", "multivariable"),
+           legend_args = fpLegend(pos = list(x=0.5, y=1), 
+                                  gp=gpar(size=5)),
+          mean = cbind(c(NA, rep(NA, 8)),
+                        c(NA,Final_forest_input$mean1), 
+                        c(NA,Final_forest_input$mean2)),
+           lower = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$lower1), 
+                         c(NA,Final_forest_input$lower2)),
+           upper = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$upper1), 
+                         c(NA,Final_forest_input$upper2)),
+           is.summary=c(TRUE,rep(FALSE,14)),
+           txt_gp = own_tiff, 
+           hrzl_lines = list("2" = gpar(lty=1, lwd=2), 
+                             "4" = gpar(lty=1, lwd=2), 
+                             "6" = gpar(lty=1, lwd=2), 
+                             "8" = gpar(lty=1, lwd=2), 
+                             "10" = gpar(lty=1, lwd=2),
+                             "11" = gpar(lty=1, lwd=2)), 
+           title="",     
+           xlab="Reported rollout of first- and second-line dolutegravir-based ART",
+           clip= c(0.1,1,10) , zero = 1, boxsize= c(0.1),
+           colgap=unit(1,"mm"),lwd.ci=3, ci.vertices=TRUE, ci.vertices.height = 0.1,
+           col=fpColors(box=c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        lines = c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        zero=c(1, "lightsteelblue4")),
+           xticks = ticks,xlog=TRUE)
+
+dev.off()
+
+```
+
+Final Forestplot
+
+
+```{r}
+
+Final_plot <- forestplot(Final_text, graph.pos=4, align = c("l","l","l","l","l","l"),
+           legend =  c("", "univariable", "multivariable"),
+           legend_args = fpLegend(pos = list(x=0.5, y=1), 
+                                  gp=gpar(cex=5)),
+           mean = cbind(c(NA, rep(NA, 8)),
+                        c(NA,Final_forest_input$mean1), 
+                        c(NA,Final_forest_input$mean2)),
+           lower = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$lower1), 
+                         c(NA,Final_forest_input$lower2)),
+           upper = cbind(c(NA, rep(NA, 8)),
+                         c(NA,Final_forest_input$upper1), 
+                         c(NA,Final_forest_input$upper2)),
+           is.summary=c(TRUE,rep(FALSE,14)),
+           txt_gp = own, 
+           hrzl_lines = list("2" = gpar(lty=1, lwd=2), 
+                             "4" = gpar(lty=1, lwd=2), 
+                             "6" = gpar(lty=1, lwd=2), 
+                             "8" = gpar(lty=1, lwd=2), 
+                             "10" = gpar(lty=1, lwd=2),
+                             "11" = gpar(lty=1, lwd=2)), 
+                             
+           title="",     
+           xlab="Reported rollout of first- and second-line dolutegravir-based ART",
+           clip= c(0.1,1,10), zero = 1, boxsize = c(0.1),
+           colgap=unit(1,"mm"),lwd.ci=6, ci.vertices=TRUE, ci.vertices.height = 0.1,
+           col=fpColors(box=c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        lines = c(NA,"lightsteelblue2", "lightsteelblue4"), 
+                        zero=c(1, "lightsteelblue4")),
+           xticks = ticks, xlog=TRUE)
+
+
+dev.off()
+
+```
+
+
+
+```{r echo=FALSE, fig.height=20, fig.width=23}
+
+Final_plot
+
+```
+
+
+
+
+
+<!-- ----------------------------------------------------- -->
+
+# Session info
+
+```{r}
+sessionInfo()
+
+```

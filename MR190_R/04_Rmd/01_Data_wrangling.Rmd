@@ -1,0 +1,1845 @@
+
+---
+title: "IeDEA MR190: DTG rollout <br> 01_Data_Wrangling"
+subtitle: " "
+author: "Elizabeth Zaniewski"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::robobook:
+    code_folding: show
+    self_contained: true
+    highlight: pygments
+    keep_md: no
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "05_html") })
+---
+
+```{r r-setup, include = FALSE}
+options(scipen = 999)
+options(max.print = "75")
+set.seed(12345)
+
+library(pacman)
+p_load(
+  kableExtra, tidyverse, dplyr, Hmisc,
+  scales, ggplot2,
+  fst, data.table, psych, readxl,
+  sjmisc
+)
+
+import::from("psych", "geometric.mean")
+import::from("sjmisc", "frq")
+import::from("gmodels", "CrossTable")
+```
+
+```{r conflicts, include = FALSE}
+conflicted::conflict_scout()
+```
+
+```{r knit-setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+knitr::opts_chunk$set(
+  cache = FALSE,
+  prompt = FALSE,
+  tidy = FALSE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE,
+  echo = TRUE
+)
+
+knitr::opts_knit$set(width = 75)
+```
+
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+getwd()
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+
+```{r echo=TRUE}
+#Clear existing data and graphics
+rm(list=ls())
+graphics.off()
+```
+
+
+
+```{r}
+select <- dplyr::select
+```
+
+
+
+# Title
+MR190: Transition to Dolutegravir-Based ART in 35 Low- and Middle-Income Countries: Survey of HIV treatment clinics
+
+<!-- ----------------------------------------------------- -->
+
+
+# Data
+
+
+## 1) IeDEA 4.0 Site Assessment survey
+
+IeDEA Cross-sectional site assessment survey conducted Sept 2020 - March 2021.
+
+Brazier E, et.al.; Design and implementation of a global site assessment survey among HIV clinics participating in the International epidemiology Databases to Evaluate AIDS (IeDEA) research consortium. PLoS One. 2023.
+https://pubmed.ncbi.nlm.nih.gov/36917598/
+
+Import Site Assessment 4.0 data from csv file  
+```{r survey data}
+# Import data
+data <- read.csv("01_Data/SiteAssessment40MERG-SurveyDataExport_DATA_2021-04-13_1002.csv", header =TRUE, sep = ",")
+
+```
+
+Number of unique regions and countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+data %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+
+
+Update date regional code for North America
+```{r fix region}
+## Change region "NA" for North America to "NN" (otherwise NA is treated as missing)
+data <- data %>%
+  mutate(region =fct_explicit_na(region, "NN"))
+```
+
+Number of sites per region
+```{r echo=FALSE}
+# Number of regions in SA 4.0 data
+frq(data, region)
+```
+
+Number of countries surveyed in 4.0 site assessment survey
+```{r}
+SA_ctry <- data %>% select(country) %>% unique
+SA_ctry <- SA_ctry %>% mutate(code = country)
+```
+
+
+Save IeDEA data
+
+
+```{r pressure}
+saveRDS(data, file="03_Output/Data/data_SA4.Rda")
+```
+
+## 2) UNAIDS HIV prevalence estimates
+
+National HIV prevalence estimates for year 2020.
+
+Source:
+National HIV estimates with uncertainty bounds 1990-Present. 2022.   
+Import UNAIDS data from xls file  
+*(Joint United Nations Programme on HIV/AIDS (UNAIDS). HIV estimates with uncertainty bounds 1990-Present. 2022.)* https://www.unaids.org/en/resources/documents/2022/HIV_estimates_with_uncertainty_bounds_1990-present
+
+
+```{r}
+# Import data
+UNAIDS <- read_excel("01_Data/HIV_estimates_from_1990-to-present.xlsx", sheet = "HIV_Prev_2020")
+```
+
+
+
+```{r echo=TRUE}
+# create country_name and create 3 letter iso code
+UNAIDS_ctry <- rename(UNAIDS, country_name=country, country = code)
+```
+
+Only keep countries included in 4.0 site assessment survey
+```{r}
+UNAIDS_ctry <- inner_join(UNAIDS_ctry, SA_ctry, by = "country" )
+
+UNAIDS_ctry <- UNAIDS_ctry %>% mutate(Prev2 = Prev) %>% mutate(Prev = ifelse(Prev == "...", NA, Prev2))
+
+```
+
+
+```{r echo=TRUE}
+# create new HIV prevalence variable
+UNAIDS_ctry <- UNAIDS_ctry %>%
+  mutate(Prev_num = Prev)
+
+# convert new HIV prevalence variable from char to numeric
+UNAIDS_ctry$Prev_num <- as.numeric(UNAIDS_ctry$Prev_num)
+
+# convert <0.1 into 0.1
+UNAIDS_ctry$Prev_num <- ifelse(UNAIDS_ctry$Prev == "<0.1", 0.1, UNAIDS_ctry$Prev_num)
+
+## UNAIDS missing prevalence for Mozambique and China
+# include prevalence for MOZ & CHN (from other sources)
+UNAIDS_ctry <- UNAIDS_ctry %>% 
+  mutate(Prev_num = ifelse(country =="MOZ", 13.0, Prev_num)) %>%
+  mutate(Prev_num = ifelse(country =="CHN", 0.1, Prev_num))
+
+
+## Define HIV prevalence categories
+# low == <1%, medium == <5%, high == >=5%
+UNAIDS_ctry$Prev_cat <- as.factor(ifelse(UNAIDS_ctry$Prev_num < 1 & !is.na(UNAIDS_ctry$Prev_num), "Low",
+                        ifelse(UNAIDS_ctry$Prev_num < 5 & !is.na(UNAIDS_ctry$Prev_num), "Medium", 
+                               ifelse(UNAIDS_ctry$Prev_num >4 & !is.na(UNAIDS_ctry$Prev_num), "High", NA))))
+
+```
+
+
+```{r echo=TRUE}
+# frequency of HIV prevalence categories (NA are high income ctrys that will be excluded)
+frq(UNAIDS_ctry, Prev_cat )
+```
+```{r}
+
+UNAIDS_ctry <- UNAIDS_ctry %>% select(-code)
+```
+
+
+
+Save UNAIDS data
+
+```{r}
+saveRDS(UNAIDS_ctry, file="03_Output/Data/data_UNAIDS_ctry.Rda")
+```
+
+## 3) The World Bank income classification
+
+World Bank country income classification for year 2020.
+
+Source:
+Historical income classification by country. 
+Import World Bank country classification data from xls file
+*(Income classifications set on 1 July 2020 remain in effect until 1 July 2021.)*
+https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups
+
+
+```{r}
+# Import data
+WorldBank <- read_excel("01_Data/WorldBank_CLASS_historical.xlsx", sheet = "income")
+```
+
+
+
+```{r echo=TRUE}
+
+
+WorldBank <- WorldBank %>% rename(economy=country) %>% rename(country = ISO) %>% rename(income2020 = "2020") %>% rename(income2019 = "2019")
+
+WorldBank_ctry <- WorldBank %>% select(country, economy,income2019, income2020) %>% 
+mutate(Income_group2019 = ifelse(income2019 == "H", "High income",
+                               ifelse(income2019 == "UM", "Upper middle income",
+                                      ifelse(income2019 == "LM", "Lower middle income", "Low income")))) %>%
+mutate(Income_group2020 = ifelse(income2020 == "H", "High income",
+                                 ifelse(income2020 == "UM", "Upper middle income",
+                                        ifelse(income2020 == "LM", "Lower middle income", "Low income"))))
+
+
+```
+
+
+Only keep countries included in 4.0 site assessment survey
+```{r}
+WorldBank_ctry <- inner_join(WorldBank_ctry, SA_ctry, by = "country" )
+
+WorldBank_ctry <- WorldBank_ctry %>% select(-code)
+
+```
+
+
+Save WorldBank data
+
+```{r}
+saveRDS(WorldBank_ctry, file="03_Output/Data/data_WB_ctry.Rda")
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Data Wrangling
+
+## IeDEA 4.0 Site Assessment Survey data
+
+```{r}
+
+# reload the data data_MR190.Rda data object
+data_SA4 <- readRDS("03_Output/Data/data_SA4.Rda") 
+```
+
+Number of unique regions and countries and sites
+```{r echo=FALSE}
+# find unique number of regions and countries
+data_SA4 %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+Number of sites per country
+```{r echo=FALSE}
+# number of sites per country
+data_SA4 %>%
+  group_by(country) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+Number of countries by region
+```{r echo=FALSE}
+# find number of countries per region
+data_SA4 %>%
+  distinct(region, country) %>%
+  group_by(region) %>%
+  summarise("ctrys per region" =n())
+```
+
+Number of sites per region
+```{r echo=FALSE}
+
+# find number of sites per region
+data_SA4 %>%
+  group_by(region) %>%
+  summarise("sites per region" =n())
+```
+
+Number of sites by region and country
+```{r echo=FALSE}
+# find number of sites per country per region
+data_SA4 %>%
+  group_by(region, country) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+```{r include=FALSE}
+# keep only columns needed (remove the following columns)
+data_SA4_v2 <- data_SA4 %>% select(-c(46:221, 225:257, 266:429, 497:876))
+data_SA4_v3 <- data_SA4_v2 %>% select(-c(27:32))
+```
+
+
+Rename original site assessment variables
+```{r echo=TRUE}
+#rename variables
+data_SA4_v4 <- data_SA4_v3 %>%
+
+  rename(pcr_vl_clinic = qualitative_pcr_vl___1) %>%
+  rename(pcr_vl_samefacility = qualitative_pcr_vl___2) %>%
+  rename(pcr_vl_offsite = qualitative_pcr_vl___3) %>%
+  rename(pcr_vl_na = qualitative_pcr_vl___77) %>%
+  
+  rename(dr_clinic = genotypic_dr_testing___1) %>%
+  rename(dr_samefacility = genotypic_dr_testing___2) %>%
+  rename(dr_offsite = genotypic_dr_testing___3) %>%
+  rename(dr_na = genotypic_dr_testing___77) %>%
+  
+  rename(dtg_1 = dtg_firstline) %>%
+  rename(dtg_1_plan_yr = dtg_year) %>%
+  rename(dtg_1_intro_dt = dtg_intro_dt) %>%
+  rename(dtg_1_intro_unk = dtg_intro_dt_unk) %>%
+  rename(dtg_1_artnaive = dtg_type___1)  %>%
+  rename(dtg_1_suppressVL = dtg_type___2) %>%
+  rename(dtg_1_unsuppressVL = dtg_type___3) %>%
+  rename(dtg_1_noDR = dtg_type___4) %>%
+  rename(dtg_1_DR = dtg_type___5) %>%
+  rename(dtg_1_women50 = dtg_type___6) %>%
+  rename(dtg_1_women1549 = dtg_type___7) %>%
+  rename(dtg_1_preg = dtg_type___8) %>%
+  rename(dtg_1_men = dtg_type___10) %>%
+  rename(dtg_1_adol = dtg_type___11) %>%
+  rename(dtg_1_child = dtg_type___12) %>%
+  rename(dtg_1_other = dtg_type___88) %>%
+  rename(dtg_1_child_kg = dtg_type_other_3) %>%
+  rename(dtg_1_other_specify = dtg_type_other) %>%
+
+  
+  rename(dtg_2 = dtg_2line) %>%
+  rename(dtg_2_plan_yr = dtg_2line_year) %>%
+  rename(dtg_2_intro_dt = dtg_2line_intro_dt) %>%
+  rename(dtg_2_intro_unk = dtg_2intro_dt_unk) %>%
+  rename(dtg_2_suppressVL = dtg_2line_type___2) %>%
+  rename(dtg_2_unsuppressVL = dtg_2line_type___3) %>%
+  rename(dtg_2_noDR = dtg_2line_type___4) %>%
+  rename(dtg_2_DR = dtg_2line_type___5) %>%
+  rename(dtg_2_women50 = dtg_2line_type___6) %>%
+  rename(dtg_2_women1549 = dtg_2line_type___7) %>%
+  rename(dtg_2_preg = dtg_2line_type___8) %>%
+  rename(dtg_2_men = dtg_2line_type___10) %>%
+  rename(dtg_2_adol = dtg_2line_type___11) %>%
+  rename(dtg_2_child = dtg_2line_type___12) %>%
+  rename(dtg_2_other = dtg_2line_type___88) %>%
+  rename(dtg_2_child_kg = dtg_2line_type_other_3) %>%
+  rename(dtg_2_other_specify = dtg_2line_type_other) %>%
+  
+  rename(dtg_3 = dtg_3line) %>%
+  rename(dtg_3_plan_yr = dtg_3line_year) %>%
+  rename(dtg_3_intro_dt = dtg_3line_intro_dt) %>%
+  rename(dtg_3_intro_unk = dtg_3line_intro_dt_unk) %>%
+  rename(dtg_3_suppressVL = dtg_3line_type___2) %>%
+  rename(dtg_3_unsuppressVL = dtg_3line_type___3) %>%
+  rename(dtg_3_noDR = dtg_3line_type___4) %>%
+  rename(dtg_3_DR = dtg_3line_type___5) %>%
+  rename(dtg_3_women50 = dtg_3line_type___6) %>%
+  rename(dtg_3_women1549 = dtg_3line_type___7) %>%
+  rename(dtg_3_preg = dtg_3line_type___8) %>%
+  rename(dtg_3_men = dtg_3line_type___10) %>%
+  rename(dtg_3_adol = dtg_3line_type___11) %>%
+  rename(dtg_3_child = dtg_3line_type___12) %>%
+  rename(dtg_3_other = dtg_3line_type___88) %>%
+  rename(dtg_3_child_kg = dtg_3line_type_other_3) %>%
+  rename(dtg_3_other_specify = dtg_3line_type_other) %>%
+  
+  rename(dtg_trans_vl_months = dtg_trans_vl) %>%
+  rename(dtg_trans_vl_yn = dtg_transition) %>%
+  rename(dtg_geno_pt_adult1 = dtg_genotyping_pt___1)  %>%
+  rename(dtg_geno_pt_adult2 = dtg_genotyping_pt___2)  %>%
+  rename(dtg_geno_pt_adult3 = dtg_genotyping_pt___3)  %>%
+  rename(dtg_geno_pt_childPI = dtg_genotyping_pt___4)  %>%
+  rename(dtg_geno_pt_childNNRTI = dtg_genotyping_pt___5)  %>%
+  rename(dtg_geno_pt_other = dtg_genotyping_pt___88)  
+
+
+
+label(data_SA4_v4$survey_status_complete)="Complete?"
+data_SA4_v4$survey_status_complete.factor = factor(data_SA4_v4$survey_status_complete,levels=c("0","1","2"))
+levels(data_SA4_v4$survey_status_complete.factor)=c("Incomplete","Unverified","Complete")
+
+
+```
+
+```{r}
+frq(data_SA4_v4, country)
+```
+
+
+## Merge WorldBank data 
+
+```{r}
+WB <- readRDS("03_Output/Data/data_WB_ctry.Rda")
+Survey_WB <- merge(data_SA4_v4, WB, by = "country", all.x = TRUE, all.y = FALSE)
+
+```
+
+## Merge UNAIDS data
+
+```{r}
+UNAIDS <- readRDS("03_Output/Data/data_UNAIDS_ctry.Rda")
+Survey_WB_UNAIDS <- merge(Survey_WB, UNAIDS, by = "country", all.x = TRUE, all.y = FALSE)
+df <- Survey_WB_UNAIDS
+
+df <- df %>% mutate(country_name = ifelse(country =="TWN", "Taiwan", country_name))
+
+#frq(df, country_name)
+
+```
+
+<!-- ----------------------------------------------------- -->
+
+# Eligibility criteria
+
+We included all surveyed clinics from countries classified by the World Bank for year 2020 as either low-, lower-middle-, or upper-middle-income. We excluded clinics that did not initiate or complete the survey questionnaire.
+
+## Exclude high income sites
+
+Number of sites by income group
+
+```{r}
+frq(df, Income_group2020, sort.frq = "desc")
+```
+
+
+Plot sites by income group
+```{r echo=FALSE}
+# plot sites by income group
+ggplot(df, aes(Income_group2020)) + geom_bar()
+```
+
+
+Number of sites by income category and country
+```{r echo=FALSE}
+# find number of sites per country per Prev_cat
+df %>%
+  group_by(Income_group2020, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+```{r}
+temp <- df %>% filter(Income_group2020 == "High income")
+```
+
+
+Remove 59 high income sites
+```{r}
+## remove High Income sites
+df2 <- df %>%
+filter(Income_group2020 != "High income")
+```
+
+Plot sites by income group
+```{r echo=FALSE}
+# plot sites by income group (high income excluded)
+ggplot(df2, aes(Income_group2020)) + geom_bar()
+```
+
+Number of sites by income group
+```{r echo=FALSE}
+# freq Income_group
+frq(df2, Income_group2020, sort.frq = "desc")
+```
+
+## Exclude non-response sites
+
+```{r}
+# sites in LMICs that did not complete survey
+nr <- df2 %>%
+  filter(survey_status_complete.factor =="Incomplete")
+frq(nr, country)
+```
+
+
+```{r}
+# region of sites in LMICs that did not complete survey
+nr %>%
+  group_by(region, country) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+```{r}
+## remove sites that did not complete survey
+df3 <- df2 %>%
+  filter(survey_status_complete.factor !="Incomplete")
+```
+
+
+```{r}
+df3 <- df3 %>%
+  mutate(Prev_cat_order = ifelse(Prev_cat == "Low", 1, 
+                                 ifelse(Prev_cat == "Medium", 2, 3))) %>%
+  mutate(Income_order = ifelse(Income_group2020 == "Low income", 1,
+                               ifelse(Income_group2020 == "Lower-middle income",2, 3)))
+```
+
+
+
+<!-- ----------------------------------------------------- -->
+
+# Summary of sites included
+
+
+
+Create and order factor variables
+```{r}
+
+df3$Prev_cat <- factor(df3$Prev_cat, levels = c( "Low","Medium", "High"),
+                     labels = c("Low", "Medium", "High"))
+
+df3$Income_group2020 <- factor(df3$Income_group2020, levels = c( "Low income","Lower middle income", "Upper middle income"),
+                     labels = c("Low income", "Lower middle income", "Upper middle income"))
+
+
+df3$region <- factor(df3$region, levels = c( "AP","CN","CA","EA","SA","WA"),
+                      labels = c("AP","CN","CA","EA","SA","WA"))
+
+
+df3$region_name <- factor(df3$region, levels = c( "AP","CN","CA","EA","SA","WA"),
+                      labels = c("Asia-Pacific", "Latin America", "Central Africa","East Africa", "Southern Africa", "West Africa"))
+
+df3$level_txt <- factor(df3$level, levels = c( "AP","CN","CA","EA","SA","WA"),
+                      labels = c("Asia-Pacific", "Latin America", "Central Africa","East Africa", "Southern Africa", "West Africa"))
+
+```
+
+
+## Overview by region
+
+Number of unique regions, countries and sites
+```{r echo=FALSE}
+temp <- df3 %>%
+  select(region, country, record_id) %>%
+  mutate(regions = region) %>%
+  mutate(countries = country) %>%
+  mutate(sites = record_id) %>%
+  select(-c(region, country, record_id))
+
+temp %>%
+  sapply(n_distinct)
+
+rm(temp)
+  
+```
+
+
+```{r eval=FALSE, include=FALSE}
+# Number of unique regions and countries and sites
+# find unique number of regions and countries
+df3 %>%
+  select(region, country, record_id) %>%
+  sapply(n_distinct)
+```
+
+
+Number of countries by region
+```{r echo=FALSE}
+# number of LMICs by region
+df3 %>%
+  distinct(region_name, country) %>%
+  group_by(region_name) %>%
+  summarise("ctrys per region" = n())
+```
+
+
+
+Number of sites by region
+```{r echo=FALSE}
+# number of sites by region
+df3 %>%
+  group_by(region_name) %>%
+  summarise("sites per region" =n())
+```
+
+
+Plot frequency of sites by region
+```{r echo=FALSE}
+# plot frequency of sites by region
+ggplot(df3, aes(region_name)) + geom_bar()
+```
+
+
+Number of sites by region and country
+```{r echo=FALSE}
+# number of sites per LMIC per region
+df3 %>%
+  group_by(region_name, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+## by income group
+
+Number of sites by income group
+```{r echo=FALSE}
+# frequency of HIV prevalence categories
+frq(df3, Income_group2020)
+```
+
+Plot frequency of sites by income group
+```{r echo=FALSE}
+# plot frequency of sites by region
+ggplot(df3, aes(Income_group2020)) + geom_bar()
+```
+
+
+
+Number of countries by income category
+```{r echo=FALSE}
+# number of LMICs by Prev_cat
+df3 %>%
+  distinct(Income_group2020, country) %>%
+  group_by(Income_group2020) %>%
+  summarise("ctrys per Prev_cat" = n())
+```
+
+
+Number of sites by income category and country
+```{r echo=FALSE}
+# find number of sites per country per Prev_cat
+df3 %>%
+  group_by(Income_group2020, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+Number of sites by income category and region
+```{r echo=FALSE}
+df3 %>%
+  group_by(Income_group2020, region_name) %>%
+  summarise("sites per income cat" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+Number of sites by region and income category
+```{r echo=FALSE}
+df3 %>%
+  group_by(region_name, Income_group2020) %>%
+  summarise("sites per income cat" =n()) %>%
+  print(n=Inf)
+```
+
+## by HIV prevalence
+
+Number of sites by HIV prevalence category
+```{r echo=FALSE}
+# frequency of HIV prevalence categories
+
+frq(df3, Prev_cat)
+```
+
+Plot frequency of sites by HIV prevalence category
+```{r echo=FALSE}
+# plot frequency of sites by region
+ggplot(df3, aes(Prev_cat)) + geom_bar()
+```
+
+
+Number of countries by HIV prevalence category
+```{r echo=FALSE}
+# number of LMICs by Prev_cat
+df3 %>%
+  distinct(Prev_cat, country) %>%
+  group_by(Prev_cat) %>%
+  summarise("ctrys per Prev_cat" = n())
+```
+
+Number of sites by HIV prevalence category and country
+```{r echo=FALSE}
+# find number of sites per country per Prev_cat
+df3 %>%
+  group_by(Prev_cat, country_name) %>%
+  summarise("sites per country" =n()) %>%
+  print(n=Inf)
+```
+
+
+Number of sites by HIV prevalence category and region
+```{r echo=FALSE}
+df3 %>%
+  group_by(Prev_cat, region_name) %>%
+  summarise("sites per HIV prev cat" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+Number of sites by region and HIV prevalence category
+```{r echo=FALSE}
+df3 %>%
+  group_by(region_name, Prev_cat) %>%
+  summarise("sites per HIV prev cat" =n()) %>%
+  print(n=Inf)
+```
+
+
+
+
+## CrossTables HIV prev and income cat
+
+CrossTable of sites by region and HIV prevalence category
+```{r echo=FALSE}
+CrossTable(df3$region_name, df3$Prev_cat, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+```
+
+CrossTable of sites by region and Income_group2020
+
+```{r}
+
+CrossTable(df3$region_name, df3$Income_group2020, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+```
+
+CrossTable of sites by HIV prev and Income_group2020
+```{r}
+
+CrossTable(df3$Prev_cat, df3$Income_group2020, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+```
+
+
+```{r}
+# rename income variable
+df3 <- df3 %>% mutate(Income_group = Income_group2020)
+
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Save file: data_190
+
+
+```{r}
+saveRDS(df3, file="03_Output/Data/data_190.Rda")
+```
+
+
+```{r echo=TRUE}
+#Clear existing data and graphics
+rm(list=ls())
+graphics.off()
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# Define variables
+
+```{r}
+data <- readRDS("03_Output/Data/data_190.Rda") 
+```
+
+
+## region.factor (IeDEA)
+
+```{r}
+data$region.factor <- factor(data$region, levels = c( "AP","CN","CA","EA","SA","WA"),
+                             labels = c("Asia-Pacific", "Latin America","Central Africa","East Africa", "Southern Africa", "West Africa" ))
+
+label(data$region.factor)="Region"
+
+frq(data, region.factor)
+
+```
+
+## Prev_cat.factor (UNAIDS)
+
+```{r}
+data$Prev_cat.factor <- factor(data$Prev_cat, levels = c( "Low","Medium" ,"High"),
+                        labels = c("Low (<1%)", "Medium (1-4.9%)", "High (≥5%)"))
+label(data$Prev_cat.factor)="HIV prevalence category"
+
+frq(data, Prev_cat.factor)
+```
+
+## Income_group.factor (World Bank)
+
+```{r}
+data$Income_group.factor <- factor(data$Income_group, levels = c( "Low income","Lower middle income" ,"Upper middle income"),
+                               labels = c("Low", "Lower-middle", "Upper-middle" ))
+label(data$Income_group.factor)="World Bank Income group"
+
+frq(data, Income_group.factor)
+```
+
+
+## level.factor (IeDEA)
+
+```{r}
+# Facility level: "1","2","3","9"  c("Health centre","District hospital","Regional hospital","Unknown")
+
+label(data$level)="LEVEL Facility level of care"
+data <- data %>% mutate(level = ifelse(is.na(level), 9, level))
+data$level.factor = factor(data$level,levels=c("1","2","3"))
+levels(data$level.factor)=c("Primary","Secondary","Tertiary")
+label(data$level.factor)="Facility level"
+frq(data, level.factor)
+
+```
+
+
+## residence_setting.factor   
+
+(Site Survey question 2.1)
+
+```{r}
+# residence_setting: 2, Predominantly Urban | 3, Predominantly Rural | 5, Mixed urban/rural
+
+label(data$residence_setting)="2.1 How would you describe the residence of the population served by this health"
+data$residence_setting.factor = factor(data$residence_setting,levels=c("2","3","5"))
+levels(data$residence_setting.factor)=c("Predominantly urban","Predominantly rural","Mixed urban/rural")
+label(data$residence_setting.factor)="Residence setting"
+frq(data, residence_setting.factor)
+```
+
+
+## Ages served at clinic  
+
+(Site Survey question 2.2)
+
+Patient age served: 
+
+1 = Adults – general population (ages 20+)  
+2 = Adolescents / youth (ages 10-24)  
+4 = Children (ages 0-9)  
+
+
+```{r}
+# Population age served: 4 = child, 2 = adolescents, 1 = adult
+
+# Adults
+data$clinic_type_b___1.factor = factor(data$clinic_type_b___1,levels=c("1", "0"))
+levels(data$clinic_type_b___1.factor)=c("Yes", "No")
+label(data$clinic_type_b___1.factor)="Adults ages served"
+frq(data, clinic_type_b___1.factor)
+
+# Adolescents
+data$clinic_type_b___2.factor = factor(data$clinic_type_b___2,levels=c("1", "0"))
+levels(data$clinic_type_b___2.factor)=c("Yes", "No")
+label(data$clinic_type_b___2.factor)="Adolescents ages served"
+frq(data, clinic_type_b___2.factor)
+
+# Children
+data$clinic_type_b___4.factor = factor(data$clinic_type_b___4,levels=c("1", "0"))
+levels(data$clinic_type_b___4.factor)=c("Yes", "No")
+label(data$clinic_type_b___4.factor)="Children ages served"
+frq(data, clinic_type_b___4.factor)
+
+
+## age group served
+
+label(data$clinic_type_b___4.factor)="2.2 Children 0-9 served"
+label(data$clinic_type_b___2.factor)="2.2 Adolescents 10-24 served"
+label(data$clinic_type_b___1.factor)="2.2 Adults 20+ served"
+
+```
+
+
+## clinic_type_all (all ages served: child, ado, adult)
+
+(Site Survey question 2.2)
+
+```{r}
+# Create new variable: clinic_type_all (all ages served: child, ado, adult)
+# 1 == all ages, 0 = not all ages
+
+data <- data %>%
+  mutate(clinic_type_all = ifelse(clinic_type_b___4 ==1 & clinic_type_b___2 ==1 & clinic_type_b___1 ==1, 1, 0))
+frq(data, clinic_type_all)
+
+data$clinic_type_all.factor = factor(data$clinic_type_all,levels=c("1", "0"))
+levels(data$clinic_type_all.factor)=c("All ages served", "No")
+label(data$clinic_type_all.factor)="  All ages served"
+frq(data, clinic_type_all.factor)
+```
+
+
+
+## clinic_1_4 (peds & adults)
+
+(Site Survey question 2.2)
+
+```{r}
+
+# Create new variable: clinic_1_4 (peds & adults)
+# 1 == all ages, 0 = not all ages
+
+data <- data %>%
+mutate(clinic_type_1_4 = ifelse(clinic_type_b___4 ==1 & clinic_type_b___1 ==1, 1, 0))
+frq(data, clinic_type_1_4)
+
+data$clinic_type_1_4.factor = factor(data$clinic_type_1_4,levels=c("1", "0"))
+levels(data$clinic_type_1_4.factor)=c("Adult & paediatric", "No")
+label(data$clinic_type_1_4.factor)="Adult & paediatric served"
+frq(data, clinic_type_1_4.factor)
+```
+
+
+## age_group_cat3  
+
+(Site Survey question 2.2)
+
+```{r}
+
+# Create new category variable for adults & peds: age_group_cat3
+# 1 == paeds, 2 == adults, 3 == other, 4 == adult & peds
+data <-data %>%
+mutate(age_group_cat3 = ifelse(clinic_type_1_4 ==1, 4,
+                        ifelse(clinic_type_b___4==1 & clinic_type_b___1 == 0, 1,
+                        ifelse(clinic_type_b___1 ==1 & clinic_type_b___4 == 0, 2,3))))
+frq(data, age_group_cat3)
+
+data$age_group_cat3.factor = factor(data$age_group_cat3,levels=c("1", "2", "3", "4"))
+levels(data$age_group_cat3.factor)=c("Paediatric only", "Adult only)", "no paeds or adults", "Paediatric and adults")
+label(data$age_group_cat3.factor)="Pediatric and adults served"
+frq(data, age_group_cat3.factor)
+```
+
+
+```{r eval=FALSE, include=FALSE}
+test <- data %>% filter(age_group_cat3==3)
+```
+
+
+## age_group_ado  
+
+(Site Survey question 2.2)
+
+```{r}
+
+# Create new variable: age_group_ado
+# 1 == adolescents, 0 = no adolescents
+data <-data %>%
+  mutate(age_group_ado = ifelse(clinic_type_b___2 ==1 & !is.na(clinic_type_b___2), 1, 0))
+frq(data, age_group_ado)
+
+data$age_group_ado.factor = factor(data$age_group_ado,levels=c("1", "0"))
+levels(data$age_group_ado.factor)=c("Yes", "No")
+label(data$age_group_ado.factor)="Adolescents served"
+frq(data, age_group_ado.factor)
+```
+
+<!-- ----------------------------------------------------- -->
+
+# Viral load & drug resistance testing  
+
+
+```{r}
+label(data$pcr_vl_clinic)="6.6 VL in clinic"
+label(data$pcr_vl_samefacility)="6.6 VL in same facility"
+label(data$pcr_vl_offsite)="6.6 VL only off-site"
+label(data$pcr_vl_na)="6.6 VL not available"
+
+label(data$dr_clinic)="6.6 GRT in clinic"
+label(data$dr_samefacility)="6.6 GRT in same facility"
+label(data$dr_offsite)="6.6 GRT only off-site"
+label(data$dr_na)="6.6 GRT not available"
+```
+
+
+
+## VL_yn.factor & DR_yn.factor
+
+(Site Survey question 6.6)
+
+```{r}
+# 1) Is VL & DR testing available?
+
+
+data <- data %>% 
+  mutate(VL_yn = ifelse(pcr_vl_na ==0, 1, 0)) %>%
+  mutate(DR_yn = ifelse(dr_na ==0, 1, 0))  %>%
+  mutate(VL_DR_yn = ifelse(pcr_vl_na ==0 & dr_na ==0, 1, 0))
+
+data$VL_yn.factor <- factor(data$VL_yn, levels = c( "0","1"),
+                            labels = c("No", "Yes" ))
+
+data$DR_yn.factor <- factor(data$DR_yn, levels = c( "0","1"),
+                            labels = c("No", "Yes" ))
+
+data$VL_DR_yn.factor <- factor(data$VL_DR_yn, levels = c( "1","0"),
+                            labels = c("Both available", "Both not available" ))
+
+label(data$VL_yn.factor)="Viral load testing available"
+label(data$DR_yn.factor)="Drug resistance testing available"
+label(data$VL_DR_yn.factor)="Viral load and drug resistance available"
+
+frq(data, VL_yn.factor)
+frq(data, DR_yn.factor)
+frq(data, VL_DR_yn.factor)
+```
+
+
+
+## vl_avail.factor & dr_avail.factor
+
+(Site Survey question 6.6)
+
+```{r}
+# 2) Where is VL and DR testing available?
+
+
+data <- data %>% 
+  mutate(vl_yes = ifelse(pcr_vl_na ==0, 1,0)) %>% 
+  mutate(dr_yes = ifelse(dr_na ==0, 1, 0)) %>%
+  mutate(vl_avail = ifelse(pcr_vl_clinic ==1 | pcr_vl_samefacility ==1, 1, ifelse(pcr_vl_offsite ==1, 2, 3))) %>%
+  mutate(dr_avail = ifelse(dr_clinic ==1 | dr_samefacility ==1, 1, ifelse(dr_offsite ==1, 2, 3))) 
+
+data <- data %>%
+  mutate(vl_dr_avail = ifelse(vl_avail ==1 & dr_avail ==1, 1, ifelse(vl_avail ==2 & dr_avail ==2, 2, 3)))
+         
+
+data$vl_avail.factor <- factor(data$vl_avail, levels = c( "1","2", "3"),
+                               labels = c("VLOn-site", "VLOff-site", "VLNot available"))
+
+data$dr_avail.factor <- factor(data$dr_avail, levels = c( "1","2", "3"),
+                               labels = c("DROn-site", "DROff-site", "DRNot available"))
+
+# data$vl_dr_avail.factor <- factor(data$vl_dr_avail, levels = c( "1","2", "3"),
+#                               labels = c("Available at clinic or facility", "Not available at clinic or facility", "Both not available"))
+
+label(data$vl_avail.factor)="Availability of viral load testing"
+label(data$dr_avail.factor)="Availability of drug resistance testing"
+#label(data$vl_dr_avail.factor)="Availability of viral load and drug resistance testing"
+
+
+frq(data, vl_avail.factor)
+frq(data, dr_avail.factor)
+#frq(data, vl_dr_avail.factor)
+```
+
+
+## outcome_VL
+
+(Site Survey question 11.15 & 6.6)
+
+```{r}
+# 3) Is VL required for switch?
+
+
+# 11.15 Is the transition of patients to DTG-based regimens 
+# based on viral load monitoring?
+frq(data,dtg_trans_vl_yn)
+#frq(data,Prev_cat)
+CrossTable(data$Prev_cat, data$dtg_trans_vl_yn, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+
+data <- data  %>%
+  mutate(test_VL = "VL") %>%
+  mutate(temp1 =1) %>%
+  mutate(testVL_cat1 = ifelse(pcr_vl_na ==0 & (dtg_trans_vl_yn ==1) & !is.na(dtg_trans_vl_yn), 1, 0)) %>%  # VL available and required for switch
+  mutate(testVL_cat2 = ifelse(pcr_vl_na ==0 & (dtg_trans_vl_yn ==0) & !is.na(dtg_trans_vl_yn), 1, 0)) %>%   # VL available and not required for switch
+  mutate(testVL_cat3 = ifelse(pcr_vl_na ==0 & is.na(dtg_trans_vl_yn), 1, 0)) %>%   # VL available but unknown if required
+  mutate(testVL_cat4 = ifelse(pcr_vl_na ==1, 1, 0)) %>%    # VL not available 
+  mutate(outcome_VL = ifelse(testVL_cat1 ==1, "1", 
+                             ifelse(testVL_cat2 ==1, "2", 
+                                    ifelse(testVL_cat3 ==1, "3", "4" ))))
+#frq(data, outcome_VL)
+
+data$outcome_VL.factor = factor(data$outcome_VL,levels=c("1","2","3","4"))
+levels(data$outcome_VL.factor)=c("VL Available, required at transition","VL Available, not required at transistion", "VL Available, unknown if required at transition", "VL Not available")
+
+
+label(data$outcome_VL.factor)="Viral load monitoring"
+
+
+frq(data, outcome_VL.factor)
+
+```
+
+
+## outcome_VL_months.factor
+
+(Site Survey question 11.16, regardless of DTG rollout)
+
+```{r}
+# Timing of VL required at switch
+# 11.16 How recent a viral load measure is a 
+# patient required to have before transitioning to DTG-based regimens?
+# 1 = 6m, 2 = 12m, 3 = varies by patient group
+# 139 sites based transition on vl (79%)
+
+#frq(data,dtg_trans_vl_months)
+#frq(data, dtg_trans_vl_months.factor)
+
+# VL months: 1 = 6m, 2 = 12m, 3 = varies, 4 = not applicable (36 sites)
+data <-data %>%
+  mutate(outcome_VL_months = ifelse(outcome_VL =="1" & dtg_trans_vl_months == 1, "1", 
+                                    ifelse(outcome_VL =="1" & dtg_trans_vl_months == 2, "2",
+                                           ifelse(outcome_VL =="1" & dtg_trans_vl_months == 3, "3", "4"))))
+
+frq(data,outcome_VL_months)
+data$outcome_VL_months.factor <- factor(data$outcome_VL_months, levels = c("1", "2", "3", "4"),
+                                          labels = c("Within previous 6m", "Within previous 12m", "Varies by patient group", "not applicable"))
+
+frq(data, outcome_VL_months.factor)
+```
+
+
+## new_VL
+
+(Site Survey question 11.16, regardless of DTG rollout)
+
+```{r}
+## New variable for VL testing at switch
+
+# 1 = available, required, within 6m, 
+# 2 = available, required, within 12m, 
+# 3 = available, required, varies, 
+# 4 = available, not required, 
+# 5 = available, unknown if required, 
+# 6 = not available
+
+data <- data %>%
+  mutate(new_VL = ifelse(pcr_vl_na ==1, 6,
+                         ifelse(pcr_vl_na ==0 & dtg_trans_vl_months ==1, 1,
+                                ifelse(pcr_vl_na ==0 & dtg_trans_vl_months ==2, 2,
+                                       ifelse(pcr_vl_na ==0 & dtg_trans_vl_months ==3, 3,
+                                              ifelse(dtg_trans_vl_yn ==0 & pcr_vl_na ==0, 4, 5))))))
+
+frq(data, new_VL)
+```
+
+
+## outcome_DR.factor
+
+(Site Survey question 11.17, regardless of DTG rollout)
+
+```{r}
+# Is DR testing performed at switch?
+# 11.17 Is HIV genotypic drug resistance testing performed at the time of switching to DTG-based regimen?
+
+frq(data,dtg_genotyping)
+#frq(data,dtg_genotyping.factor)
+CrossTable(data$Prev_cat, data$dtg_genotyping, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+
+data <- data %>%
+  mutate(test_DR = "DR") %>%
+  mutate(temp1 =1) %>%
+  mutate(testDR_cat1 = ifelse(dr_na ==0 & dtg_genotyping ==1 & !is.na(dtg_genotyping), 1, 0)) %>%  # DR available and used for switch
+  mutate(testDR_cat2 = ifelse(dr_na ==0 & dtg_genotyping ==0  & !is.na(dtg_genotyping), 1, 0)) %>%   # DR available and not used for switch
+  mutate(testDR_cat3 = ifelse(dr_na ==0 & is.na(dtg_genotyping), 1, 0)) %>%   # DR available but switch is NA
+  mutate(testDR_cat4 = ifelse(dr_na ==1 & dtg_genotyping ==0 , 1, 0)) %>%    # DR not available 
+  mutate(outcome_DR = ifelse(testDR_cat1 ==1, "1", 
+                             ifelse(testDR_cat2 ==1, "2", 
+                                    ifelse(testDR_cat3 ==1, "3", "4"))))
+
+
+
+#data$outcome_VL.factor = factor(data$outcome_VL,levels=c("1","2","3","4"))
+#levels(data$outcome_VL.factor)=c("VL Available, required at transition","VL Available, not required at transistion", "VL Available, 
+#unknown if required at transition", "VL Not available")
+
+data$outcome_DR.factor = factor(data$outcome_DR,levels=c("1","2","3","4"))
+levels(data$outcome_DR.factor)=c("DR Available, performed at switch", "DR Available, not performed at switch", "DR Available, unknown if performed at switch", "DR Not available")
+
+#label(data$outcome_VL.factor)="Viral load monitoring"
+label(data$outcome_DR.factor)="Drug resistance testing"
+
+#frq(data,outcome_VL.factor)
+
+frq(data,outcome_DR.factor)
+```
+
+
+<!-- ----------------------------------------------------- -->
+
+# DTG rollout
+
+Data Wrangling
+
+```{r include=FALSE}
+
+
+# 77, No plans for introducing first-line DTG-based regimens | 2, 2020 | 3, 2021 | 9, Do not know
+
+# DTG 1 Qs
+
+frq(data, dtg_1)
+
+data$dtg_1.factor <- factor(data$dtg_1, levels = c(1, 0),
+                            labels = c("Yes", "No"))
+
+data$dtg_1_plan_yr.factor <- factor(data$dtg_1_plan_yr, levels = c(77, 2,3, 9),
+                                    labels = c("No plans", "2020", "2021", "Do not know"))
+
+data$insti_firstline___77.factor <- factor(data$insti_firstline___77, levels = c(1, 0),
+                                           labels = c("Checked", "Unchecked"))
+data$insti_firstline___1.factor <- factor(data$insti_firstline___1, levels = c(1, 0),
+                                          labels = c("Checked", "Unchecked"))
+data$insti_firstline___2.factor <- factor(data$insti_firstline___2, levels = c(1, 0),
+                                          labels = c("Checked", "Unchecked"))
+data$insti_firstline___3.factor <- factor(data$insti_firstline___3, levels = c(1, 0),
+                                          labels = c("Checked", "Unchecked"))
+
+data <- data %>% mutate(dtg_1_intro_unk = ifelse(is.na(dtg_1_intro_unk), 0, 1))
+data$dtg_1_intro_unk.factor <- factor(data$dtg_1_intro_unk, levels = c(1, 0),
+                                      labels = c("Checked", "Unchecked"))
+
+
+data$dtg_1_artnaive.factor <- factor(data$dtg_1_artnaive, levels = c(1, 0),
+                                     labels = c("Checked", "Unchecked"))
+data$dtg_1_suppressVL.factor <- factor(data$dtg_1_suppressVL, levels = c(1, 0),
+                                       labels = c("Checked", "Unchecked"))
+data$dtg_1_unsuppressVL.factor <- factor(data$dtg_1_unsuppressVL, levels = c(1, 0),
+                                         labels = c("Checked", "Unchecked"))
+data$dtg_1_noDR.factor <- factor(data$dtg_1_noDR, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_1_DR.factor <- factor(data$dtg_1_DR, levels = c(1, 0),
+                               labels = c("Checked", "Unchecked"))
+data$dtg_1_women50.factor <- factor(data$dtg_1_women50, levels = c(1, 0),
+                                    labels = c("Checked", "Unchecked"))
+data$dtg_1_women1549.factor <- factor(data$dtg_1_women1549, levels = c(1, 0),
+                                      labels = c("Checked", "Unchecked"))
+data$dtg_1_preg.factor <- factor(data$dtg_1_preg, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_1_men.factor <- factor(data$dtg_1_men, levels = c(1, 0),
+                                labels = c("Checked", "Unchecked"))
+data$dtg_1_adol.factor <- factor(data$dtg_1_adol, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_1_child.factor <- factor(data$dtg_1_child, levels = c(1, 0),
+                                  labels = c("Checked", "Unchecked"))
+data$dtg_1_other.factor <- factor(data$dtg_1_other, levels = c(1, 0),
+                                  labels = c("Checked", "Unchecked"))
+
+label(data$dtg_1.factor)="11.1a First-line introduced?"
+label(data$dtg_1_plan_yr.factor)= "11.2 Plan to introduce?"
+label(data$insti_firstline___77.factor)="11.3 None"
+label(data$insti_firstline___1.factor)="11.3 Elvitegravir"
+label(data$insti_firstline___2.factor)="11.3 Raltegravir"
+label(data$insti_firstline___3.factor)="11.3 Bictegravir"
+label(data$dtg_1_intro_unk.factor)="11.4 Do not know when first-line introduced"
+
+
+# DTG 2 Qs
+
+data$dtg_2.factor <- factor(data$dtg_2, levels = c(1, 0),
+                            labels = c("Yes", "No"))
+
+data$dtg_2_plan_yr.factor <- factor(data$dtg_2_plan_yr, levels = c(77, 2,3, 9),
+                                    labels = c("No plans", "2020", "2021", "Do not know"))
+data <- data %>% mutate(dtg_2_intro_unk = ifelse(is.na(dtg_2_intro_unk), 0, 1))
+data$dtg_2_intro_unk.factor <- factor(data$dtg_2_intro_unk, levels = c(1, 0),
+                                      labels = c("Checked", "Unchecked"))
+
+
+data$dtg_2_suppressVL.factor <- factor(data$dtg_2_suppressVL, levels = c(1, 0),
+                                       labels = c("Checked", "Unchecked"))
+data$dtg_2_unsuppressVL.factor <- factor(data$dtg_2_unsuppressVL, levels = c(1, 0),
+                                         labels = c("Checked", "Unchecked"))
+data$dtg_2_noDR.factor <- factor(data$dtg_2_noDR, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_2_DR.factor <- factor(data$dtg_2_DR, levels = c(1, 0),
+                               labels = c("Checked", "Unchecked"))
+data$dtg_2_women50.factor <- factor(data$dtg_2_women50, levels = c(1, 0),
+                                    labels = c("Checked", "Unchecked"))
+data$dtg_2_women1549.factor <- factor(data$dtg_2_women1549, levels = c(1, 0),
+                                      labels = c("Checked", "Unchecked"))
+data$dtg_2_preg.factor <- factor(data$dtg_2_preg, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_2_men.factor <- factor(data$dtg_2_men, levels = c(1, 0),
+                                labels = c("Checked", "Unchecked"))
+data$dtg_2_adol.factor <- factor(data$dtg_2_adol, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_2_child.factor <- factor(data$dtg_2_child, levels = c(1, 0),
+                                  labels = c("Checked", "Unchecked"))
+data$dtg_2_other.factor <- factor(data$dtg_2_other, levels = c(1, 0),
+                                  labels = c("Checked", "Unchecked"))
+
+# DTG 3 Qs
+
+data$dtg_3.factor <- factor(data$dtg_3, levels = c(1, 0),
+                            labels = c("Yes", "No"))
+
+data$dtg_3_plan_yr.factor <- factor(data$dtg_3_plan_yr, levels = c(77, 2,3, 9),
+                                    labels = c("No plans", "2020", "2021", "Do not know"))
+
+
+
+data <- data %>% mutate(dtg_3_intro_unk = ifelse(is.na(dtg_3_intro_unk), 0, 1))
+
+data$dtg_3_intro_unk.factor <- factor(data$dtg_3_intro_unk, levels = c(1, 0),
+                                      labels = c("Checked", "Unchecked"))
+
+
+data$dtg_3_suppressVL.factor <- factor(data$dtg_3_suppressVL, levels = c(1, 0),
+                                       labels = c("Checked", "Unchecked"))
+data$dtg_3_unsuppressVL.factor <- factor(data$dtg_3_unsuppressVL, levels = c(1, 0),
+                                         labels = c("Checked", "Unchecked"))
+data$dtg_3_noDR.factor <- factor(data$dtg_3_noDR, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_3_DR.factor <- factor(data$dtg_3_DR, levels = c(1, 0),
+                               labels = c("Checked", "Unchecked"))
+data$dtg_3_women50.factor <- factor(data$dtg_3_women50, levels = c(1, 0),
+                                    labels = c("Checked", "Unchecked"))
+data$dtg_3_women1549.factor <- factor(data$dtg_3_women1549, levels = c(1, 0),
+                                      labels = c("Checked", "Unchecked"))
+data$dtg_3_preg.factor <- factor(data$dtg_3_preg, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_3_men.factor <- factor(data$dtg_3_men, levels = c(1, 0),
+                                labels = c("Checked", "Unchecked"))
+data$dtg_3_adol.factor <- factor(data$dtg_3_adol, levels = c(1, 0),
+                                 labels = c("Checked", "Unchecked"))
+data$dtg_3_child.factor <- factor(data$dtg_3_child, levels = c(1, 0),
+                                  labels = c("Checked", "Unchecked"))
+data$dtg_3_other.factor <- factor(data$dtg_3_other, levels = c(1, 0),
+                                  labels = c("Checked", "Unchecked"))
+
+# DTG other
+
+data$dtg_trans_vl_yn.factor <- factor(data$dtg_trans_vl_yn, levels = c(1, 0),
+                                  labels = c("Yes", "No"))
+
+data$dtg_trans_vl_months.factor <- factor(data$dtg_trans_vl_months, levels = c("1", "2", "3"),
+                                          labels = c("Within previous 6m", "Within previous 12m", "Varies by patient group"))
+
+
+data$dtg_genotyping.factor <- factor(data$dtg_genotyping, levels = c(1, 0),
+                                     labels = c("Checked", "Unchecked"))
+
+data$dtg_geno_pt_adult1.factor <- factor(data$dtg_geno_pt_adult1, levels = c(1, 0),
+                                         labels = c("Checked", "Unchecked"))
+
+data$dtg_geno_pt_adult2.factor <- factor(data$dtg_geno_pt_adult2, levels = c(1, 0),
+                                         labels = c("Checked", "Unchecked"))
+
+data$dtg_geno_pt_adult3.factor <- factor(data$dtg_geno_pt_adult3, levels = c(1, 0),
+                                         labels = c("Checked", "Unchecked"))
+
+data$dtg_geno_pt_childPI.factor <- factor(data$dtg_geno_pt_childPI, levels = c(1, 0),
+                                          labels = c("Checked", "Unchecked"))
+
+data$dtg_geno_pt_childNNRTI.factor <- factor(data$dtg_geno_pt_childNNRTI, levels = c(1, 0),
+                                             labels = c("Checked", "Unchecked"))
+
+data$dtg_geno_pt_other.factor <- factor(data$dtg_geno_pt_other, levels = c(1, 0),
+                                        labels = c("Checked", "Unchecked"))
+
+
+```
+
+
+
+## dtg_rollout_type.factor
+
+(Site Survey question 11.14, regardless of DTG rollout)
+
+```{r}
+# initiative for rollout
+
+label(data$dtg_rollout_type)="Type of initiative used to rollout DTG"
+#frq(data, dtg_rollout_type)
+
+data$dtg_rollout_type.factor = factor(data$dtg_rollout_type,levels=c("1","2","77"))
+levels(data$dtg_rollout_type.factor)=c("National", "Institutional or practice-level", "Not applicable")
+label(data$dtg_rollout_type.factor)="Initiative used to rollout DTG"
+frq(data, dtg_rollout_type.factor)
+```
+
+
+
+## Rollout or planned rollout: dtg1, dtg2, dtg3
+
+(Site Survey question 11.1 & 11.2, 11.6 & 11.7, 11.10 & 11.11)
+
+```{r}
+
+# data cleaning to create new variable for planned rollout
+
+data <- data %>%
+  mutate(dtg_1_plan = ifelse(data$dtg_1_plan_yr =="2"  | data$dtg_1_plan_yr =="3", 1,0)) %>%
+  mutate(dtg_2_plan = ifelse(data$dtg_2_plan_yr =="2"  | data$dtg_2_plan_yr =="3", 1,0)) %>%
+  mutate(dtg_3_plan = ifelse(data$dtg_3_plan_yr =="2"  | data$dtg_3_plan_yr =="3", 1,0))
+
+data <- data %>%
+  mutate(dtg1 = ifelse(data$dtg_1_plan =="1" | data$dtg_1 =="1", 1,0)) %>%
+  mutate(dtg2 = ifelse(data$dtg_2_plan =="1" | data$dtg_2 =="1", 1,0)) %>%
+  mutate(dtg3 = ifelse(data$dtg_3_plan =="1" | data$dtg_3 =="1", 1,0))
+
+frq(data, dtg1)
+frq(data, dtg2)
+frq(data, dtg3)
+```
+
+
+
+## Rollout or planned rollout dtg12
+
+First- and second-line
+
+```{r}
+
+#Rolled out or plan to rollout dtg for two ART lines
+data$dtg12 <- ifelse(data$dtg1 ==1 & data$dtg2 ==1, 1, 0)
+frq(data, dtg12)
+CrossTable(data$Prev_cat, data$dtg12, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+```
+
+
+## Rollout or planned rollout dtg123
+
+First-, second- and third-line (all three lines)
+
+```{r}
+
+#Rolled out or plan to rollout dtg for all three ART lines
+data$dtg123 <- ifelse(data$dtg1 ==1 & data$dtg2 ==1  & data$dtg3 ==1, 1, 0)
+frq(data, dtg123)
+CrossTable(data$Prev_cat, data$dtg123, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE)
+
+```
+
+
+## no dtg rollout
+```{r}
+#No rollout
+data <- data %>%
+  mutate(nodtg1 = ifelse(dtg1 ==0, 1,0)) %>%
+  mutate(nodtg2 = ifelse(dtg2 ==0, 1,0)) %>%
+  mutate(nodtg12 = ifelse(dtg1 ==0 & dtg2 ==0, 1,0)) %>%
+  mutate(nodtg3 = ifelse(dtg3 ==0, 1,0)) %>%
+  mutate(nodtg123 = ifelse(dtg1 ==0 & dtg2 ==0 & dtg3==0, 1,0))   
+```
+
+
+## only dtg1 or only dtg2
+```{r}
+#only
+data <- data %>%
+  mutate(onlydtg1 = ifelse(dtg1 ==1 & dtg2 ==0, 1,0)) %>%
+  mutate(onlydtg2 = ifelse(dtg2 ==1 & dtg1 ==0, 1,0)) 
+```
+
+<!-- ----------------------------------------------------- -->
+
+# New DTG rollout variables (8Aug2023)
+
+## newdtg1.factor
+
+newdtg1.factor: 
+
+1 == yes, rolled out dtg1,   
+2 == no, but plan to rollout in 2020 or 2021,   
+3 == no plans to rollout,  
+4 == do not know if plan to rollout
+
+```{r}
+# DTG 1
+# 1 == yes, rolled out dtg1, 2= no, but plan to rollout in 2020 or 2021, 3== no plans to rollout, 4 == do not know if plan to rollout
+data <- data %>%
+  mutate(newdtg1 = ifelse(dtg_1 ==1, 1,
+                          ifelse(dtg_1_plan ==1, 2,
+                                 ifelse(dtg_1_plan_yr ==77, 3, 4))))
+
+data$newdtg1.factor = factor(data$newdtg1,levels=c("1", "2", "3", "4"))
+levels(data$newdtg1.factor)=c("Rolled out first-line dtg", "Plan rollout of first-line dtg in 2020 or 2021", "No planned rollout of first-line dtg", "Do not know if planned rollout of first-line dtg")
+  
+
+#frq(data, newdtg1)
+#frq(data, dtg_1)
+frq(data, newdtg1.factor)
+
+
+```
+
+## newdtg2.factor
+
+newdtg2.factor: 
+
+1 == yes, rolled out dtg2,   
+2 == no, but plan to rollout in 2020 or 2021,   
+3 == no plans to rollout,  
+4 == do not know if plan to rollout
+
+```{r}
+# DTG 2
+# 1 == yes, rolled out dtg1, 2= no, but plan to rollout in 2020 or 2021, 3== no plans to rollout, 4 == do not know if plan to rollout
+data <- data %>%
+  mutate(newdtg2 = ifelse(dtg_2 ==1, 1,
+                          ifelse(dtg_2_plan ==1, 2,
+                                 ifelse(dtg_2_plan_yr ==77, 3, 4))))
+
+data$newdtg2.factor = factor(data$newdtg2,levels=c("1", "2", "3", "4"))
+levels(data$newdtg2.factor)=c("Rolled out second-line dtg", "Plan rollout of second-line dtg in 2020 or 2021", "No planned rollout of second-line dtg", "Do not know if planned rollout of second-line dtg")
+
+
+#frq(data, dtg_2)
+frq(data, newdtg2.factor)
+```
+
+
+## newdtg3.factor
+
+newdtg3.factor: 
+
+1 == yes, rolled out dtg3,   
+2 == no, but plan to rollout in 2020 or 2021,   
+3 == no plans to rollout,  
+4 == do not know if plan to rollout
+
+
+```{r}
+# DTG 3
+# 1 == yes, rolled out dtg1, 2= no, but plan to rollout in 2020 or 2021, 3== no plans to rollout, 4 == do not know if plan to rollout
+data <- data %>%
+  mutate(newdtg3 = ifelse(dtg_3 ==1, 1,
+                          ifelse(dtg_3_plan ==1, 2,
+                                 ifelse(dtg_3_plan_yr ==77, 3, 4))))
+
+data$newdtg3.factor = factor(data$newdtg3,levels=c("1", "2", "3", "4"))
+levels(data$newdtg3.factor)=c("Rolled out third-line dtg", "Plan rollout of third-line dtg in 2020 or 2021", "No planned rollout of third-line dtg", "Do not know if planned rollout of third-line dtg")
+
+
+#frq(data, dtg_3)
+frq(data, newdtg3.factor)
+```
+
+
+## labels
+
+```{r}
+
+label(data$dtg1) <- "Rollout DTG first-line"
+label(data$dtg2) <- "Rollout DTG second-line"
+label(data$dtg3) <- "Rollout DTG third-line"
+label(data$dtg12) <- "Rollout DTG first- & second_line"
+label(data$dtg123) <- "Rollout DTG all three lines"
+
+data$dtg1.factor = factor(data$dtg1,levels=c("1", "0"))
+data$dtg2.factor = factor(data$dtg2,levels=c("1", "0"))
+data$dtg3.factor = factor(data$dtg3,levels=c("1", "0"))
+data$dtg12.factor = factor(data$dtg12,levels=c("1", "0"))
+data$dtg123.factor = factor(data$dtg123,levels=c("1", "0"))
+
+levels(data$dtg1.factor)=c("Rollout or planned rollout", "No rollout or unknown")
+levels(data$dtg2.factor)=c("Rollout or planned rollout", "No rollout or unknown")
+levels(data$dtg3.factor)=c("Rollout or planned rollout", "No rollout or unknown")
+levels(data$dtg12.factor)=c("Rollout or planned rollout", "No rollout or unknown")
+levels(data$dtg123.factor)=c("Rollout or planned rollout", "No rollout or unknown")
+
+label(data$dtg1.factor) <- "First-line"
+label(data$dtg2.factor) <- "Second-line"
+label(data$dtg3.factor) <- "Third-line"
+label(data$dtg12.factor) <- "First- & second-line"
+label(data$dtg123.factor) <- "All lines"
+
+data <- data %>% mutate(dtg_123 = ifelse(dtg123 ==0, 0, 1))
+data$dtg_123.factor = factor(data$dtg_123,levels=c("0", "1"))
+levels(data$dtg_123.factor)=c("No", "Yes")
+
+
+```
+
+
+
+<!-- ----------------------------------------------------- -->
+
+# New DTG rollout variables (24Aug2023)
+
+**Only looking at DTG first-line and second-line.**
+
+**Only taking into account rollout completed (not planned).**
+
+## newdtg_1_yn
+
+1 == have already rolled out   
+0 == if have not yet rolled out  
+(excluding information on planned rollout)  
+
+```{r}
+
+# rolled out DTG 1 (do not take into account planned rollout)
+# 1 == yes,  2= no
+frq(data, dtg_1)
+data$newdtg_1_yn <- factor(data$dtg_1, levels = c( "1","0"),
+                               labels = c("Yes", "No" ))
+frq(data, newdtg_1_yn)
+```
+
+
+## newdtg_2_yn
+
+1 == have already rolled out   
+0 == if have not yet rolled out  
+(excluding information on planned rollout)  
+
+```{r}
+
+# for rolled out DTG  2 (do not take into account planned rollout)
+# 1 == yes, 2= dno
+frq(data, dtg_2)
+data$newdtg_2_yn <- factor(data$dtg_2, levels = c( "1","0"),
+                               labels = c("Yes", "No" ))
+frq(data, newdtg_2_yn)
+```
+
+
+
+##  newdtg_12_yn
+
+1 == have already rolled out first- and second-line  
+0 == if have not yet rolled out first- and second-line 
+(excluding information on planned rollout)  
+
+```{r}
+
+# for rolled out DTG 1 & 2 (do not take into account planned rollout)
+# 1 == yes, rolled out dtg 1 & 2, 2= didn't already roll out dtg 1 & 2
+
+data <- data %>% mutate(newdtg_12 = ifelse(dtg_1 ==1 & dtg_2 ==1, 1, 0))
+
+#frq(data, newdtg_12)
+
+data$newdtg_12_yn <- factor(data$newdtg_12, levels = c( "1","0"),
+                                labels = c("Yes", "No" ))
+frq(data, newdtg_12_yn)
+```
+Number of sites and countries that rolled out first- and second-line DTG
+
+```{r echo=FALSE}
+# number of sites that rolled out DTG 1 & 2
+data %>% filter(newdtg_12_yn =="Yes") %>% select(record_id, country) %>% 
+  summarise("N sites" =n()) 
+```
+```{r echo=FALSE}
+# number of countries
+data %>% filter(newdtg_12_yn =="Yes") %>% select(country) %>% distinct() %>%
+  summarise("N countries" =n()) 
+```
+
+
+```{r echo=FALSE}
+# number of LMICs that rolled out DTG 1 & 2
+
+data %>% filter(newdtg_12_yn =="Yes") %>% select(record_id, country) %>% 
+  group_by(country) %>% 
+  summarise("sites per ctry" =n()) 
+
+```
+
+## newdtg_1or2_yn
+
+1 == yes, have already rolled out first- OR second-line    
+0 == no first- NOR second-line
+(excluding information on planned rollout)  
+
+```{r}
+
+
+# for rolled out DTG 1 OR 2 (do not take into account planned rollout)
+# 1 == yes, rolled out dtg 1 OR dtg 2, 2= no dtg 1 OR dtg 2 rolled out
+
+data <- data %>% mutate(newdtg_1or2 = ifelse(dtg_1 ==1 | dtg_2 ==1, 1, 0))
+
+frq(data, newdtg_1or2)
+
+data$newdtg_1or2_yn <- factor(data$newdtg_1or2, levels = c( "1","0"),
+                            labels = c("Yes", "No" ))
+frq(data, newdtg_1or2_yn)
+```
+
+
+## new_VL_DR_avail.factor
+
+from Section 6 response
+1 == both available  
+2 == VL only  
+3 == DR only  
+4 == neither available  
+
+```{r}
+
+# from Section 6 responses
+# availability of VL & DR at sites 
+
+data <- data %>%
+  mutate(new_VL_DR_avail = ifelse(pcr_vl_na ==0 & dr_na ==0, 1,
+                                  ifelse(pcr_vl_na ==0 & dr_na ==1, 2,
+                                         ifelse(pcr_vl_na ==1 & dr_na ==0, 3,
+                                                ifelse(pcr_vl_na ==1 & dr_na ==1, 4,5
+                                                )))))
+
+frq(data, new_VL_DR_avail)
+
+data$new_VL_DR_avail.factor <- factor(data$new_VL_DR_avail, levels = c( "1","2", "3", "4"),
+                                      labels = c("VL and DR", "VL only ", "DR only", "Neither" ))
+
+frq(data, new_VL_DR_avail.factor)
+```
+
+
+## new_VL_trans.factor
+
+1 == Required within 6 months
+2 == Required within 12 months
+3 == Required, varies by patient group
+5 == Available, not required
+7 == Available, unknown if required
+
+```{r}
+
+# for VL testing at switch
+# Do not take into account responses from section 6
+# VL months: 1 = 6m, 2 = 12m, 3 = varies, 4 = not applicable (36 sites)
+
+# Among sites that rolled out 1st or 2nd line DTG, how many required VL testing at switch
+# 1 = dtg 1 or dtg 2 rolled out, VL required, within 6m, 
+# 2 = dtg 1 or dtg 2 rolled out, VL required, within 12m, 
+# 3 = dtg 1 or dtg 2 rolled out, VL required, varies, 
+# 4 = dtg 1 or dtg 2 rolled out, VL required, unknown, 
+# 5 = dtg 1 or dtg 2 rolled out, VL available, but not required, 
+# 6 = dtg 1 or dtg 2 rolled out, VL unavailable & not required
+# 7 = dtg 1 or dtg 2 rolled out, VL available, but unknown if required at transition
+# NA = no dtg 1 or dtg 2 rolled out
+
+
+
+data <- data %>%
+  mutate(new_VL_trans = ifelse(newdtg_1or2 ==0, NA,
+                     ifelse(newdtg_1or2 ==1 & dtg_trans_vl_yn ==1 & dtg_trans_vl_months ==1 & !is.na(dtg_trans_vl_months) & !is.na(dtg_trans_vl_yn), 1,
+                               ifelse(newdtg_1or2 ==1 & dtg_trans_vl_yn ==1 & dtg_trans_vl_months ==2 & !is.na(dtg_trans_vl_months) & !is.na(dtg_trans_vl_yn), 2,
+                                      ifelse(newdtg_1or2 ==1 & dtg_trans_vl_yn ==1 & dtg_trans_vl_months ==3 & !is.na(dtg_trans_vl_months) & !is.na(dtg_trans_vl_yn), 3,
+                                            ifelse(newdtg_1or2 ==1 & dtg_trans_vl_yn ==1 & is.na(dtg_trans_vl_months) & !is.na(dtg_trans_vl_yn), 4,
+                                             ifelse(newdtg_1or2 ==1 & dtg_trans_vl_yn ==0 & pcr_vl_na ==0 & !is.na(dtg_trans_vl_yn) & !is.na(pcr_vl_na), 5,
+                                                    ifelse(newdtg_1or2 ==1 & dtg_trans_vl_yn ==0 & pcr_vl_na ==1 & !is.na(dtg_trans_vl_yn) & !is.na(pcr_vl_na), 6, 
+                                                           ifelse(newdtg_1or2 == 1 & pcr_vl_na ==0 & is.na(dtg_trans_vl_yn), 7, 8
+                                                           )))))))))
+
+
+data$new_VL_trans.factor <- factor(data$new_VL_trans, levels = c( "1", "2", "3", "5", "7"),
+                                   labels = c("Required within 6 months", 
+                                              "Required within 12 months ",
+                                              "Required, varies by patient group", 
+                                              "Available, not required", 
+                                              "Available, unknown if required"
+                                              ))
+
+
+frq(data, new_VL_trans.factor)
+```
+
+
+## new_DR_trans.factor
+
+1 == Performed
+2 == Available, not performed  
+3 == Available, unknown if performed 
+4 == Unavailable    
+
+
+```{r}
+
+
+# for DRT testing at switch
+# Do not take into account responses from section 6
+frq(data, dtg_genotyping)
+
+data <- data %>%
+  mutate(new_DR_trans = ifelse(newdtg_1or2 ==0, NA,
+           ifelse(newdtg_1or2 ==1 & dtg_genotyping ==1 & !is.na(dtg_genotyping), 1,
+                               ifelse(newdtg_1or2 ==1 & dtg_genotyping ==0 &  dr_na ==0 & !is.na(dtg_genotyping), 2,
+                                      ifelse(newdtg_1or2 ==1 & dr_na ==0 & is.na(dtg_genotyping), 3, 
+                                             ifelse(newdtg_1or2 ==1 & dr_na ==1, 4, 5)
+                                      )))))
+
+data$new_DR_trans.factor <- factor(data$new_DR_trans, levels = c( "1", "2", "3", "4"),
+                                   labels = c("Performed", 
+                                              "Available, not performed",
+                                              "Available, unknown if performed",
+                                              "Unavailable"))
+
+frq(data, new_DR_trans.factor)
+
+```
+
+
+
+<!-- ----------------------------------------------------- -->
+
+# Save file: data_190_variables
+```{r}
+
+# save as a new data object (in folder, so can be reloaded later)
+saveRDS(data, file="03_Output/Data/data_190_variables.Rda")
+```
+
+```{r}
+sessionInfo()
+
+```
+
+
+
