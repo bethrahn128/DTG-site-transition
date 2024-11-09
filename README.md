@@ -20,7 +20,7 @@ IeDEA cross-sectional site assessment survey conducted in 2020-2021 has been sum
 ## Methods
 Assessed the status of dolutegravir rollout and viral load and drug resistance testing practices for patients on ART switching to dolutegravir-based regimens. We used generalized estimating equations (GEE) to assess associations between clinic rollout of both first- and second-line dolutegravir-based ART regimens (dual rollout) and site-level factors.
 
-Statistical analyses performed using Stata (Stata Corp., College Station, TX, USA) and R Statistical Software (v4.3.3; R Core Team 2022) with RStudio (version 2023.12.1).
+Statistical analyses performed using R Statistical Software (v4.3.3; R Core Team 2022) with RStudio (version 2023.12.1).
 
 ## Coding files in R
 
